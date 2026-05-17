@@ -285,14 +285,20 @@
                     </div>
 
                     <div class="grid grid-cols-1 gap-8">
-                        <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 min-h-[550px] flex flex-col">
-                            <h3 class="font-black text-slate-800 dark:text-slate-200 uppercase text-xs mb-8 flex items-center gap-2 tracking-widest"><i data-lucide="activity" class="text-blue-500"></i> Tendência de Movimentação (Ondulação)</h3>
+                        <div id="flowChartCard" class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 min-h-[550px] flex flex-col transition-all duration-500 overflow-y-auto custom-scrollbar">
+                            <div class="flex justify-between items-center mb-8">
+                                <h3 class="font-black text-slate-800 dark:text-slate-200 uppercase text-xs flex items-center gap-2 tracking-widest"><i data-lucide="activity" class="text-blue-500"></i> Tendência de Movimentação (Ondulação)</h3>
+                                <button onclick="toggleFlowChartFullscreen()" class="p-2 text-slate-400 hover:text-blue-500 transition-colors bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700" title="Modo Foco (Tela Cheia)">
+                                    <i data-lucide="maximize-2" size="18"></i>
+                                </button>
+                            </div>
                             <div id="flowChart" class="w-full flex-1 min-h-[400px]"></div>
-                        </div>
-
-                        <div id="insightDetailsContainer" class="hidden bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 transition-all duration-500">
-                            <h4 id="insightDetailsTitle" class="font-black text-slate-800 dark:text-slate-200 uppercase text-[10px] mb-6 tracking-widest flex items-center gap-2"></h4>
-                            <div id="insightDetailsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+                            
+                            <!-- Movido para dentro do Card para ser visível no Fullscreen -->
+                            <div id="insightDetailsContainer" class="hidden mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 transition-all duration-500">
+                                <h4 id="insightDetailsTitle" class="font-black text-slate-800 dark:text-slate-200 uppercase text-[10px] mb-6 tracking-widest flex items-center gap-2"></h4>
+                                <div id="insightDetailsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1548,7 +1554,7 @@
                         },
                         grid: { left: '3%', right: '4%', bottom: 90, top: '5%', containLabel: true },
                         dataZoom: [
-                            { type: 'inside', start: 0, end: 100 },
+                            { type: 'inside', disabled: !document.fullscreenElement, start: 0, end: 100 },
                             { type: 'slider', show: true, bottom: 35, height: 20, borderColor: 'transparent', backgroundColor: 'transparent', fillerColor: 'rgba(59, 130, 246, 0.1)', handleStyle: { color: '#3b82f6' }, textStyle: { color: '#94a3b8', fontWeight: 'bold', fontSize: 9 } }
                         ],
                         xAxis: {
@@ -1647,13 +1653,17 @@
                             detailsContainer.classList.remove('hidden');
                             detailsTitle.innerHTML = title;
                             detailsList.innerHTML = filtered.map(h => `
-                                <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex items-center gap-3 transition-all hover:border-blue-500/50">
+                                <div onclick="${seriesName === 'Manutenção' ? `navigateToMaintenance('${h.toolId}')` : `navigateToHistory('${h.historyId}')`}" 
+                                     class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex items-center gap-3 transition-all hover:border-blue-500/50 cursor-pointer active:scale-95 group/item shadow-sm">
                                     <div class="w-10 h-10 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-800 shrink-0">
                                         ${h.toolImg ? `<img src="${h.toolImg}" class="w-full h-full object-cover">` : `<i data-lucide="package" class="text-slate-300" size="16"></i>`}
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="font-black text-slate-800 dark:text-slate-200 uppercase text-[10px] truncate">${h.toolName}</p>
                                         <p class="text-[9px] font-bold text-slate-500 uppercase truncate">Resp: ${h.workerName}</p>
+                                    </div>
+                                    <div class="text-slate-300 group-hover/item:text-blue-500 transition-colors">
+                                        <i data-lucide="chevron-right" size="14"></i>
                                     </div>
                                 </div>
                             `).join('');
@@ -1664,7 +1674,87 @@
                         }
                     });
 
+                    // Gerencia o zoom via teclado para evitar conflito com o scroll da página
+                    const handleKeyZoom = (e) => {
+                        // Não executa se o usuário estiver digitando em algum campo
+                        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                        if (!document.getElementById('section-insights').classList.contains('active-section')) return;
+
+                        const zoom = myChart.getOption().dataZoom[0];
+                        let start = zoom.start, end = zoom.end;
+                        const step = 5; // Velocidade do zoom
+
+                        if (['+', '=', 'Add'].includes(e.key)) { // Zoom In
+                            myChart.dispatchAction({ type: 'dataZoom', start: Math.min(end - step, start + step), end: Math.max(start + step, end - step) });
+                        } else if (['-', '_', 'Subtract'].includes(e.key)) { // Zoom Out
+                            myChart.dispatchAction({ type: 'dataZoom', start: Math.max(0, start - step), end: Math.min(100, end + step) });
+                        }
+                    };
+                    // Remove o listener antigo para não acumular eventos ao trocar de seção
+                    window.removeEventListener('keydown', window._insightZoomHandler);
+                    window._insightZoomHandler = handleKeyZoom;
+                    window.addEventListener('keydown', handleKeyZoom);
+
                     window.addEventListener('resize', () => myChart.resize());
+                }
+
+                function toggleFlowChartFullscreen() {
+                    const container = document.getElementById('flowChartCard');
+                    if (!document.fullscreenElement) {
+                        container.requestFullscreen().catch(err => {
+                            showToast("Erro ao entrar em modo foco", "error");
+                        });
+                    } else {
+                        document.exitFullscreen();
+                    }
+                }
+
+                // Listener para detectar mudança de tela cheia e atualizar o comportamento do gráfico
+                document.addEventListener('fullscreenchange', () => {
+                    const chartDom = document.getElementById('flowChart');
+                    const myChart = echarts.getInstanceByDom(chartDom);
+                    if (!myChart) return;
+
+                    const isFullscreen = !!document.fullscreenElement;
+                    
+                    // Alterna o ícone entre maximizar e minimizar
+                    const icon = document.querySelector('#flowChartCard button i');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', isFullscreen ? 'minimize-2' : 'maximize-2');
+                        lucide.createIcons();
+                    }
+
+                    // Atualiza a opção do gráfico: habilita o scroll apenas em tela cheia
+                    myChart.setOption({
+                        dataZoom: [
+                            { type: 'inside', disabled: !isFullscreen },
+                            { type: 'slider' }
+                        ]
+                    });
+                    
+                    setTimeout(() => myChart.resize(), 150);
+                });
+
+                function navigateToHistory(query) {
+                    if (document.fullscreenElement) document.exitFullscreen();
+                    const input = document.getElementById('historySearchInput');
+                    if (input) {
+                        input.value = query;
+                        // Atualiza visual do botão "X" e renderiza a lista filtrada
+                        handleSearchInput(input, renderHistory);
+                        showSection('logs');
+                    }
+                }
+
+                function navigateToMaintenance(query) {
+                    if (document.fullscreenElement) document.exitFullscreen();
+                    const input = document.getElementById('maintenanceSearchInput');
+                    if (input) {
+                        input.value = query;
+                        // Atualiza visual do botão "X" e renderiza a lista filtrada
+                        handleSearchInput(input, renderMaintenance);
+                        showSection('maintenance');
+                    }
                 }
 
                 async function save(syncToCloud = true) { 
@@ -3122,7 +3212,7 @@
                     }
 
                     const filteredHistory = history.filter(h => {
-                        const matchesSearch = !searchTerm || (h.toolName && h.toolName.toLowerCase().includes(searchTerm)) || (h.workerName && h.workerName.toLowerCase().includes(searchTerm));
+                        const matchesSearch = !searchTerm || (h.toolName && h.toolName.toLowerCase().includes(searchTerm)) || (h.workerName && h.workerName.toLowerCase().includes(searchTerm)) || (h.historyId && h.historyId.toString() === searchTerm);
                         const matchesDate = !dateFilter || (h.checkoutDate && h.checkoutDate.startsWith(dateFilter)) || (h.returnDate && h.returnDate.startsWith(dateFilter));
                         return matchesSearch && matchesDate;
                     });
@@ -4820,7 +4910,8 @@
                         const matchesSearch = !searchTerm || 
                                               (t.name && t.name.toLowerCase().includes(searchTerm)) ||
                                               (t.code && t.code.toLowerCase().includes(searchTerm)) ||
-                                              (info.reportedBy && info.reportedBy.toLowerCase().includes(searchTerm));
+                                              (info.reportedBy && info.reportedBy.toLowerCase().includes(searchTerm)) ||
+                                              (t.id && t.id.toString() === searchTerm);
                         
                         return matchesFilter && matchesSearch;
                     });
