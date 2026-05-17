@@ -197,7 +197,8 @@
                         <span id="actionsOverdueBadge" class="hidden absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full"></span>
                     </button>
                     <button id="btn-insights" onclick="showSection('insights')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Insights</span></button>
-                    <button id="btn-catalog" onclick="showSection('catalog')" class="nav-btn"><i data-lucide="archive"></i> <span class="sidebar-text">Estoque</span></button>
+                    <button id="btn-catalog" onclick="showSection('catalog')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">Ferramentas</span></button>
+                    <button id="btn-materials" onclick="showSection('materials')" class="nav-btn"><i data-lucide="box"></i> <span class="sidebar-text">Materiais</span></button>
                     <button id="btn-team" onclick="showSection('team')" class="nav-btn"><i data-lucide="users"></i> <span class="sidebar-text">Equipe</span></button>
                     <button id="btn-maintenance" onclick="showSection('maintenance')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">FollowUp</span></button>
                     <button id="btn-logs" onclick="showSection('logs')" class="nav-btn"><i data-lucide="history"></i> <span class="sidebar-text">Histórico</span></button>
@@ -392,8 +393,8 @@
                                 <div class="flex items-center gap-4 mb-2">
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400"><i data-lucide="archive" size="28"></i></div>
                                     <div>
-                                        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Estoque</h2>
-                                        <p class="text-slate-400 text-sm font-medium mt-1">Gerenciamento de ferramentas e materiais</p>
+                                        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Ferramentas</h2>
+                                        <p class="text-slate-400 text-sm font-medium mt-1">Gerenciamento de equipamentos e ativos</p>
                                     </div>
                                 </div>
                             </div>
@@ -428,6 +429,34 @@
                         </div>
                     </div>
                     <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+                </div>
+            </main>
+
+            <main id="section-materials" class="main-content p-4 md:p-8">
+                <div class="max-w-[1400px] mx-auto">
+                    <div class="bg-[#0B1120] rounded-[2.5rem] p-6 md:p-8 mb-10 shadow-2xl relative overflow-hidden border border-slate-800">
+                        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
+                        <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
+                            <div>
+                                <div class="flex items-center gap-4 mb-2">
+                                    <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400"><i data-lucide="box" size="28"></i></div>
+                                    <div>
+                                        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Materiais</h2>
+                                        <p class="text-slate-400 text-sm font-medium mt-1">Consumíveis e insumos sem devolução</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="relative w-full xl:w-96">
+                                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size="16"></i>
+                                <input type="text" id="materialsSearchInput" onkeyup="handleSearchInput(this, renderMaterials)" placeholder="BUSCAR POR NOME, CÓDIGO..." class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl pl-12 pr-10 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all placeholder-slate-500">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-4 mb-8">
+                        <div class="bg-white p-3 px-5 rounded-xl border border-slate-100 shadow-sm text-right"><p class="text-slate-400 text-[10px] font-bold uppercase">Valor Total</p><h2 id="materialsTotalValue" class="text-lg font-black text-emerald-600">R$ 0,00</h2></div>
+                        <div class="bg-white p-3 px-5 rounded-xl border border-slate-100 shadow-sm text-right"><p class="text-slate-400 text-[10px] font-bold uppercase">Peças Totais</p><h2 class="text-lg font-black text-slate-800 flex items-center justify-end gap-2"><i data-lucide="box" size="20" class="text-slate-400"></i><span id="materialsTotalQty">0</span></h2></div>
+                    </div>
+                    <div id="materialsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
                 </div>
             </main>
 
@@ -596,6 +625,19 @@
                     </div>
                     <div class="p-8 max-h-[80vh] overflow-y-auto custom-scrollbar">
                         <div class="space-y-3">
+                            <!-- Category Selection -->
+                            <div class="flex gap-3 mb-6">
+                                <div onclick="selectItemCategory('tool')" id="cat-card-tool" class="flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden">
+                                    <div id="cat-indicator-tool" class="absolute top-3 right-3 w-2.5 h-2.5 bg-white rounded-full transition-colors"></div>
+                                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="wrench" size="20"></i></div>
+                                    <span id="cat-text-tool" class="font-black text-white text-[10px] uppercase tracking-widest">Ferramenta</span>
+                                </div>
+                                <div onclick="selectItemCategory('material')" id="cat-card-material" class="flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-slate-300 group relative overflow-hidden">
+                                    <div id="cat-indicator-material" class="absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors"></div>
+                                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="box" size="20"></i></div>
+                                    <span id="cat-text-material" class="font-black text-slate-400 text-[10px] uppercase tracking-widest">Material</span>
+                                </div>
+                            </div>
                             <div class="border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors group" onclick="document.getElementById('fileInput').click()">
                                 <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage(this)">
                                 <div id="uploadPlaceholder" class="text-slate-400">
@@ -616,7 +658,23 @@
                                 <label for="toolBrandInput" class="text-xs font-black uppercase text-slate-400 ml-4">Marca</label>
                                 <input type="text" id="toolBrandInput" placeholder="MARCA DA FERRAMENTA" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-emerald-500 transition-all">
                             </div>
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-3 gap-3">
+                                <div>
+                                    <label for="toolCabinetInput" class="text-xs font-black uppercase text-slate-400 ml-4">Armário</label>
+                                    <select id="toolCabinetInput" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-white">
+                                        <option value="">N/A</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
                                 <div>
                                     <label for="toolShelfInput" class="text-xs font-black uppercase text-slate-400 ml-4">Prateleira</label>
                                     <select id="toolShelfInput" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-white">
@@ -1405,6 +1463,7 @@
                 let currentImageBase64 = "";
                 let currentMaintenanceImageBase64 = "";
                 let pendingStatus = "disponivel";
+                let pendingCategory = "tool";
                 let catalogFilter = 'all';
                 let maintenanceFilter = 'all';
                 let itemToDeleteId = null;
@@ -1506,6 +1565,7 @@
                     renderHistory(); 
                     renderMaintenance(); 
                     renderOverdueAlert();
+                    renderMaterials();
                     renderTeam(); 
                 }
 
@@ -1832,6 +1892,7 @@
                         renderCatalog();
                         renderOverdueAlert();
                     }
+                    if (s === 'materials') renderMaterials();
                     if (s === 'logs') renderHistory();
                     if (s === 'maintenance') renderMaintenance();
                     if (s === 'team') renderTeam();
@@ -1863,6 +1924,32 @@
                         document.getElementById('zoomContainer').onwheel = null;
                     }
                     playSound('click');
+                }
+
+                function selectItemCategory(cat) {
+                    pendingCategory = cat;
+                    const toolCard = document.getElementById('cat-card-tool');
+                    const matCard = document.getElementById('cat-card-material');
+                    const toolInd = document.getElementById('cat-indicator-tool');
+                    const matInd = document.getElementById('cat-indicator-material');
+                    const toolText = document.getElementById('cat-text-tool');
+                    const matText = document.getElementById('cat-text-material');
+
+                    if (cat === 'tool') {
+                        toolCard.className = "flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
+                        toolInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-white rounded-full transition-colors";
+                        toolText.className = "font-black text-white text-[10px] uppercase tracking-widest";
+                        matCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-slate-300 group relative overflow-hidden";
+                        matInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors";
+                        matText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
+                    } else {
+                        toolCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden";
+                        toolInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors";
+                        toolText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
+                        matCard.className = "flex-1 cursor-pointer bg-emerald-600 border-2 border-emerald-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
+                        matInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-white rounded-full transition-colors";
+                        matText.className = "font-black text-white text-[10px] uppercase tracking-widest";
+                    }
                 }
 
                 let currentWorkerType = 'LDC';
@@ -2750,12 +2837,14 @@
                 function openAddModal(s) { 
                     pendingStatus = s; 
                     currentImageBase64 = "";
+                    selectItemCategory('tool');
                     document.getElementById('fileInput').value = null;
                     document.getElementById('addModalTitle').innerText = "Novo Equipamento";
                     document.getElementById('toolCodeInput').value = "";
                     document.getElementById('toolNameInput').value = "";
                     document.getElementById('toolBrandInput').value = "";
                     document.getElementById('toolWeightInput').value = "";
+                    document.getElementById('toolCabinetInput').value = "";
                     document.getElementById('toolShelfInput').value = "";
                     document.getElementById('toolCompartmentInput').value = "";
                     document.getElementById('toolValueInput').value = "";
@@ -2794,6 +2883,7 @@
                         code: code,
                         brand: document.getElementById('toolBrandInput').value.toUpperCase(),
                         weight: document.getElementById('toolWeightInput').value,
+                        cabinet: document.getElementById('toolCabinetInput').value,
                         shelf: document.getElementById('toolShelfInput').value,
                         compartment: document.getElementById('toolCompartmentInput').value,
                         value: parseFloat(document.getElementById('toolValueInput').value) || 0,
@@ -2801,7 +2891,8 @@
                         status: pendingStatus,
                         user: '-',
                         maintenanceNote: "",
-                        maintenanceInfo: null
+                        maintenanceInfo: null,
+                        category: pendingCategory
                     };
                     if (qtyInput.value && parseInt(qtyInput.value) > 0) {
                         tool.qty = parseInt(qtyInput.value);
@@ -2815,11 +2906,13 @@
                 async function editTool(id) {
                     const t = tools.find(x => x.id === id);
                     if(!t) return;
+                    selectItemCategory(t.category || 'tool');
                     document.getElementById('fileInput').value = null;
                     document.getElementById('addModalTitle').innerText = "Editar Equipamento";
                     document.getElementById('toolCodeInput').value = t.code;
                     document.getElementById('toolNameInput').value = t.name;
                     document.getElementById('toolBrandInput').value = t.brand || "";
+                    document.getElementById('toolCabinetInput').value = t.cabinet || "";
                     document.getElementById('toolShelfInput').value = t.shelf || "";
                     document.getElementById('toolCompartmentInput').value = t.compartment || "";
                     document.getElementById('toolWeightInput').value = t.weight || "";
@@ -2837,6 +2930,7 @@
                         t.name = document.getElementById('toolNameInput').value;
                         t.code = document.getElementById('toolCodeInput').value;
                         t.brand = document.getElementById('toolBrandInput').value.toUpperCase();
+                        t.cabinet = document.getElementById('toolCabinetInput').value;
                         t.shelf = document.getElementById('toolShelfInput').value;
                         t.compartment = document.getElementById('toolCompartmentInput').value;
                         t.weight = document.getElementById('toolWeightInput').value;
@@ -2848,6 +2942,7 @@
                             delete t.qty;
                         }
                         t.img = currentImageBase64;
+                        t.category = pendingCategory;
                         // A nota de manutenção só é alterada na tela de manutenção
                         await save(); closeModal('addModal');
                         playSound('success', 'Item atualizado com sucesso!');
@@ -3009,7 +3104,7 @@
                                     `<p class="text-[9px] font-bold text-rose-500 mt-1 truncate" title="${t.maintenanceNote}"><i data-lucide="wrench" size="10" class="inline-block -mt-px"></i> ${t.maintenanceNote}</p>` :
                                     `<div class="flex items-center gap-2 mt-2 flex-wrap">
                                         ${t.code ? `<span class="bg-slate-800 text-white px-2 py-1 rounded-md text-[10px] font-black tracking-widest shadow-sm">#${t.code}</span>` : ''}
-                                        ${(t.shelf || t.compartment) ? `<span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-md text-[9px] font-bold uppercase" title="Localização: Prateleira ${t.shelf}, Repartição ${t.compartment}">${t.shelf || ''}${t.compartment || ''}</span>` : ''}
+                                        ${(t.cabinet || t.shelf || t.compartment) ? `<span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-md text-[9px] font-bold uppercase" title="Localização: Armário ${t.cabinet || ''}, Prateleira ${t.shelf || ''}, Repartição ${t.compartment || ''}">${t.cabinet ? 'ARM ' + t.cabinet : ''} ${t.shelf || ''}${t.compartment || ''}</span>` : ''}
                                         ${t.brand ? `<span class="text-[10px] font-bold text-indigo-500 uppercase tracking-tight">${t.brand}</span>` : ''}
                                     </div>`}
                                 
@@ -3063,6 +3158,36 @@
                         return;
                     }
                     grid.innerHTML = filteredTools.map(t => createCatalogCardHTML(t)).join('');
+                    lucide.createIcons();
+                }
+
+                function renderMaterials() {
+                    const grid = document.getElementById('materialsGrid');
+                    if (!grid) return;
+                    const searchTerm = document.getElementById('materialsSearchInput').value.toLowerCase();
+
+                    let filteredMaterials = tools.filter(t => {
+                        const isMaterial = t.category === 'material';
+                        if (!isMaterial) return false;
+
+                        const matchesSearch = !searchTerm || 
+                                            t.name.toLowerCase().includes(searchTerm) ||
+                                            (t.code && t.code.toLowerCase().includes(searchTerm)) ||
+                                            (t.brand && t.brand.toLowerCase().includes(searchTerm));
+
+                        return matchesSearch;
+                    });
+
+                    const totalValue = filteredMaterials.reduce((sum, t) => sum + ((t.value || 0) * (t.qty || 1)), 0);
+                    const totalQty = filteredMaterials.reduce((sum, t) => sum + (t.qty || 1), 0);
+                    document.getElementById('materialsTotalValue').innerText = formatBRL(totalValue);
+                    document.getElementById('materialsTotalQty').innerText = totalQty;
+
+                    if(filteredMaterials.length === 0) {
+                        grid.innerHTML = `<p class="text-center text-sm text-slate-400 col-span-full py-10">Nenhum material encontrado.</p>`;
+                        return;
+                    }
+                    grid.innerHTML = filteredMaterials.map(t => createCatalogCardHTML(t)).join('');
                     lucide.createIcons();
                 }
 
@@ -4191,35 +4316,35 @@
                     
                     if (!t || !w || !qty) return;
 
-                    const isTool = !t.hasOwnProperty('qty');
-                    const hasStock = t.hasOwnProperty('qty');
+                    const isTool = (t.category === 'tool' || !t.category);
 
                     if (isTool) {
-                        t.status = 'em uso';
-                        t.user = w.name;
-                        history.unshift({ 
-                            historyId: Date.now(), 
-                            toolId: t.id, 
-                            toolName: t.name, 
-                            toolImg: t.img,
-                            workerName: w.name, 
-                            qty: 1, 
-                            toolValue: t.value || 0,
-                            checkoutDate: new Date().toISOString(), 
-                            returnDate: null,
-                            type: 'emprestimo' 
-                        });
-                    } else if (hasStock) {
-                        if (t.qty < qty) {
-                            alert(`Quantidade insuficiente em estoque. Disponível: ${t.qty}`);
-                            return;
-                        }
+                        if (!t.hasOwnProperty('qty')) {
+                            t.status = 'em uso';
+                            t.user = w.name;
+                            history.unshift({ 
+                                historyId: Date.now(), toolId: t.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
+                                qty: 1, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo' 
+                            });
+                        } else {
+                            if (t.qty < qty) return;
+                            t.qty -= qty;
+                            const newTool = { ...t, status: 'em uso', user: w.name, id: Date.now(), original_id: t.id, qty: qty, category: 'tool' };
+                            tools.unshift(newTool);
+                            history.unshift({
+                                historyId: Date.now() + 1, toolId: newTool.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
+                                qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo' 
+                            });
+                        };
+                    } else {
+                        // Lógica para Materiais (Consumíveis)
+                        if (t.qty < qty) return;
                         t.qty -= qty;
-                        const newTool = { ...t, status: 'em uso', user: w.name, id: Date.now(), original_id: t.id, qty: qty };
-                        tools.unshift(newTool);
                         history.unshift({
-                            historyId: Date.now() + 1, toolId: newTool.id, toolName: t.name, toolImg: t.img, workerName: w.name, qty: qty, toolValue: t.value || 0,
-                            checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo' 
+                            historyId: Date.now(), toolId: t.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
+                            qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), 
+                            returnDate: new Date().toISOString(), // Devolução imediata pois é consumo
+                            type: 'emprestimo', condition: 'boa'
                         });
                     }
                     closeModal('materialModal');
@@ -4239,7 +4364,7 @@
                     const searchTerm = searchInput.value.toLowerCase();
 
                     const borrowedItems = tools.filter(t => 
-                        t.status === 'em uso' &&
+                        t.status === 'em uso' && (t.category === 'tool' || !t.category) &&
                         (!searchTerm || t.name.toLowerCase().includes(searchTerm) || (t.code && t.code.toLowerCase().includes(searchTerm)) || (t.user && t.user.toLowerCase().includes(searchTerm)))
                     );
 
