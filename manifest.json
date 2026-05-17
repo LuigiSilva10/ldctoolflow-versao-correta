@@ -1,0 +1,25 @@
+{
+  "name": "LDC ToolFlow",
+  "short_name": "ToolFlow",
+  "description": "Sistema de Gestão de Ferramentaria LDC",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#0B1120",
+  "icons": [
+    {
+      "src": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f6e0/512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "orientation": "any",
+  "scope": "/"
+}
