@@ -196,7 +196,7 @@
                         <span class="sidebar-text">Operações</span>
                         <span id="actionsOverdueBadge" class="hidden absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full"></span>
                     </button>
-                    <button id="btn-insights" onclick="showSection('insights')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Insights</span></button>
+                    <button id="btn-dashboard" onclick="showSection('dashboard')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Dashboard</span></button>
                     <button id="btn-catalog" onclick="showSection('catalog')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">Ferramentas</span></button>
                     <button id="btn-materials" onclick="showSection('materials')" class="nav-btn"><i data-lucide="box"></i> <span class="sidebar-text">Materiais</span></button>
                     <button id="btn-team" onclick="showSection('team')" class="nav-btn"><i data-lucide="users"></i> <span class="sidebar-text">Equipe</span></button>
@@ -270,7 +270,7 @@
                 </div>
             </main>
 
-            <main id="section-insights" class="main-content p-4 md:p-8">
+            <main id="section-dashboard" class="main-content p-4 md:p-8">
                 <div class="max-w-[1400px] mx-auto">
                     <div class="bg-[#0B1120] rounded-[2.5rem] p-6 md:p-8 mb-10 shadow-2xl relative overflow-hidden border border-slate-800">
                         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
@@ -279,7 +279,7 @@
                                 <i data-lucide="trending-up" size="28"></i>
                             </div>
                             <div>
-                                <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Insights de Fluxo</h2>
+                                <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Dashboard de Fluxo</h2>
                                 <p class="text-slate-400 text-sm font-medium mt-1">Análise inteligente de movimentação e ativos</p>
                             </div>
                         </div>
@@ -296,9 +296,9 @@
                             <div id="flowChart" class="w-full flex-1 min-h-[400px]"></div>
                             
                             <!-- Movido para dentro do Card para ser visível no Fullscreen -->
-                            <div id="insightDetailsContainer" class="hidden mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 transition-all duration-500">
-                                <h4 id="insightDetailsTitle" class="font-black text-slate-800 dark:text-slate-200 uppercase text-[10px] mb-6 tracking-widest flex items-center gap-2"></h4>
-                                <div id="insightDetailsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+                            <div id="dashboardDetailsContainer" class="hidden mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 transition-all duration-500">
+                                <h4 id="dashboardDetailsTitle" class="font-black text-slate-800 dark:text-slate-200 uppercase text-[10px] mb-6 tracking-widest flex items-center gap-2"></h4>
+                                <div id="dashboardDetailsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
                             </div>
                         </div>
                     </div>
@@ -628,17 +628,15 @@
                             <!-- Category Selection -->
                             <div class="flex gap-3 mb-6">
                                 <div onclick="selectItemCategory('tool')" id="cat-card-tool" class="flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden">
-                                    <div id="cat-indicator-tool" class="absolute top-3 right-3 w-2.5 h-2.5 bg-white rounded-full transition-colors"></div>
                                     <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="wrench" size="20"></i></div>
                                     <span id="cat-text-tool" class="font-black text-white text-[10px] uppercase tracking-widest">Ferramenta</span>
                                 </div>
                                 <div onclick="selectItemCategory('material')" id="cat-card-material" class="flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-slate-300 group relative overflow-hidden">
-                                    <div id="cat-indicator-material" class="absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors"></div>
-                                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="box" size="20"></i></div>
+                                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-emerald-500 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="box" size="20"></i></div>
                                     <span id="cat-text-material" class="font-black text-slate-400 text-[10px] uppercase tracking-widest">Material</span>
                                 </div>
                             </div>
-                            <div class="border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors group" onclick="document.getElementById('fileInput').click()">
+                            <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group" onclick="document.getElementById('fileInput').click()">
                                 <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage(this)">
                                 <div id="uploadPlaceholder" class="text-slate-400">
                                     <i data-lucide="camera" class="mx-auto" size="24"></i>
@@ -1065,7 +1063,7 @@
                         <div id="step-detalhes-manutencao" class="hidden">
                             <p class="text-xs font-black uppercase text-slate-400 mb-4 tracking-widest">2. Detalhes do problema</p>
                             <div id="selectedToolMaintenance" class="mb-4"></div>
-                            <div class="border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors group mb-4" onclick="document.getElementById('maintenanceFileInput').click()">
+                            <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group mb-4" onclick="document.getElementById('maintenanceFileInput').click()">
                                 <input type="file" id="maintenanceFileInput" class="hidden" accept="image/*" onchange="previewMaintenanceImage(this)">
                                 <div id="maintenanceUploadPlaceholder" class="text-slate-400">
                                     <i data-lucide="camera" class="mx-auto" size="24"></i>
@@ -1100,7 +1098,7 @@
                         <div class="space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- Photo Upload -->
-                                <div class="border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors group" onclick="document.getElementById('workerFileInputModal').click()">
+                                <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group" onclick="document.getElementById('workerFileInputModal').click()">
                                     <input type="file" id="workerFileInputModal" class="hidden" accept="image/*" onchange="previewWorkerImage(this)">
                                     <div id="workerUploadPlaceholderModal" class="text-slate-400">
                                         <i data-lucide="camera" class="mx-auto" size="24"></i>
@@ -1121,7 +1119,6 @@
                             <!-- Worker Type Selection -->
                             <div class="flex gap-3">
                                 <div onclick="selectWorkerType('LDC')" id="type-card-ldc" class="flex-1 cursor-pointer bg-blue-50 border-2 border-blue-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden">
-                                    <div id="indicator-ldc" class="absolute top-3 right-3 w-2.5 h-2.5 bg-blue-500 rounded-full transition-colors"></div>
                                     <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm group-hover:scale-110 transition-transform">
                                         <i data-lucide="building-2" size="20"></i>
                                     </div>
@@ -1129,8 +1126,7 @@
                                 </div>
                                 
                                 <div onclick="selectWorkerType('TERCEIRO')" id="type-card-terceiro" class="flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-slate-300 hover:shadow-md group relative overflow-hidden">
-                                    <div id="indicator-terceiro" class="absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors"></div>
-                                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 shadow-sm group-hover:scale-110 transition-transform">
+                                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-orange-500 shadow-sm group-hover:scale-110 transition-transform">
                                         <i data-lucide="hard-hat" size="20"></i>
                                     </div>
                                     <span id="text-terceiro" class="font-black text-slate-400 text-xs uppercase tracking-widest">Terceiro</span>
@@ -1569,7 +1565,7 @@
                     renderTeam(); 
                 }
 
-                function updateInsights() {
+                function updateDashboard() {
                     const chartDom = document.getElementById('flowChart');
                     if (!chartDom) return;
 
@@ -1578,7 +1574,7 @@
                     myChart = echarts.init(chartDom, appSettings.darkMode ? 'dark' : null, { renderer: 'svg' });
                     
                     if (history.length === 0) {
-                        if (document.getElementById('insightDetailsContainer')) document.getElementById('insightDetailsContainer').classList.add('hidden');
+                        if (document.getElementById('dashboardDetailsContainer')) document.getElementById('dashboardDetailsContainer').classList.add('hidden');
                         chartDom.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-slate-400 gap-4"><i data-lucide="bar-chart-3" size="48" class="opacity-20"></i><p class="font-black uppercase text-[10px] tracking-widest">Sem movimentações registradas no histórico</p></div>`;
                         lucide.createIcons();
                         return;
@@ -1705,9 +1701,9 @@
                             title = `<i data-lucide="wrench" class="text-rose-500"></i> Itens em Manutenção em ${formattedDate}`;
                         }
 
-                        const detailsContainer = document.getElementById('insightDetailsContainer');
-                        const detailsTitle = document.getElementById('insightDetailsTitle');
-                        const detailsList = document.getElementById('insightDetailsList');
+                        const detailsContainer = document.getElementById('dashboardDetailsContainer');
+                        const detailsTitle = document.getElementById('dashboardDetailsTitle');
+                        const detailsList = document.getElementById('dashboardDetailsList');
 
                         if (filtered.length > 0) {
                             detailsContainer.classList.remove('hidden');
@@ -1738,7 +1734,7 @@
                     const handleKeyZoom = (e) => {
                         // Não executa se o usuário estiver digitando em algum campo
                         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-                        if (!document.getElementById('section-insights').classList.contains('active-section')) return;
+                        if (!document.getElementById('section-dashboard').classList.contains('active-section')) return;
 
                         const zoom = myChart.getOption().dataZoom[0];
                         let start = zoom.start, end = zoom.end;
@@ -1751,8 +1747,8 @@
                         }
                     };
                     // Remove o listener antigo para não acumular eventos ao trocar de seção
-                    window.removeEventListener('keydown', window._insightZoomHandler);
-                    window._insightZoomHandler = handleKeyZoom;
+                    window.removeEventListener('keydown', window._dashboardZoomHandler);
+                    window._dashboardZoomHandler = handleKeyZoom;
                     window.addEventListener('keydown', handleKeyZoom);
 
                     window.addEventListener('resize', () => myChart.resize());
@@ -1897,7 +1893,7 @@
                     if (s === 'maintenance') renderMaintenance();
                     if (s === 'team') renderTeam();
                     if (s === 'settings') loadSettingsUI();
-                    if (s === 'insights') updateInsights();
+                    if (s === 'dashboard') updateDashboard();
                     render();
                     playSound('click');
                 }
@@ -1930,25 +1926,36 @@
                     pendingCategory = cat;
                     const toolCard = document.getElementById('cat-card-tool');
                     const matCard = document.getElementById('cat-card-material');
-                    const toolInd = document.getElementById('cat-indicator-tool');
-                    const matInd = document.getElementById('cat-indicator-material');
                     const toolText = document.getElementById('cat-text-tool');
                     const matText = document.getElementById('cat-text-material');
+                    const labelName = document.querySelector('label[for="toolNameInput"]');
+                    const inputName = document.getElementById('toolNameInput');
+                    const labelBrand = document.querySelector('label[for="toolBrandInput"]');
+                    const inputBrand = document.getElementById('toolBrandInput');
+                    const modalTitle = document.getElementById('addModalTitle');
 
                     if (cat === 'tool') {
                         toolCard.className = "flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
-                        toolInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-white rounded-full transition-colors";
                         toolText.className = "font-black text-white text-[10px] uppercase tracking-widest";
                         matCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-slate-300 group relative overflow-hidden";
-                        matInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors";
                         matText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
+
+                        if (labelName) labelName.innerText = "Nome do Equipamento";
+                        if (inputName) inputName.placeholder = "NOME DA FERRAMENTA";
+                        if (labelBrand) labelBrand.innerText = "Marca";
+                        if (inputBrand) inputBrand.placeholder = "MARCA DA FERRAMENTA";
+                        if (modalTitle) modalTitle.innerText = modalTitle.innerText.includes("Editar") ? "Editar Equipamento" : "Novo Equipamento";
                     } else {
                         toolCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden";
-                        toolInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors";
                         toolText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
                         matCard.className = "flex-1 cursor-pointer bg-emerald-600 border-2 border-emerald-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
-                        matInd.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-white rounded-full transition-colors";
                         matText.className = "font-black text-white text-[10px] uppercase tracking-widest";
+
+                        if (labelName) labelName.innerText = "Nome do Material";
+                        if (inputName) inputName.placeholder = "NOME DO MATERIAL";
+                        if (labelBrand) labelBrand.innerText = "Fabricante";
+                        if (inputBrand) inputBrand.placeholder = "FABRICANTE / MARCA";
+                        if (modalTitle) modalTitle.innerText = modalTitle.innerText.includes("Editar") ? "Editar Material" : "Novo Material";
                     }
                 }
 
@@ -1958,8 +1965,6 @@
                     currentWorkerType = type;
                     const ldcCard = document.getElementById('type-card-ldc');
                     const terceiroCard = document.getElementById('type-card-terceiro');
-                    const ldcIndicator = document.getElementById('indicator-ldc');
-                    const terceiroIndicator = document.getElementById('indicator-terceiro');
                     const ldcText = document.getElementById('text-ldc');
                     const terceiroText = document.getElementById('text-terceiro');
                     const companyLabel = document.getElementById('workerCompanyLabel');
@@ -1969,12 +1974,10 @@
                     if (type === 'LDC') {
                         // Active LDC
                         ldcCard.className = "flex-1 cursor-pointer bg-blue-50 border-2 border-blue-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
-                        ldcIndicator.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-blue-500 rounded-full transition-colors";
                         ldcText.className = "font-black text-blue-900 text-[10px] uppercase tracking-widest";
 
                         // Inactive Terceiro
                         terceiroCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-slate-300 hover:shadow-md group relative overflow-hidden";
-                        terceiroIndicator.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors";
                         terceiroText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
 
                         companyLabel.innerText = "Matrícula";
@@ -1983,12 +1986,10 @@
                     } else {
                         // Inactive LDC
                         ldcCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 hover:shadow-md group relative overflow-hidden";
-                        ldcIndicator.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-slate-200 rounded-full transition-colors";
                         ldcText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
 
                         // Active Terceiro
                         terceiroCard.className = "flex-1 cursor-pointer bg-orange-50 border-2 border-orange-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
-                        terceiroIndicator.className = "absolute top-3 right-3 w-2.5 h-2.5 bg-orange-500 rounded-full transition-colors";
                         terceiroText.className = "font-black text-orange-900 text-[10px] uppercase tracking-widest";
 
                         companyLabel.innerText = "Empresa";
@@ -2837,9 +2838,9 @@
                 function openAddModal(s) { 
                     pendingStatus = s; 
                     currentImageBase64 = "";
-                    selectItemCategory('tool');
                     document.getElementById('fileInput').value = null;
                     document.getElementById('addModalTitle').innerText = "Novo Equipamento";
+                    selectItemCategory('tool');
                     document.getElementById('toolCodeInput').value = "";
                     document.getElementById('toolNameInput').value = "";
                     document.getElementById('toolBrandInput').value = "";
@@ -2906,9 +2907,9 @@
                 async function editTool(id) {
                     const t = tools.find(x => x.id === id);
                     if(!t) return;
-                    selectItemCategory(t.category || 'tool');
                     document.getElementById('fileInput').value = null;
                     document.getElementById('addModalTitle').innerText = "Editar Equipamento";
+                    selectItemCategory(t.category || 'tool');
                     document.getElementById('toolCodeInput').value = t.code;
                     document.getElementById('toolNameInput').value = t.name;
                     document.getElementById('toolBrandInput').value = t.brand || "";
@@ -3087,8 +3088,8 @@
                         <div id="tool-card-${t.id}" class="bg-white rounded-[2rem] p-4 shadow-lg border border-slate-100 flex flex-col group relative transition-all hover:shadow-2xl hover:-translate-y-1">
                             ${!isReadOnly ? `<div class="absolute top-6 right-6 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                                 ${t.status === 'em uso' ? `<button onclick="requestReturn(${t.id}); event.stopPropagation();" class="bg-orange-500 text-white p-2 rounded-lg shadow-sm border border-orange-500 cursor-pointer hover:bg-orange-600" title="Devolver"><i data-lucide="rotate-ccw" size="14"></i></button>` : ''}
-                                <button onclick="editTool(${t.id}); event.stopPropagation();" class="bg-white/90 p-2 rounded-lg text-slate-600 hover:text-blue-600 shadow-sm border border-slate-200 cursor-pointer backdrop-blur" title="Editar"><i data-lucide="pencil" size="14"></i></button>
-                                <button onclick="requestDelete(${t.id}); event.stopPropagation();" class="bg-white/90 p-2 rounded-lg text-rose-500 hover:bg-rose-50 shadow-sm border border-slate-200 cursor-pointer backdrop-blur" title="Excluir"><i data-lucide="trash-2" size="14"></i></button>
+                                <button onclick="editTool(${t.id}); event.stopPropagation();" class="bg-white/90 dark:bg-slate-800/90 p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 shadow-sm border border-slate-200 dark:border-slate-700 cursor-pointer backdrop-blur" title="Editar"><i data-lucide="pencil" size="14"></i></button>
+                                <button onclick="requestDelete(${t.id}); event.stopPropagation();" class="bg-white/90 dark:bg-slate-800/90 p-2 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 shadow-sm border border-slate-200 dark:border-slate-700 cursor-pointer backdrop-blur" title="Excluir"><i data-lucide="trash-2" size="14"></i></button>
                             </div>` : ''}
                             <div onclick="openZoom('${t.img || ''}')" class="img-container relative w-full aspect-square bg-slate-50 rounded-2xl mb-4 flex items-center justify-center overflow-hidden border border-slate-50">
                                 ${t.img ? `<img src="${t.img}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">` : `<i data-lucide="wrench" class="text-slate-200" size="40"></i>`}
@@ -3263,7 +3264,7 @@
                             <td class="px-4 md:px-8 py-5 text-right">
                                 <div class="flex justify-end gap-2">
                                     ${t.status === 'em uso' ? 
-                                        `<button onclick="requestReturn(${t.id})" class="p-2 text-orange-500 hover:bg-orange-50 rounded-lg transition-colors" title="Devolver"><i data-lucide="rotate-ccw" size="16"></i></button>` :
+                                        `<button onclick="requestReturn(${t.id})" class="p-2 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 rounded-lg transition-colors" title="Devolver"><i data-lucide="rotate-ccw" size="16"></i></button>` :
                                         '<div class="w-10 p-2"></div>'
                                     }
                                     <button onclick="editTool(${t.id})" class="p-2 text-slate-400 hover:text-blue-600 bg-transparent border-none cursor-pointer"><i data-lucide="pencil" size="16"></i></button>
@@ -4279,8 +4280,8 @@
                             const textColor = workerType === 'TERCEIRO' ? 'text-orange-600' : 'text-blue-600';
                             const infoDisplay = w.info || w.company || 'N/A';
                             return `
-                            <div onclick="selectWorkerForMaterial(${w.id})" class="bg-slate-50 p-4 rounded-xl border border-slate-100 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all flex flex-col items-center gap-2 text-center">
-                                <div class="w-10 h-10 bg-white ${textColor} rounded-full flex items-center justify-center font-black shadow-sm overflow-hidden border border-slate-100">
+                            <div onclick="selectWorkerForMaterial(${w.id})" class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all flex flex-col items-center gap-2 text-center">
+                                <div class="w-10 h-10 bg-white dark:bg-slate-900 ${textColor} rounded-full flex items-center justify-center font-black shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700">
                                     ${w.img ? `<img src="${w.img}" class="w-full h-full object-cover">` : w.name.charAt(0)}
                                 </div>
                                 <div class="w-full">
@@ -5219,8 +5220,8 @@
                                             <p class="text-xs font-bold text-slate-700 truncate">Nota Fiscal Anexada</p>
                                             <p class="text-[10px] text-slate-400 uppercase">Clique para visualizar</p>
                                         </div>
-                                        <button onclick="openZoom('${info.invoiceFile}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Visualizar"><i data-lucide="eye" size="18"></i></button>
-                                        <button onclick="deleteInvoice(${id})" class="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors" title="Excluir Nota"><i data-lucide="trash-2" size="18"></i></button>
+                                        <button onclick="openZoom('${info.invoiceFile}')" class="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="Visualizar"><i data-lucide="eye" size="18"></i></button>
+                                        <button onclick="deleteInvoice(${id})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg transition-colors" title="Excluir Nota"><i data-lucide="trash-2" size="18"></i></button>
                                     </div>
                                 `;
                             } else {
@@ -5346,11 +5347,11 @@
                     function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
 
                     ['dragenter', 'dragover'].forEach(eventName => {
-                        dropArea.addEventListener(eventName, () => dropArea.classList.add('border-blue-500', 'bg-blue-50'), false);
+                        dropArea.addEventListener(eventName, () => { dropArea.classList.add('border-blue-500'); dropArea.classList.add(appSettings.darkMode ? 'bg-blue-900/20' : 'bg-blue-50'); }, false);
                     });
 
                     ['dragleave', 'drop'].forEach(eventName => {
-                        dropArea.addEventListener(eventName, () => dropArea.classList.remove('border-blue-500', 'bg-blue-50'), false);
+                        dropArea.addEventListener(eventName, () => dropArea.classList.remove('border-blue-500', 'bg-blue-50', 'bg-blue-900/20'), false);
                     });
 
                     dropArea.addEventListener('drop', handleDrop, false);
