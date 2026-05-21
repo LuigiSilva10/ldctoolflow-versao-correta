@@ -1,5 +1,4 @@
-const CACHE_NAME = 'toolflow-turso-v1.0';
-const CACHE_NAME = 'toolflow-turso-v1.1'; // Versão incrementada para forçar atualização
+const CACHE_NAME = 'toolflow-turso-v1.1';
 const ASSETS = [
   './',
   './index.html',

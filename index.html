@@ -96,6 +96,7 @@
                 
                 .filter-pill { padding: 0.5rem 1.25rem; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; transition: all 0.2s; border: 1px solid transparent; cursor: pointer; }
                 .filter-pill.active { border-color: currentColor; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+                .area-pill.active { background-color: #2563EB !important; color: white !important; border-color: #2563EB !important; }
 
                 .img-container { cursor: pointer !important; }
 
@@ -195,6 +196,7 @@
                     <button id="btn-materials" onclick="showSection('materials')" class="nav-btn"><i data-lucide="box"></i> <span class="sidebar-text">Materiais</span></button>
                     <button id="btn-team" onclick="showSection('team')" class="nav-btn"><i data-lucide="users"></i> <span class="sidebar-text">Equipe</span></button>
                     <button id="btn-maintenance" onclick="showSection('maintenance')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">FollowUp</span></button>
+                    <button id="btn-shopping" onclick="showSection('shopping')" class="nav-btn"><i data-lucide="shopping-cart"></i> <span class="sidebar-text">Lista de Compras</span></button>
                     <button id="btn-logs" onclick="showSection('logs')" class="nav-btn"><i data-lucide="history"></i> <span class="sidebar-text">Histórico</span></button>
                     <button id="btn-database" onclick="showSection('database')" class="nav-btn"><i data-lucide="database"></i> <span class="sidebar-text">Backup</span></button>
                     <button id="btn-settings" onclick="showSection('settings')" class="nav-btn"><i data-lucide="settings"></i> <span class="sidebar-text">Configurações</span></button>
@@ -230,7 +232,7 @@
                                     <i data-lucide="calendar" size="16" class="text-white"></i>
                                     <span id="currentDateDisplay" class="text-xs font-bold uppercase tracking-widest"></span>
                                 </div>
-                                
+                                <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mr-4 opacity-60">Created by, Luigi Vaz.</p>
                             </div>
                         </div>
                     </div>
@@ -568,6 +570,38 @@
                 </div>
             </main>
 
+            <main id="section-shopping" class="main-content p-4 md:p-8">
+                <div class="max-w-[1400px] mx-auto">
+                    <div class="bg-[#0B1120] rounded-[2.5rem] p-6 md:p-8 mb-10 shadow-2xl relative overflow-hidden border border-slate-800">
+                        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
+                        <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
+                            <div>
+                                <div class="flex items-center gap-4 mb-2">
+                                    <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
+                                        <i data-lucide="shopping-cart" size="28"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Lista de Compras</h2>
+                                        <p class="text-slate-400 text-sm font-medium mt-1">Planejamento de novas aquisições e reposições</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="openShoppingModal()" class="bg-blue-600 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 shadow-lg shadow-blue-200 text-xs uppercase tracking-widest hover:bg-blue-700 transition-all border-none cursor-pointer w-full xl:w-auto justify-center admin-only">
+                                <i data-lucide="plus" size="18"></i> Novo Pedido
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 mb-8 flex-wrap">
+                        <button onclick="setShoppingFilter('pending')" id="shop-filter-pending" class="filter-pill active bg-blue-100 text-blue-600">Pendentes</button>
+                        <button onclick="setShoppingFilter('bought')" id="shop-filter-bought" class="filter-pill bg-slate-100 text-slate-500">Já Comprados</button>
+                        <button onclick="setShoppingFilter('all')" id="shop-filter-all" class="filter-pill bg-slate-100 text-slate-500">Ver Todos</button>
+                    </div>
+
+                    <div id="shoppingGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </main>
+
             <div id="zoomModal" class="fixed inset-0 bg-black/90 hidden z-[950] flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal('zoomModal')">
 
                 <button onclick="closeModal('zoomModal'); event.stopPropagation();" class="absolute top-5 right-5 text-white bg-transparent border-none cursor-pointer z-[951]"><i data-lucide="x" size="32"></i></button>
@@ -639,12 +673,18 @@
                                 <div id="imagePreviewContainer" class="hidden relative h-full" title="Clique para alterar a imagem"><img id="imagePreview" class="h-full object-contain rounded-lg transition-opacity group-hover:opacity-80"><button onclick="removeImage(event)" class="absolute top-1 right-1 bg-rose-500 text-white rounded-full p-0.5 leading-none shadow-md border-2 border-white cursor-pointer" title="Remover Imagem"><i data-lucide="x" size="14"></i></button></div>
                             </div>
                             <div>
-                                <label for="toolCodeInput" class="text-xs font-black uppercase text-slate-400 ml-4">Código (#)</label>
-                                <input type="text" id="toolCodeInput" placeholder="CÓDIGO / TAG" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-emerald-500 transition-all">
-                            </div>
-                            <div>
                                 <label for="toolNameInput" class="text-xs font-black uppercase text-slate-400 ml-4">Nome do Equipamento</label>
                                 <input type="text" id="toolNameInput" placeholder="NOME DA FERRAMENTA" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-emerald-500 transition-all">
+                            </div>
+                            <div>
+                                <label for="toolCodeInput" class="text-xs font-black uppercase text-slate-400 ml-4 mb-1 block">Código (#)</label>
+                                <div class="relative">
+                                    <input type="text" id="toolCodeInput" placeholder="EX: FUR-EL-001" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-emerald-500 transition-all pr-16">
+                                    <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                        <button onclick="showIDHint()" class="text-slate-400 hover:text-blue-500 p-1" title="Dica de Padrão"><i data-lucide="help-circle" size="14"></i></button>
+                                        <button onclick="suggestID()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-2 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all shadow-sm">Sugerir</button>
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <label for="toolBrandInput" class="text-xs font-black uppercase text-slate-400 ml-4">Marca</label>
@@ -942,7 +982,7 @@
                                             </div>
                                             <p class="text-[9px] text-slate-400 mt-2 font-medium leading-relaxed">
                                                 <i data-lucide="info" size="10" class="inline mr-1 -mt-0.5"></i>
-                                                A capacidade de 500MB comporta aproximadamente <strong>15.000 a 20.000 itens</strong> completos com fotos otimizadas, ou milhões de registros se forem apenas texto.
+                                                A capacidade de 500MB comporta até <strong>90.000 itens (apenas texto)</strong> ou aproximadamente 15.000 a 20.000 itens completos com fotos otimizadas.
                                             </p>
                                         </div>
                                     </div>
@@ -962,13 +1002,17 @@
                                 </div>
 
                                 <div class="space-y-4">
-                                    <div>
-                                        <label class="text-xs font-bold text-slate-400 uppercase ml-2 tracking-wider">Link de Visualização (Somente Leitura)</label>
-                                        <div class="flex gap-2 mt-1">
-                                            <input type="text" id="readOnlyLinkInput" readonly class="flex-1 border-2 border-slate-100 rounded-xl px-4 py-3 font-bold text-slate-500 outline-none bg-slate-50 text-xs truncate">
-                                            <button onclick="copyReadOnlyLink()" class="bg-pink-500 text-white px-4 rounded-xl font-bold uppercase text-xs hover:bg-pink-600 transition-all shadow-lg shadow-pink-200">Copiar</button>
+                                    <div class="flex flex-col items-center gap-6 mt-2">
+                                        <button id="webShareBtn" onclick="shareSystem()" class="hidden w-full bg-pink-500 text-white px-6 py-4 rounded-2xl font-black uppercase text-xs hover:bg-pink-600 transition-all flex items-center justify-center gap-3 shadow-lg shadow-pink-200">
+                                            <i data-lucide="share-2" size="18"></i> Compartilhar Link de Acesso
+                                        </button>
+
+                                        <div class="p-6 bg-white rounded-[2rem] border-2 border-slate-50 shadow-sm flex flex-col items-center">
+                                            <canvas id="shareQrCanvas" class="w-40 h-40"></canvas>
+                                            <p class="text-[10px] font-black text-slate-400 uppercase mt-4 tracking-widest">QR Code de Acesso</p>
                                         </div>
-                                        <p class="text-xs text-slate-400 mt-2 font-medium"><i data-lucide="info" size="12" class="inline mr-1"></i>Quem acessar este link poderá ver os dados mas <strong>não poderá editar nada</strong>.</p>
+
+                                        <p class="text-xs text-slate-400 font-medium text-center px-4"><i data-lucide="info" size="14" class="inline mr-1 -mt-0.5"></i>O acesso compartilhado permite <strong>apenas a visualização</strong> dos dados.</p>
                                     </div>
                                 </div>
                             </div>
@@ -996,6 +1040,17 @@
                             <h4 class="font-black text-emerald-600 uppercase text-xs mb-4 flex justify-between">Itens Encontrados <span id="auditFoundCount" class="bg-emerald-100 px-2 py-0.5 rounded-full">0</span></h4>
                             <div id="auditFoundList" class="space-y-2"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="historyDetailModal" class="fixed inset-0 bg-slate-900/90 hidden z-[900] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('historyDetailModal')">
+                <div class="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+                    <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-black uppercase tracking-tighter text-slate-900">Detalhes da Movimentação</h3>
+                        <button onclick="closeModal('historyDetailModal');" class="text-slate-400 hover:text-rose-500 bg-transparent border-none cursor-pointer"><i data-lucide="x"></i></button>
+                    </div>
+                    <div id="historyDetailContent" class="p-8 max-h-[80vh] overflow-y-auto custom-scrollbar">
                     </div>
                 </div>
             </div>
@@ -1096,6 +1151,57 @@
                 </div>
             </div>
 
+            <div id="shoppingModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('shoppingModal')">
+                <div class="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+                    <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 id="shoppingModalTitle" class="font-black uppercase tracking-tighter text-slate-900">Novo Pedido de Compra</h3>
+                        <button onclick="closeModal('shoppingModal');" class="text-slate-400 hover:text-rose-500 bg-transparent border-none cursor-pointer"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="p-8 space-y-4">
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Tipo de Item</label>
+                            <div class="flex gap-3 mb-4">
+                                <div onclick="selectShopCategory('tool')" id="shop-cat-card-tool" class="flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden">
+                                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="wrench" size="20"></i></div>
+                                    <span id="shop-cat-text-tool" class="font-black text-white text-[10px] uppercase tracking-widest">Ferramenta</span>
+                                </div>
+                                <div onclick="selectShopCategory('consumable')" id="shop-cat-card-consumable" class="flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden">
+                                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-amber-500 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="box" size="20"></i></div>
+                                    <span id="shop-cat-text-consumable" class="font-black text-slate-400 text-[10px] uppercase tracking-widest">Consumo</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Nome da Ferramenta</label>
+                            <input type="text" id="shopNameInput" placeholder="EX: FURADEIRA INDUSTRIAL" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                        </div>
+                        <div id="purchaseDetailsFields" class="hidden grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 mt-2">
+                            <div>
+                                <label class="text-[10px] font-black uppercase text-emerald-600 ml-4">Valor Pago (R$)</label>
+                                <input type="number" id="shopPricePaidInput" placeholder="0,00" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black uppercase text-emerald-600 ml-4">Data da Compra</label>
+                                <input type="date" id="shopPurchaseDateInput" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Marca Preferencial</label>
+                            <input type="text" id="shopBrandInput" placeholder="EX: DEWALT, BOSCH..." class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Link de Compra</label>
+                            <input type="url" id="shopLinkInput" placeholder="HTTPS://MERCADOLIVRE.COM/..." class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-blue-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Itens Necessários / Observações</label>
+                            <textarea id="shopNotesInput" placeholder="EX: BATERIA EXTRA, MALETA DE TRANSPORTE..." class="w-full h-24 border-2 border-slate-100 rounded-xl p-3 font-medium text-sm outline-none focus:border-blue-500 transition-all"></textarea>
+                        </div>
+                        <button id="btnSaveShopping" onclick="addShoppingItem()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700 transition-all">Salvar Pedido</button>
+                    </div>
+                </div>
+            </div>
+
             <div id="addWorkerModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('addWorkerModal')">
                 <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
                     <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center">
@@ -1174,7 +1280,7 @@
             </div>
 
             <div id="materialModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('materialModal')">
-                <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+                <div class="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
                     <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center gap-4">
                         <h3 id="materialModalTitle" class="font-black uppercase tracking-tighter text-slate-900">Saída de Ferramentas</h3>
                         <div class="flex-1 flex justify-end gap-2">
@@ -1182,7 +1288,7 @@
                         </div>
                         <button onclick="closeModal('materialModal'); event.stopPropagation();" class="text-slate-400 hover:text-rose-500 bg-transparent border-none cursor-pointer"><i data-lucide="x"></i></button>
                     </div>
-                    <div class="p-8">
+                    <div class="p-4 md:p-6">
                         <div id="qrScannerContainer" class="hidden">
                             <div id="qr-reader" class="w-full rounded-xl overflow-hidden border-2 border-slate-200"></div>
                         </div>
@@ -1204,16 +1310,49 @@
                                 <button id="btnNextMaterialQty" onclick="processQtyStep()" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700">Avançar</button>
                             </div>
                         </div>
-                        <div id="step-material-worker" class="hidden">
-                            <p class="text-xs font-black uppercase text-slate-400 mb-4 tracking-widest">3. Quem está retirando?</p>
-                            <div id="teamGridMaterial" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar"></div>
-                                <button onclick="resetMaterial(1)" class="w-full mt-4 py-3 bg-slate-100 text-slate-500 rounded-xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                        <div id="step-material-details" class="hidden text-center py-6">
+                            <p class="text-xs font-black uppercase text-slate-400 mb-4 tracking-widest">3. Detalhes do Serviço</p>
+                            <div class="space-y-6">
+                                <div class="text-left px-2">
+                                    <label class="text-[10px] font-black uppercase text-slate-400 block mb-2 ml-2">Qual serviço será executado?</label>
+                                    <input type="text" id="materialServiceInput" placeholder="EX: MANUTENÇÃO PREVENTIVA, TROCA DE ROLAMENTO..." class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                                </div>
+                                <div class="text-left px-2">
+                                    <div class="flex items-center justify-between mb-2 ml-2">
+                                        <label class="text-[10px] font-black uppercase text-slate-400 block">Área de Atuação</label>
+                                        <button onclick="openModal('areaInfoModal')" class="text-slate-400 hover:text-blue-600 transition-colors" title="Ver responsáveis por área">
+                                            <i data-lucide="help-circle" size="16"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex gap-2 justify-center flex-wrap" id="areaButtonGroup">
+                                        <button onclick="selectAreaForMaterial('1A')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">1A</button>
+                                        <button onclick="selectAreaForMaterial('1B')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">1B</button>
+                                        <button onclick="selectAreaForMaterial('2')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">2</button>
+                                        <button onclick="selectAreaForMaterial('3')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">3</button>
+                                        <button onclick="selectAreaForMaterial('4')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">4</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 mt-8">
+                                <button onclick="resetMaterial(1)" class="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                                <button onclick="processDetailsStep()" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700">Avançar</button>
+                            </div>
                         </div>
-                        <div id="step-material-confirm" class="hidden text-center py-6">
-                            <div id="confirmationDetails" class="mb-6"></div>
-                            <h4 class="text-xl font-black text-slate-900 uppercase mb-8">Confirmar Retirada?</h4>
+                        <div id="step-material-worker" class="hidden">
+                            <p class="text-xs font-black uppercase text-slate-400 mb-4 tracking-widest">4. Quem está retirando?</p>
+                            <div class="relative mb-4">
+                                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size="16"></i>
+                                <input type="text" id="workerSearchInputMaterial" onkeyup="renderWorkerListMaterial()" placeholder="BUSCAR POR NOME, ID OU EMPRESA..." class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl pl-12 pr-10 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                                <button onclick="clearSearch('workerSearchInputMaterial', renderWorkerListMaterial)" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 hidden z-10"><i data-lucide="x-circle" size="16"></i></button>
+                            </div>
+                            <div id="teamGridMaterial" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar"></div>
+                                <button onclick="resetMaterial(2)" class="w-full mt-4 py-3 bg-slate-100 text-slate-500 rounded-xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                        </div>
+                        <div id="step-material-confirm" class="hidden text-center py-2">
+                            <div id="confirmationDetails" class="mb-2"></div>
+                            <h4 class="text-md font-black text-slate-900 uppercase mb-2">Confirmar Retirada?</h4>
                             <div class="flex gap-3">
-                                    <button onclick="resetMaterial(2)" class="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                                    <button onclick="resetMaterial(3)" class="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
                                     <button id="btnFinalizeMaterial" class="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-indigo-700">Confirmar Saída</button>
                             </div>
                         </div>
@@ -1370,6 +1509,50 @@
                 </div>
             </div>
 
+            <div id="areaInfoModal" class="fixed inset-0 bg-slate-900/90 hidden z-[980] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('areaInfoModal');">
+                <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col" onclick="event.stopPropagation()">
+                    <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-black uppercase tracking-tighter text-slate-900 flex items-center gap-2">
+                            <i data-lucide="map" class="text-blue-600" size="20"></i> Responsáveis por Área
+                        </h3>
+                        <button onclick="closeModal('areaInfoModal');" class="text-slate-400 hover:text-rose-500 bg-transparent border-none cursor-pointer"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="flex flex-col md:flex-row h-[480px]">
+                        <!-- Lado Esquerdo: Lista de Áreas -->
+                        <div class="w-full md:w-1/2 p-6 border-r border-slate-100 overflow-y-auto custom-scrollbar space-y-3 bg-slate-50/30">
+                            <div onclick="selectAreaInfo('1A')" class="area-info-card flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all shadow-sm group">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-md group-hover:scale-110 transition-transform">1A</div>
+                                <div class="min-w-0"><p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Supervisor</p><p class="text-xs font-black text-slate-800 uppercase truncate">Cleyton Madureira</p></div>
+                            </div>
+                            <div onclick="selectAreaInfo('1B')" class="area-info-card flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all shadow-sm group">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-md group-hover:scale-110 transition-transform">1B</div>
+                                <div class="min-w-0"><p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Supervisor</p><p class="text-xs font-black text-slate-800 uppercase truncate">Ricardo Tavares</p></div>
+                            </div>
+                            <div onclick="selectAreaInfo('2')" class="area-info-card flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all shadow-sm group">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-md group-hover:scale-110 transition-transform">2</div>
+                                <div class="min-w-0"><p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Supervisor</p><p class="text-xs font-black text-slate-800 uppercase truncate">Gustavo Pontelli</p></div>
+                            </div>
+                            <div onclick="selectAreaInfo('3')" class="area-info-card flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all shadow-sm group">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-md group-hover:scale-110 transition-transform">3</div>
+                                <div class="min-w-0"><p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Supervisor</p><p class="text-xs font-black text-slate-800 uppercase truncate">Fábio Neto</p></div>
+                            </div>
+                            <div onclick="selectAreaInfo('4')" class="area-info-card flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all shadow-sm group">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-md group-hover:scale-110 transition-transform">4</div>
+                                <div class="min-w-0"><p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Supervisor</p><p class="text-xs font-black text-slate-800 uppercase truncate">Marcelo Guerra</p></div>
+                            </div>
+                        </div>
+
+                        <!-- Lado Direito: Detalhes da Área -->
+                        <div id="areaDetailView" class="w-full md:w-1/2 p-8 flex flex-col items-center justify-center text-center bg-white transition-all duration-300">
+                            <div class="opacity-20 flex flex-col items-center gap-4">
+                                <i data-lucide="info" size="48"></i>
+                                <p class="font-black uppercase text-[10px] tracking-widest">Selecione uma área para ver os detalhes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="overdueModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('overdueModal')">
                 <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
                     <div class="bg-rose-50 p-6 border-b border-rose-100 flex justify-between items-center">
@@ -1422,7 +1605,10 @@
                         }
 
                         const data = await response.json();
-                        return data.results.map(r => r.response?.result).filter(Boolean);
+                        if (!data || !Array.isArray(data.results)) {
+                            return [];
+                        }
+                        return data.results.map(r => r?.response?.result).filter(Boolean);
                     }
                 };
                 // -------------------------------------
@@ -1432,6 +1618,9 @@
                 let tools = JSON.parse(localStorage.getItem('ldc_pro_db')) || [];
                 let team = JSON.parse(localStorage.getItem('ldc_team_db')) || [];
                 // Remove Almoxarifado legado se existir
+                let shoppingList = (JSON.parse(localStorage.getItem('ldc_shopping_db')) || []).map(item => ({...item, status: item.status || 'pending'}));
+                let shoppingFilter = 'pending';
+                let pendingShopCategory = 'tool';
                 team = team.filter(w => w.id !== 1 && w.name !== 'ALMOXARIFADO');
 
                 let history = JSON.parse(localStorage.getItem('ldc_history_db')) || [];
@@ -1480,7 +1669,11 @@
 
                     try {
                         const results = await tursoClient.execute([{ sql: "SELECT key, value FROM app_storage" }]);
-                        const rows = results[0]?.rows || [];
+                        // Verificação ultra-segura para evitar erro de .length em undefined
+                        if (!Array.isArray(results) || results.length === 0 || !results[0] || !Array.isArray(results[0].rows)) {
+                            return;
+                        }
+                        const rows = results[0].rows; 
 
                         // Se houve alteração local enquanto baixava, ignora este download para não sobrescrever
                         if (lastLocalUpdate > fetchStart) return;
@@ -1490,14 +1683,21 @@
                         if (isSaving) return; // Verifica novamente antes de aplicar
 
                         if (rows.length > 0) {
-                            const cloudData = rows.reduce((acc, row) => { 
-                                acc[row[0].value] = JSON.parse(row[1].value); 
+                            const cloudData = rows.filter(row => Array.isArray(row) && row.length >= 2 && row[0] && row[1]).reduce((acc, row) => { 
+                                try {
+                                    const key = row[0].value;
+                                    const val = JSON.parse(row[1].value);
+                                    if (key) acc[key] = val;
+                                } catch(e) {
+                                    console.warn("Cloud Sync: Erro ao processar registro", row[0]?.value);
+                                }
                                 return acc; 
                             }, {});
 
-                            if (cloudData.tools) tools = cloudData.tools;
-                            if (cloudData.team) team = cloudData.team;
-                            if (cloudData.history) history = cloudData.history;
+                            if (cloudData.tools) tools = Array.isArray(cloudData.tools) ? cloudData.tools : (Array.isArray(tools) ? tools : []);
+                            if (cloudData.team) team = Array.isArray(cloudData.team) ? cloudData.team : (Array.isArray(team) ? team : []);
+                            if (cloudData.history) history = Array.isArray(cloudData.history) ? cloudData.history : (Array.isArray(history) ? history : []);
+                            if (cloudData.shoppingList) shoppingList = Array.isArray(cloudData.shoppingList) ? cloudData.shoppingList : (Array.isArray(shoppingList) ? shoppingList : []);
                             
                             save(false); // Salva localmente e atualiza a tela (false para não reenviar pra nuvem)
                         }
@@ -1871,6 +2071,7 @@
                     try {
                         localStorage.setItem('ldc_pro_db', JSON.stringify(tools)); 
                         localStorage.setItem('ldc_team_db', JSON.stringify(team));
+                        localStorage.setItem('ldc_shopping_db', JSON.stringify(shoppingList));
                         localStorage.setItem('ldc_history_db', JSON.stringify(history));
                         localStorage.setItem('ldc_settings_db', JSON.stringify(appSettings));
                     } catch (e) {
@@ -1884,7 +2085,8 @@
                             await tursoClient.execute([
                                 { sql: sqlUpsert, args: ['tools', JSON.stringify(tools)] },
                                 { sql: sqlUpsert, args: ['team', JSON.stringify(team)] },
-                                { sql: sqlUpsert, args: ['history', JSON.stringify(history)] }
+                                { sql: sqlUpsert, args: ['history', JSON.stringify(history)] },
+                                { sql: sqlUpsert, args: ['shoppingList', JSON.stringify(shoppingList)] }
                             ]);
 
                             lastCloudSaveTime = Date.now();
@@ -1931,6 +2133,7 @@
                     if (s === 'logs') renderHistory();
                     if (s === 'maintenance') renderMaintenance();
                     if (s === 'team') renderTeam();
+                    if (s === 'shopping') renderShoppingList();
                     if (s === 'settings') loadSettingsUI();
                     if (s === 'dashboard') updateDashboard();
                     render();
@@ -3201,6 +3404,76 @@
                     lucide.createIcons();
                 }
 
+                function openHistoryDetailModal(historyId) {
+                    const h = history.find(entry => entry.historyId === historyId);
+                    if (!h) return;
+
+                    const tool = tools.find(t => t.id === h.toolId) || {};
+                    const content = document.getElementById('historyDetailContent');
+                    
+                    let typeLabel, typeColor;
+                    if (h.returnDate) {
+                        if (h.type === 'manutencao') {
+                            typeLabel = 'Manutenção Finalizada';
+                            typeColor = 'text-emerald-600 bg-emerald-50 border-emerald-100';
+                        } else {
+                            typeLabel = h.condition === 'quebrado' ? 'Devolvido (Quebrado)' : 'Devolvido (Bom estado)';
+                            typeColor = h.condition === 'quebrado' ? 'text-rose-600 bg-rose-50 border-rose-100' : 'text-emerald-600 bg-emerald-50 border-emerald-100';
+                        }
+                    } else {
+                        typeLabel = h.type === 'manutencao' ? 'Em Manutenção' : 'Em Uso (Pendente)';
+                        typeColor = h.type === 'manutencao' ? 'text-rose-600 bg-rose-50 border-rose-100' : 'text-orange-600 bg-orange-50 border-orange-100';
+                    }
+
+                    content.innerHTML = `
+                        <div class="flex flex-col items-center text-center mb-8">
+                            <div class="w-24 h-24 bg-slate-100 rounded-3xl mb-4 overflow-hidden border-2 border-slate-50 shadow-inner flex items-center justify-center">
+                                ${h.toolImg ? `<img src="${h.toolImg}" class="w-full h-full object-cover">` : `<i data-lucide="wrench" class="text-slate-300" size="40"></i>`}
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${typeColor} mb-2">${typeLabel}</span>
+                            <h2 class="text-xl font-black text-slate-900 uppercase leading-tight">${h.toolName}</h2>
+                            <p class="text-xs font-bold text-slate-400 uppercase mt-1 tracking-widest">${tool.code || 'S/ CÓDIGO'}</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Responsável</p>
+                                <p class="text-sm font-black text-slate-700 uppercase">${h.workerName}</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Quantidade</p>
+                                <p class="text-sm font-black text-slate-700">${h.qty}</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Data Retirada</p>
+                                <p class="text-sm font-black text-slate-700">${formatISODate(h.checkoutDate)}</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Data Devolução</p>
+                                <p class="text-sm font-black text-slate-700">${h.returnDate ? formatISODate(h.returnDate) : 'Pendente'}</p>
+                            </div>
+                        </div>
+
+                        ${h.service ? `
+                        <div class="bg-blue-50/50 p-6 rounded-[2rem] border border-blue-100 mb-6">
+                            <p class="text-[10px] font-black text-blue-500 uppercase mb-3 tracking-widest flex items-center gap-2">
+                                <i data-lucide="info" size="14"></i> Serviço Executado
+                            </p>
+                            <p class="text-sm font-bold text-slate-700 leading-relaxed uppercase">${h.service}</p>
+                        </div>
+                        ` : ''}
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Área / Duração</p>
+                                <p class="text-sm font-black text-indigo-600">${h.area || 'N/A'} • ${formatDuration(h.checkoutDate, h.returnDate || new Date().toISOString())}</p>
+                            </div>
+                        </div>
+                    `;
+                    openModal('historyDetailModal');
+                    lucide.createIcons();
+                }
+
                 function renderMaterials() {
                     const grid = document.getElementById('materialsGrid');
                     if (!grid) return;
@@ -3410,9 +3683,9 @@
                         const toolImg = h.toolImg || tool.img;
 
                         return `
-                        <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col gap-4 relative group">
+                        <div onclick="openHistoryDetailModal(${h.historyId})" class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col gap-4 relative group cursor-pointer hover:border-blue-500 transition-all hover:shadow-lg">
                             ${!isReadOnly ? `<div class="absolute top-4 right-4">
-                                <button onclick="requestDeleteHistory(${h.historyId})" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Registro"><i data-lucide="trash-2" size="16"></i></button>
+                                <button onclick="requestDeleteHistory(${h.historyId}); event.stopPropagation();" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Registro"><i data-lucide="trash-2" size="16"></i></button>
                             </div>` : ''}
                             <div class="flex items-start gap-4">
                                 <div class="w-16 h-16 bg-slate-50 rounded-xl flex items-center justify-center overflow-hidden border border-slate-100">
@@ -3449,6 +3722,16 @@
                                     <span class="font-bold text-slate-400">Tempo de Posse:</span>
                                     <span class="font-black text-blue-600">${formatDuration(h.checkoutDate, h.returnDate)}</span>
                                 </div>
+                                ${h.service ? `
+                                <div class="flex justify-between border-t border-slate-50 pt-2 mt-2">
+                                    <span class="font-bold text-slate-400">Serviço:</span>
+                                    <span class="font-bold text-slate-700 uppercase truncate max-w-[150px]" title="${h.service}">${h.service}</span>
+                                </div>` : ''}
+                                ${h.area ? `
+                                <div class="flex justify-between">
+                                    <span class="font-bold text-slate-400">Área:</span>
+                                    <span class="font-black text-indigo-600">${h.area}</span>
+                                </div>` : ''}
                             </div>
                         </div>
                         `;
@@ -3520,6 +3803,7 @@
                         const teamForm = document.querySelector('#section-team button[onclick="openAddWorkerModal()"]')?.parentElement;
                         if(teamForm) teamForm.classList.add('hidden');
 
+                        document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
                         // Ocultar opções de backup restritas
                         if(document.getElementById('btn-backup-import')) document.getElementById('btn-backup-import').classList.add('hidden');
                         if(document.getElementById('btn-backup-reset')) document.getElementById('btn-backup-reset').classList.add('hidden');
@@ -3670,7 +3954,8 @@
                     // Sharing Link
                     const baseUrl = window.location.href.split('?')[0];
                     const shareLink = `${baseUrl}?mode=readonly`;
-                    document.getElementById('readOnlyLinkInput').value = shareLink;
+                    const linkInput = document.getElementById('readOnlyLinkInput');
+                    if (linkInput) linkInput.value = shareLink;
 
                     // Gerar QR Code de Compartilhamento
                     new QRious({
@@ -3687,7 +3972,8 @@
                 }
 
                 function shareSystem() {
-                    const shareLink = document.getElementById('readOnlyLinkInput').value;
+                    const baseUrl = window.location.href.split('?')[0];
+                    const shareLink = `${baseUrl}?mode=readonly`;
                     if (navigator.share) {
                         navigator.share({
                             title: 'LDC ToolFlow',
@@ -4326,14 +4612,41 @@
                     }
 
                     materialData.workerId = workerId;
+                    resetMaterial(4);
+                }
+
+                function selectAreaForMaterial(area) {
+                    materialData.area = area;
+                    document.querySelectorAll('.area-pill').forEach(btn => {
+                        btn.classList.toggle('active', btn.innerText === area);
+                    });
+                    playSound('click');
+                }
+
+                function processDetailsStep() {
+                    const svc = document.getElementById('materialServiceInput').value.trim().toUpperCase();
+                    materialData.service = svc;
                     resetMaterial(3);
                 }
 
                 function resetMaterial(step) {
+                    if (step === 0) { // Primeiro passo do modal
+                        // Garante que materialData esteja sempre inicializado como um objeto
+                        if (typeof materialData === 'undefined' || materialData === null) {
+                            materialData = { toolId: null, workerId: null, qty: null, service: null, area: null };
+                        }
+                        const svcInput = document.getElementById('materialServiceInput');
+                        if (svcInput) svcInput.value = '';
+                        document.querySelectorAll('.area-pill').forEach(btn => btn.classList.remove('active'));
+                        materialData.service = null;
+                        materialData.area = null;
+                    }
+
                     document.getElementById('step-material-tool').classList.toggle('hidden', step !== 0);
                     document.getElementById('step-material-qty').classList.toggle('hidden', step !== 1);
-                    document.getElementById('step-material-worker').classList.toggle('hidden', step !== 2);
-                    document.getElementById('step-material-confirm').classList.toggle('hidden', step !== 3);
+                    document.getElementById('step-material-details').classList.toggle('hidden', step !== 2);
+                    document.getElementById('step-material-worker').classList.toggle('hidden', step !== 3);
+                    document.getElementById('step-material-confirm').classList.toggle('hidden', step !== 4);
 
                     if (step === 1) { // Etapa de Quantidade
                         const tool = tools.find(t => t.id === materialData.toolId);
@@ -4345,41 +4658,102 @@
                         qtyInput.disabled = !isConsumable;
                         if (isConsumable) qtyInput.max = tool.qty;
                         lucide.createIcons();
-                    } else if (step === 2) { // Etapa de Colaborador
-                        const list = document.getElementById('teamGridMaterial');
-                        list.innerHTML = team.map(w => {
-                            const workerType = w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO');
-                            const textColor = workerType === 'TERCEIRO' ? 'text-orange-600' : 'text-blue-600';
-                            const infoDisplay = w.info || w.company || 'N/A';
-                            return `
-                            <div onclick="selectWorkerForMaterial(${w.id})" class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all flex flex-col items-center gap-2 text-center">
-                                <div class="w-10 h-10 bg-white dark:bg-slate-900 ${textColor} rounded-full flex items-center justify-center font-black shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700">
-                                    ${w.img ? `<img src="${w.img}" class="w-full h-full object-cover">` : w.name.charAt(0)}
-                                </div>
-                                <div class="w-full">
-                                    <p class="font-bold text-[10px] uppercase text-slate-700 truncate px-1" title="${w.name}">${w.name}</p>
-                                    <p class="text-[10px] font-black text-slate-400 uppercase truncate px-1" title="${infoDisplay}">${infoDisplay}</p>
-                                </div>
-                            </div>
-                        `; }).join('');
-                        lucide.createIcons();
-                    } else if (step === 3) { // Etapa de Confirmação
+                    } else if (step === 3) { // Etapa de Colaborador
+                        const searchInput = document.getElementById('workerSearchInputMaterial');
+                        if (searchInput) {
+                            searchInput.value = '';
+                            searchInput.nextElementSibling.classList.add('hidden');
+                        }
+                        renderWorkerListMaterial();
+                    } else if (step === 4) { // Etapa de Confirmação
                         const tool = tools.find(t => t.id === materialData.toolId);
                         const worker = team.find(w => w.id === materialData.workerId);
                         const isTool = !tool.hasOwnProperty('qty');
                         const operationType = isTool ? 'Retirada' : 'Consumo';
 
                         document.getElementById('confirmationDetails').innerHTML = `
-                            <div class="w-24 h-24 bg-slate-100 rounded-2xl mx-auto mb-4 overflow-hidden border border-slate-200">${tool.img ? `<img src="${tool.img}" class="w-full h-full object-cover">` : `<div class="flex items-center justify-center h-full text-slate-300"><i data-lucide="wrench"></i></div>`}</div>
-                            <h3 class="font-black text-slate-900 uppercase text-sm">${tool.name}</h3>
-                            <p class="text-slate-500 text-xs font-bold">QTD: <span class="text-blue-600">${materialData.qty}</span> | RESPONSÁVEL: <span class="text-blue-600">${worker.name}</span></p>
-                            <p class="text-slate-500 text-xs font-bold mt-1">VALOR UNIT: <span class="text-emerald-600">${formatBRL(tool.value)}</span></p>
+                            <!-- Card Principal do Item (Mais compacto) -->
+                            <div class="bg-white dark:bg-slate-800 p-2 rounded-2xl border border-slate-100 dark:border-slate-700 mb-2 flex flex-col items-center gap-1 text-center shadow-sm">
+                                <div class="w-12 h-12 bg-slate-50 dark:bg-slate-900 rounded-xl flex items-center justify-center overflow-hidden border border-slate-100 dark:border-slate-800 shrink-0 shadow-inner">
+                                    ${tool.img ? `<img src="${tool.img}" class="w-full h-full object-cover">` : `<i data-lucide="wrench" class="text-slate-300" size="20"></i>`}
+                                </div>
+                                <div class="w-full min-w-0">
+                                    <h3 class="font-black text-slate-900 dark:text-white uppercase text-[10px] truncate leading-tight">${tool.name}</h3>
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-0.5">${tool.code || 'S/C'}</p>
+                                </div>
+                            </div>
+
+                            <!-- Grid de Detalhes (2 por linha) -->
+                            <div class="grid grid-cols-2 gap-2 mb-2">
+                                <div class="bg-white dark:bg-slate-800 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                                    <p class="text-[7px] font-black uppercase text-slate-400 mb-0.5 tracking-tighter">Quantidade</p>
+                                    <p class="text-[10px] font-black text-blue-600 dark:text-blue-400">${materialData.qty}</p>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center overflow-hidden">
+                                    <p class="text-[7px] font-black uppercase text-slate-400 mb-0.5 tracking-tighter">Responsável</p>
+                                    <p class="text-[10px] font-black text-blue-600 dark:text-blue-400 truncate w-full px-1">${worker.name}</p>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center overflow-hidden">
+                                    <p class="text-[7px] font-black uppercase text-slate-400 mb-0.5 tracking-tighter">Serviço</p>
+                                    <p class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 truncate w-full px-1 capitalize">${materialData.service || 'N/A'}</p>
+                                </div>
+                                <div class="bg-white dark:bg-slate-800 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                                    <p class="text-[7px] font-black uppercase text-slate-400 mb-0.5 tracking-tighter">Área</p>
+                                    <p class="text-[10px] font-black text-indigo-600 dark:text-indigo-400">${materialData.area || 'N/A'}</p>
+                                </div>
+                            </div>
+
+                            <!-- Valor Unitário Centralizado -->
+                            <div class="flex justify-center">
+                                <div class="bg-emerald-50/50 dark:bg-emerald-500/10 px-4 py-1 rounded-xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm flex flex-col items-center">
+                                    <p class="text-[7px] font-black uppercase text-emerald-600/70 dark:text-emerald-400/70 mb-0.5 tracking-tighter">Valor Unitário</p>
+                                    <p class="text-xs font-black text-emerald-600 dark:text-emerald-400">${formatBRL(tool.value)}</p>
+                                </div>
+                            </div>
                         `;
                         document.querySelector('#step-material-confirm h4').innerText = `Confirmar ${operationType}?`;
                         document.getElementById('btnFinalizeMaterial').innerText = `Confirmar ${operationType}`;
                         document.getElementById('btnFinalizeMaterial').onclick = finalizeMaterialCheckout;
                         lucide.createIcons();
                     }
+                }
+
+                function renderWorkerListMaterial() {
+                    const list = document.getElementById('teamGridMaterial');
+                    const input = document.getElementById('workerSearchInputMaterial');
+                    const searchTerm = (input ? input.value : "").toLowerCase();
+                    
+                    const filteredTeam = (Array.isArray(team) ? team : []).filter(w => 
+                        w.name.toLowerCase().includes(searchTerm) || 
+                        (w.info && w.info.toLowerCase().includes(searchTerm)) || 
+                        (w.company && w.company.toLowerCase().includes(searchTerm)) ||
+                        (w.costCenter && w.costCenter.toLowerCase().includes(searchTerm))
+                    );
+
+                    list.innerHTML = filteredTeam.map(w => {
+                        const workerType = w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO');
+                        const textColor = workerType === 'TERCEIRO' ? 'text-orange-600' : 'text-blue-600';
+                        const infoDisplay = w.info || w.company || 'N/A';
+                        return `
+                        <div onclick="selectWorkerForMaterial(${w.id})" class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all flex flex-col items-center gap-2 text-center">
+                            <div class="w-10 h-10 bg-white dark:bg-slate-900 ${textColor} rounded-full flex items-center justify-center font-black shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700">
+                                ${w.img ? `<img src="${w.img}" class="w-full h-full object-cover">` : w.name.charAt(0)}
+                            </div>
+                            <div class="w-full">
+                                <p class="font-bold text-[10px] uppercase text-slate-700 truncate px-1" title="${w.name}">${w.name}</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase truncate px-1" title="${infoDisplay}">${infoDisplay}</p>
+                            </div>
+                        </div>
+                    `; }).join('');
+                    
+                    if (filteredTeam.length === 0) {
+                        list.innerHTML = `<p class="text-center text-[10px] text-slate-400 col-span-full py-10">Nenhum colaborador encontrado.</p>`;
+                    }
+                    
+                    const clearBtn = input ? input.nextElementSibling : null;
+                    if (clearBtn) clearBtn.classList.toggle('hidden', !searchTerm);
+                    
+                    lucide.createIcons();
                 }
 
                 async function finalizeMaterialCheckout() {
@@ -4397,7 +4771,7 @@
                             t.user = w.name;
                             history.unshift({ 
                                 historyId: Date.now(), toolId: t.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
-                                qty: 1, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo' 
+                                qty: 1, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo', service: materialData.service, area: materialData.area
                             });
                         } else {
                             if (t.qty < qty) return;
@@ -4406,7 +4780,7 @@
                             tools.unshift(newTool);
                             history.unshift({
                                 historyId: Date.now() + 1, toolId: newTool.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
-                                qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo' 
+                                qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo', service: materialData.service, area: materialData.area
                             });
                         };
                     } else {
@@ -4417,7 +4791,8 @@
                             historyId: Date.now(), toolId: t.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
                             qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), 
                             returnDate: new Date().toISOString(), // Devolução imediata pois é consumo
-                            type: 'emprestimo', condition: 'boa'
+                            type: 'emprestimo', condition: 'boa',
+                            service: materialData.service, area: materialData.area
                         });
                     }
                     closeModal('materialModal');
@@ -5078,6 +5453,326 @@
                         alert("Auditoria perfeita! Todos os itens encontrados.");
                     }
                     closeModal('auditModal');
+                }
+
+                function selectAreaInfo(areaCode) {
+                    const detailView = document.getElementById('areaDetailView');
+                    const cards = document.querySelectorAll('.area-info-card');
+                    
+                    // Toggle active visual style on cards
+                    cards.forEach(card => {
+                        const isTarget = card.querySelector('div').innerText === areaCode;
+                        card.classList.toggle('border-blue-500', isTarget);
+                        card.classList.toggle('shadow-md', isTarget);
+                        card.classList.toggle('scale-[1.02]', isTarget);
+                    });
+
+                    const data = {
+                        '1A': { 
+                            sup: 'Cleyton Madureira', 
+                            locations: ['Recepção Silo de frutas', 'Mesa lavadora', 'Mesa de escolha', 'Pré-extração'],
+                            icon: 'factory'
+                        },
+                        '1B': { 
+                            sup: 'Ricardo Tavares', 
+                            locations: ['Centrífuga de suco', 'Centrífuga de óleo', 'Evaporador Taste', 'Blender'],
+                            icon: 'droplets'
+                        },
+                        '2': { 
+                            sup: 'Gustavo Pontelli', 
+                            locations: ['Ração', 'Casca Seca', 'Evaporador Waste'],
+                            icon: 'container'
+                        },
+                        '3': { 
+                            sup: 'Fábio Neto', 
+                            locations: ['Caldeira', 'ETE (Efluentes)', 'ETA (Água)', 'Refrigeração', 'Farm & Óleo'],
+                            icon: 'thermometer'
+                        },
+                        '4': { 
+                            sup: 'Marcelo Guerra', 
+                            locations: ['Elétrica em geral', 'Painéis de comando', 'Subestações'],
+                            icon: 'zap'
+                        }
+                    };
+
+                    const area = data[areaCode];
+                    if (!area) return;
+
+                    detailView.innerHTML = `
+                        <div class="animate-enter w-full h-full flex flex-col items-center justify-start py-4">
+                            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4 shadow-inner"><i data-lucide="${area.icon}" size="32"></i></div>
+                            <h4 class="text-xl font-black text-slate-800 uppercase tracking-tighter mb-1">Área ${areaCode}</h4>
+                            <p class="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-6">${area.sup}</p>
+                            <div class="w-full space-y-2">
+                                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-3 text-left">Locais de Atuação</p>
+                                ${area.locations.map(loc => `
+                                    <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 text-left group/loc">
+                                        <div class="w-1.5 h-1.5 bg-blue-400 rounded-full group-hover/loc:scale-150 transition-transform"></div>
+                                        <p class="text-xs font-bold text-slate-600 uppercase truncate">${loc}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    lucide.createIcons();
+                    playSound('click');
+                }
+
+                function showIDHint() {
+                    document.getElementById('alertModalTitle').innerText = "Dica de Identificação";
+                    document.getElementById('alertModalText').innerHTML = `
+                        <div class="text-left space-y-3">
+                            <p class="text-xs font-medium">Recomendamos o padrão profissional: <br><span class="text-blue-600 font-black">TIPO-CATEGORIA-SEQUENCIAL</span></p>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[10px]">
+                                <p><strong>1. TIPO:</strong> 3 letras do item (ex: FUR para Furadeira)</p>
+                                <p><strong>2. CATEGORIA:</strong> EL (Elétrica), MA (Manual), MT (Material)</p>
+                                <p><strong>3. NÚMERO:</strong> 3 dígitos (ex: 001, 002)</p>
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">EXEMPLO: <span class="text-slate-900">FUR-EL-001</span></p>
+                        </div>
+                    `;
+                    openModal('alertModal');
+                }
+
+                function suggestID() {
+                    const nameInput = document.getElementById('toolNameInput');
+                    const name = nameInput.value.trim().toUpperCase();
+                    
+                    if (!name) {
+                        showToast("Digite o nome primeiro para sugerir um código", "error");
+                        return;
+                    }
+
+                    // Pega as 3 primeiras letras do nome (ex: FURADEIRA -> FUR)
+                    const mnemonic = name.substring(0, 3).replace(/[^A-Z]/g, 'X');
+                    
+                    // Define categoria base (EL para ferramentas, MT para materiais)
+                    const cat = pendingCategory === 'tool' ? 'EL' : 'MT';
+                    const prefix = `${mnemonic}-${cat}-`;
+                    
+                    // Busca o maior número sequencial existente para esse prefixo específico
+                    const existing = tools.filter(t => t.code && t.code.startsWith(prefix));
+                    let nextNum = 1;
+                    
+                    if (existing.length > 0) {
+                        const nums = existing.map(t => {
+                            const parts = t.code.split('-');
+                            return parts.length >= 3 ? (parseInt(parts[2]) || 0) : 0;
+                        });
+                        nextNum = Math.max(...nums) + 1;
+                    }
+                    
+                    const finalCode = `${prefix}${nextNum.toString().padStart(3, '0')}`;
+                    document.getElementById('toolCodeInput').value = finalCode;
+                    playSound('success', `Sugestão gerada: ${finalCode}`);
+                }
+
+                function openShoppingModal() {
+                    selectShopCategory('tool');
+                    document.getElementById('shopNameInput').value = '';
+                    document.getElementById('shopBrandInput').value = '';
+                    document.getElementById('shopLinkInput').value = '';
+                    document.getElementById('shopNotesInput').value = '';
+                    document.getElementById('purchaseDetailsFields').classList.add('hidden');
+                    document.getElementById('btnSaveShopping').onclick = addShoppingItem;
+                    document.getElementById('shoppingModalTitle').innerText = "Novo Pedido de Compra";
+                    openModal('shoppingModal');
+                }
+
+                function selectShopCategory(cat) {
+                    pendingShopCategory = cat;
+                    const toolCard = document.getElementById('shop-cat-card-tool');
+                    const consCard = document.getElementById('shop-cat-card-consumable');
+                    const toolText = document.getElementById('shop-cat-text-tool');
+                    const consText = document.getElementById('shop-cat-text-consumable');
+
+                    if (cat === 'tool') {
+                        toolCard.className = "flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
+                        toolText.className = "font-black text-white text-[10px] uppercase tracking-widest";
+                        consCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden";
+                        consText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
+                    } else {
+                        toolCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden";
+                        toolText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
+                        consCard.className = "flex-1 cursor-pointer bg-amber-600 border-2 border-amber-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
+                        consText.className = "font-black text-white text-[10px] uppercase tracking-widest";
+                    }
+                    playSound('click');
+                }
+
+                function setShoppingFilter(f) {
+                    shoppingFilter = f;
+                    document.querySelectorAll('#section-shopping .filter-pill').forEach(b => {
+                        b.classList.remove('active', 'bg-blue-100', 'text-blue-600');
+                        b.classList.add('bg-slate-100', 'text-slate-500');
+                    });
+                    const activeBtn = document.getElementById(`shop-filter-${f}`);
+                    activeBtn.classList.add('active', 'bg-blue-100', 'text-blue-600');
+                    activeBtn.classList.remove('bg-slate-100', 'text-slate-500');
+                    renderShoppingList();
+                }
+
+                async function addShoppingItem() {
+                    const name = document.getElementById('shopNameInput').value.trim();
+                    if (!name) return;
+
+                    const newItem = {
+                        id: Date.now(),
+                        category: pendingShopCategory,
+                        name: name,
+                        brand: document.getElementById('shopBrandInput').value.trim().toUpperCase(),
+                        link: document.getElementById('shopLinkInput').value.trim(),
+                        notes: document.getElementById('shopNotesInput').value.trim(),
+                        date: new Date().toLocaleDateString('pt-BR'),
+                        status: 'pending'
+                    };
+
+                    shoppingList.unshift(newItem);
+                    closeModal('shoppingModal');
+                    await save();
+                    renderShoppingList();
+                    showToast("Pedido de compra adicionado!", "success");
+                }
+
+                function renderShoppingList() {
+                    const grid = document.getElementById('shoppingGrid');
+                    if (!grid) return;
+
+                    const filteredList = shoppingList.filter(item => {
+                        if (shoppingFilter === 'all') return true;
+                        return item.status === shoppingFilter;
+                    });
+
+                    if (filteredList.length === 0) {
+                        grid.innerHTML = `<p class="text-center text-sm text-slate-400 col-span-full py-20 font-bold uppercase tracking-widest opacity-50">Nenhum item encontrado nesta categoria.</p>`;
+                        return;
+                    }
+
+                    grid.innerHTML = filteredList.map(item => `
+                        <div class="bg-white rounded-[2rem] p-6 shadow-lg border ${item.status === 'bought' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100'} flex flex-col group relative transition-all hover:shadow-2xl">
+                            ${!isReadOnly ? `
+                            <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="editShoppingItem(${item.id})" class="p-2 text-slate-400 hover:text-blue-500 bg-white rounded-lg border shadow-sm"><i data-lucide="pencil" size="14"></i></button>
+                                <button onclick="deleteShoppingItem(${item.id})" class="p-2 text-slate-400 hover:text-rose-500 bg-white rounded-lg border shadow-sm"><i data-lucide="trash-2" size="14"></i></button>
+                            </div>` : ''}
+                            
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 ${item.category === 'consumable' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'} rounded-2xl flex items-center justify-center shadow-inner shrink-0">
+                                    <i data-lucide="${item.category === 'consumable' ? 'box' : 'shopping-bag'}" size="28"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <span class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase tracking-tighter">${item.category === 'consumable' ? 'Consumo' : 'Ferramenta'}</span>
+                                        ${item.status === 'bought' ? '<span class="text-[8px] font-black px-1.5 py-0.5 rounded bg-emerald-500 text-white uppercase tracking-tighter">Comprado</span>' : ''}
+                                    </div>
+                                    <h3 class="font-black text-slate-800 uppercase text-sm truncate" title="${item.name}">${item.name}</h3>
+                                    <p class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">${item.brand || 'MARCA NÃO DEFINIDA'}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-white/50 rounded-2xl p-4 mb-4 flex-1 border border-slate-50 shadow-inner">
+                                <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Itens / Observações</p>
+                                <p class="text-xs text-slate-600 font-medium leading-relaxed whitespace-pre-wrap">${item.notes || 'Nenhuma observação extra.'}</p>
+                            </div>
+
+                            ${item.status === 'bought' ? `
+                            <div class="grid grid-cols-2 gap-2 mb-4">
+                                <div class="bg-emerald-50/50 p-2 rounded-xl text-center border border-emerald-100/50">
+                                    <p class="text-[8px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Pago</p>
+                                    <p class="text-xs font-black text-emerald-700">${formatBRL(item.price)}</p>
+                                </div>
+                                <div class="bg-emerald-50/50 p-2 rounded-xl text-center border border-emerald-100/50">
+                                    <p class="text-[8px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Data Compra</p>
+                                    <p class="text-xs font-black text-emerald-700">${item.purchaseDate ? new Date(item.purchaseDate).toLocaleDateString('pt-BR') : '-'}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Adicionado: ${item.date}</span>
+                                <div class="flex gap-2">
+                                    ${!isReadOnly && item.status === 'pending' ? `
+                                        <button onclick="markAsBought(${item.id})" class="bg-emerald-600 text-white px-4 py-2 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-2 hover:bg-emerald-700 transition-all">
+                                            <i data-lucide="check-circle" size="12"></i> Comprado
+                                        </button>
+                                    ` : ''}
+                                    ${item.link ? `
+                                        <a href="${item.link}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-blue-200 flex items-center gap-2 hover:bg-blue-700 transition-all no-underline">
+                                            <i data-lucide="external-link" size="12"></i> Ver Link
+                                        </a>
+                                    ` : '<span class="text-[9px] font-bold text-slate-300 uppercase italic py-2">Sem link</span>'}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                    lucide.createIcons();
+                }
+
+                function deleteShoppingItem(id) {
+                    const modal = document.getElementById('deleteModal');
+                    modal.querySelector('h3').innerText = 'Remover Pedido?';
+                    modal.querySelector('p').innerText = 'Deseja remover este item da lista de compras?';
+                    document.getElementById('confirmDeleteBtn').onclick = async () => {
+                        shoppingList = shoppingList.filter(i => i.id !== id);
+                        closeModal('deleteModal');
+                        await save();
+                        renderShoppingList();
+                    };
+                    openModal('deleteModal');
+                }
+
+                function markAsBought(id) {
+                    const item = shoppingList.find(i => i.id === id);
+                    if (!item) return;
+                    
+                    selectShopCategory(item.category || 'tool');
+                    document.getElementById('shopNameInput').value = item.name;
+                    document.getElementById('shopBrandInput').value = item.brand;
+                    document.getElementById('shopLinkInput').value = item.link;
+                    document.getElementById('shopNotesInput').value = item.notes;
+                    
+                    document.getElementById('purchaseDetailsFields').classList.remove('hidden');
+                    document.getElementById('shopPricePaidInput').value = '';
+                    document.getElementById('shopPurchaseDateInput').value = new Date().toISOString().split('T')[0];
+                    
+                    document.getElementById('shoppingModalTitle').innerText = "Finalizar Compra";
+                    document.getElementById('btnSaveShopping').onclick = () => updateShoppingItem(id, true);
+                    openModal('shoppingModal');
+                }
+
+                function editShoppingItem(id) {
+                    const item = shoppingList.find(i => i.id === id);
+                    if (!item) return;
+                    selectShopCategory(item.category || 'tool');
+                    document.getElementById('shopNameInput').value = item.name;
+                    document.getElementById('shopBrandInput').value = item.brand;
+                    document.getElementById('shopLinkInput').value = item.link;
+                    document.getElementById('shopNotesInput').value = item.notes;
+                    document.getElementById('purchaseDetailsFields').classList.add('hidden');
+                    document.getElementById('shoppingModalTitle').innerText = "Editar Pedido de Compra";
+                    document.getElementById('btnSaveShopping').onclick = () => updateShoppingItem(id);
+                    openModal('shoppingModal');
+                }
+
+                async function updateShoppingItem(id, isClosing = false) {
+                    const item = shoppingList.find(i => i.id === id);
+                    if (!item) return;
+                    item.category = pendingShopCategory;
+                    item.name = document.getElementById('shopNameInput').value.trim();
+                    item.brand = document.getElementById('shopBrandInput').value.trim().toUpperCase();
+                    item.link = document.getElementById('shopLinkInput').value.trim();
+                    item.notes = document.getElementById('shopNotesInput').value.trim();
+                    
+                    if (isClosing) {
+                        item.status = 'bought';
+                        item.price = parseFloat(document.getElementById('shopPricePaidInput').value) || 0;
+                        item.purchaseDate = document.getElementById('shopPurchaseDateInput').value;
+                    }
+
+                    closeModal('shoppingModal');
+                    await save();
+                    renderShoppingList();
+                    showToast("Pedido de compra atualizado!", "success");
                 }
             </script>
             <script>
