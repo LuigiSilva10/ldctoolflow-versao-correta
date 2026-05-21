@@ -586,16 +586,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <button onclick="openShoppingModal()" class="bg-blue-600 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 shadow-lg shadow-blue-200 text-xs uppercase tracking-widest hover:bg-blue-700 transition-all border-none cursor-pointer w-full xl:w-auto justify-center admin-only">
-                                <i data-lucide="plus" size="18"></i> Novo Pedido
-                            </button>
                         </div>
                     </div>
 
-                    <div class="flex gap-2 mb-8 flex-wrap">
-                        <button onclick="setShoppingFilter('pending')" id="shop-filter-pending" class="filter-pill active bg-blue-100 text-blue-600">Pendentes</button>
-                        <button onclick="setShoppingFilter('bought')" id="shop-filter-bought" class="filter-pill bg-slate-100 text-slate-500">Já Comprados</button>
-                        <button onclick="setShoppingFilter('all')" id="shop-filter-all" class="filter-pill bg-slate-100 text-slate-500">Ver Todos</button>
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+                        <div class="flex gap-2 flex-wrap mb-4 lg:mb-0">
+                            <button onclick="setShoppingFilter('pending')" id="shop-filter-pending" class="filter-pill active bg-blue-100 text-blue-600">Pendentes</button>
+                            <button onclick="setShoppingFilter('bought')" id="shop-filter-bought" class="filter-pill bg-slate-100 text-slate-500">Já Comprados</button>
+                            <button onclick="setShoppingFilter('all')" id="shop-filter-all" class="filter-pill bg-slate-100 text-slate-500">Ver Todos</button>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-4 w-full lg:w-auto items-end md:items-center">
+                            <div class="flex gap-4">
+                                <div class="bg-white p-3 px-5 rounded-xl border border-slate-100 shadow-sm text-right min-w-[140px]">
+                                    <p class="text-slate-400 text-[10px] font-bold uppercase">Investimento Total</p>
+                                    <h2 id="shoppingTotalValue" class="text-lg font-black text-emerald-600">R$ 0,00</h2>
+                                </div>
+                                <div class="bg-white p-3 px-5 rounded-xl border border-slate-100 shadow-sm text-right min-w-[120px]">
+                                    <p class="text-slate-400 text-[10px] font-bold uppercase">Total de Itens</p>
+                                    <h2 class="text-lg font-black text-slate-800 flex items-center justify-end gap-2"><i data-lucide="shopping-cart" size="20" class="text-slate-400"></i><span id="shoppingTotalQty">0</span></h2>
+                                </div>
+                            </div>
+                            <button onclick="openShoppingModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-black flex items-center gap-2 shadow-md text-xs uppercase tracking-widest hover:bg-blue-700 transition-all border-none cursor-pointer w-full md:w-auto justify-center admin-only">
+                                <i data-lucide="plus" size="16"></i> Novo Pedido
+                            </button>
+                        </div>
                     </div>
 
                     <div id="shoppingGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -1153,51 +1167,72 @@
 
             <div id="shoppingModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('shoppingModal')">
                 <div class="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
-                    <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex justify-between items-center">
                         <h3 id="shoppingModalTitle" class="font-black uppercase tracking-tighter text-slate-900">Novo Pedido de Compra</h3>
                         <button onclick="closeModal('shoppingModal');" class="text-slate-400 hover:text-rose-500 bg-transparent border-none cursor-pointer"><i data-lucide="x"></i></button>
                     </div>
-                    <div class="p-8 space-y-4">
+                    <div class="p-5 space-y-3 max-h-[80vh] overflow-y-auto custom-scrollbar">
                         <div>
-                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Tipo de Item</label>
-                            <div class="flex gap-3 mb-4">
-                                <div onclick="selectShopCategory('tool')" id="shop-cat-card-tool" class="flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2">Tipo de Item</label>
+                            <div class="flex gap-2 mb-2">
+                                <div onclick="selectShopCategory('tool')" id="shop-cat-card-tool" class="flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 transition-all shadow-md group relative overflow-hidden">
                                     <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="wrench" size="20"></i></div>
                                     <span id="shop-cat-text-tool" class="font-black text-white text-[10px] uppercase tracking-widest">Ferramenta</span>
                                 </div>
-                                <div onclick="selectShopCategory('consumable')" id="shop-cat-card-consumable" class="flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden">
+                                <div onclick="selectShopCategory('consumable')" id="shop-cat-card-consumable" class="flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-200 group relative overflow-hidden">
                                     <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-amber-500 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="box" size="20"></i></div>
                                     <span id="shop-cat-text-consumable" class="font-black text-slate-400 text-[10px] uppercase tracking-widest">Consumo</span>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Nome da Ferramenta</label>
-                            <input type="text" id="shopNameInput" placeholder="EX: FURADEIRA INDUSTRIAL" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2">Nome da Ferramenta</label>
+                            <input type="text" id="shopNameInput" placeholder="EX: FURADEIRA INDUSTRIAL" class="w-full border-2 border-slate-100 rounded-xl px-4 py-2.5 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
                         </div>
-                        <div id="purchaseDetailsFields" class="hidden grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 mt-2">
+                        <div id="purchaseDetailsFields" class="hidden grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
                             <div>
-                                <label class="text-[10px] font-black uppercase text-emerald-600 ml-4">Valor Pago (R$)</label>
-                                <input type="number" id="shopPricePaidInput" placeholder="0,00" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
+                                <label class="text-[10px] font-black uppercase text-emerald-600 ml-2">Valor Pago (R$)</label>
+                                <input type="number" id="shopPricePaidInput" placeholder="0,00" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-2.5 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
                             </div>
                             <div>
-                                <label class="text-[10px] font-black uppercase text-emerald-600 ml-4">Data da Compra</label>
-                                <input type="date" id="shopPurchaseDateInput" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
+                                <label class="text-[10px] font-black uppercase text-emerald-600 ml-2">Data da Compra</label>
+                                <input type="date" id="shopPurchaseDateInput" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-2.5 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
                             </div>
                         </div>
                         <div>
-                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Marca Preferencial</label>
-                            <input type="text" id="shopBrandInput" placeholder="EX: DEWALT, BOSCH..." class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2">Marca Preferencial</label>
+                            <input type="text" id="shopBrandInput" placeholder="EX: DEWALT, BOSCH..." class="w-full border-2 border-slate-100 rounded-xl px-4 py-2.5 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
                         </div>
                         <div>
-                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Link de Compra</label>
-                            <input type="url" id="shopLinkInput" placeholder="HTTPS://MERCADOLIVRE.COM/..." class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold text-xs outline-none focus:border-blue-500 transition-all">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2">Link de Compra</label>
+                            <input type="url" id="shopLinkInput" placeholder="HTTPS://MERCADOLIVRE.COM/..." class="w-full border-2 border-slate-100 rounded-xl px-4 py-2.5 font-bold text-xs outline-none focus:border-blue-500 transition-all">
                         </div>
                         <div>
-                            <label class="text-xs font-black uppercase text-slate-400 ml-4">Itens Necessários / Observações</label>
-                            <textarea id="shopNotesInput" placeholder="EX: BATERIA EXTRA, MALETA DE TRANSPORTE..." class="w-full h-24 border-2 border-slate-100 rounded-xl p-3 font-medium text-sm outline-none focus:border-blue-500 transition-all"></textarea>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2">Itens Necessários / Observações</label>
+                            <textarea id="shopNotesInput" placeholder="EX: BATERIA EXTRA, MALETA DE TRANSPORTE..." class="w-full h-20 border-2 border-slate-100 rounded-xl p-3 font-medium text-sm outline-none focus:border-blue-500 transition-all"></textarea>
                         </div>
-                        <button id="btnSaveShopping" onclick="addShoppingItem()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700 transition-all">Salvar Pedido</button>
+                        <button id="btnSaveShopping" onclick="addShoppingItem()" class="w-full py-3 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700 transition-all">Salvar Pedido</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="purchaseConfirmModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('purchaseConfirmModal')">
+                <div class="bg-white rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-black uppercase tracking-tighter text-slate-900">Confirmar Compra</h3>
+                        <button onclick="closeModal('purchaseConfirmModal');" class="text-slate-400 hover:text-rose-500 bg-transparent border-none cursor-pointer"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="p-6 space-y-4 text-center">
+                        <div id="confirmShopItemInfo" class="mb-2"></div>
+                        <div class="text-left">
+                            <label class="text-[10px] font-black uppercase text-emerald-600 ml-2">Valor Pago (R$)</label>
+                            <input type="number" id="confirmShopPriceInput" placeholder="0,00" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-2.5 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
+                        </div>
+                        <div class="text-left">
+                            <label class="text-[10px] font-black uppercase text-emerald-600 ml-2">Data da Compra</label>
+                            <input type="date" id="confirmShopDateInput" class="w-full border-2 border-emerald-100 rounded-xl px-4 py-2.5 font-bold text-xs outline-none focus:border-emerald-500 transition-all bg-emerald-50/30">
+                        </div>
+                        <button id="btnConfirmPurchaseFinal" class="w-full py-3 bg-emerald-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-emerald-700 transition-all">Confirmar Pagamento</button>
                     </div>
                 </div>
             </div>
@@ -1598,13 +1633,17 @@
                             })
                         });
 
-                        if (!response.ok) {
-                            const errorData = await response.text().catch(() => `Erro ${response.status}`); // Tenta ler como texto
-                            console.error("Erro Turso API:", errorData);
-                            throw new Error(`Erro Turso: ${response.status}`);
+                        const data = await response.json().catch(() => null);
+                        
+                        if (!response.ok || !data) {
+                            const errorMsg = data?.error || `Erro HTTP ${response.status}`;
+                            console.error("Erro Turso API:", errorMsg);
+                            if (errorMsg.includes("serviço")) {
+                                console.warn("Dica: Verifique se a URL e o Token no config.js estão corretos para o seu banco Turso.");
+                            }
+                            return [];
                         }
 
-                        const data = await response.json();
                         if (!data || !Array.isArray(data.results)) {
                             return [];
                         }
@@ -1669,11 +1708,11 @@
 
                     try {
                         const results = await tursoClient.execute([{ sql: "SELECT key, value FROM app_storage" }]);
-                        // Verificação ultra-segura para evitar erro de .length em undefined
-                        if (!Array.isArray(results) || results.length === 0 || !results[0] || !Array.isArray(results[0].rows)) {
+                        // Verificação reforçada para evitar erro de .length em undefined
+                        if (!results || !Array.isArray(results) || results.length === 0 || !results[0] || !results[0].rows || !Array.isArray(results[0].rows)) {
                             return;
                         }
-                        const rows = results[0].rows; 
+                        const rows = results[0].rows;
 
                         // Se houve alteração local enquanto baixava, ignora este download para não sobrescrever
                         if (lastLocalUpdate > fetchStart) return;
@@ -1682,14 +1721,14 @@
 
                         if (isSaving) return; // Verifica novamente antes de aplicar
 
-                        if (rows.length > 0) {
-                            const cloudData = rows.filter(row => Array.isArray(row) && row.length >= 2 && row[0] && row[1]).reduce((acc, row) => { 
+                        if (rows && rows.length > 0) {
+                            const cloudData = rows.filter(row => Array.isArray(row) && row.length >= 2 && row[0] && row[1]).reduce((acc, row) => {
                                 try {
-                                    const key = row[0].value;
-                                    const val = JSON.parse(row[1].value);
+                                    const key = row[0]?.value;
+                                    const val = row[1]?.value ? JSON.parse(row[1].value) : null;
                                     if (key) acc[key] = val;
                                 } catch(e) {
-                                    console.warn("Cloud Sync: Erro ao processar registro", row[0]?.value);
+                                    console.warn("Cloud Sync: Erro ao processar registro", row[0]?.value, e);
                                 }
                                 return acc; 
                             }, {});
@@ -3864,6 +3903,9 @@
                     // Saída de Materiais (Quantidade)
                     setupEnter('materialQtyInput', () => document.getElementById('btnNextMaterialQty').click());
 
+                    // Confirmação de Compra
+                    setupEnter('confirmShopPriceInput', () => document.getElementById('btnConfirmPurchaseFinal').click());
+
                     // Manutenção (Orçamento)
                     const saveQuoteAction = () => document.getElementById('btnSaveQuote').click();
                     setupEnter('quoteProviderInput', saveQuoteAction);
@@ -4839,6 +4881,14 @@
 
                 function handleCheckinBarcodeScan(code) {
                     if (!code) return;
+                    const cleanCode = code.trim().toUpperCase();
+                    const tool = tools.find(t => t.code === cleanCode);
+                    
+                    if (!tool) {
+                        showInvalidCodeModal(code);
+                        return;
+                    }
+
                     document.getElementById('checkinSearchInput').value = code;
                     openCheckinModal(true);
                 }
@@ -4846,8 +4896,62 @@
                 // --- FUNÇÕES DE CÓDIGO DE BARRAS E QR CODE ---
                 function handleBarcodeScan(code) {
                     if (!code) return;
+                    const cleanCode = code.trim().toUpperCase();
+                    const tool = tools.find(t => t.code === cleanCode);
+
+                    if (!tool) {
+                        showInvalidCodeModal(code);
+                        return;
+                    }
+
                     document.getElementById('materialSearchInput').value = code;
                     openMaterialModal(true);
+                }
+
+                function showInvalidCodeModal(content) {
+                    const title = document.getElementById('alertModalTitle');
+                    const text = document.getElementById('alertModalText');
+                    const iconBox = document.querySelector('#alertModal .bg-orange-50');
+                    
+                    // Transforma temporariamente o ícone para erro de leitura
+                    if (iconBox) {
+                        iconBox.className = "w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 transition-all";
+                        const icon = iconBox.querySelector('i');
+                        if (icon) icon.setAttribute('data-lucide', 'scan-line');
+                    }
+
+                    title.innerText = "QR Code não Reconhecido";
+                    const isUrl = content.startsWith('http');
+                    const tip = isUrl ? "Este código parece ser um link de internet e não uma etiqueta do sistema." : "Este código não corresponde a nenhuma ferramenta em nosso banco de dados.";
+
+                    text.innerHTML = `
+                        <div class="space-y-4">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-tight">${tip}</p>
+                            <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-100 break-all text-left shadow-inner">
+                                <p class="text-[8px] font-black text-slate-400 uppercase mb-1 tracking-widest">Conteúdo lido:</p>
+                                <p class="text-[10px] font-mono text-slate-600 leading-relaxed">${content}</p>
+                            </div>
+                            <p class="text-[10px] font-black text-rose-500 uppercase">Ação cancelada: ferramenta inexistente</p>
+                        </div>
+                    `;
+
+                    openModal('alertModal');
+                    lucide.createIcons();
+                    playSound('error');
+                    
+                    // Restaura o modal para o padrão original ao fechar
+                    const btn = document.querySelector('#alertModal button');
+                    const originalAction = btn.onclick;
+                    btn.onclick = () => {
+                        if (originalAction) originalAction();
+                        if (iconBox) {
+                            iconBox.className = "w-16 h-16 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mx-auto mb-4";
+                            const icon = iconBox.querySelector('i');
+                            if (icon) icon.setAttribute('data-lucide', 'alert-triangle');
+                        }
+                        title.innerText = "Atenção";
+                        lucide.createIcons();
+                    };
                 }
 
                 function startQrScanner() {
@@ -4861,9 +4965,12 @@
                         (decodedText, decodedResult) => {
                             handleBarcodeScan(decodedText);
                             stopQrScanner();
-                        },
-                        (errorMessage) => { showToast(`Erro ao ler QR Code: ${errorMessage}`, 'error'); }
-                    ).catch(err => console.error("QR Scanner Error:", err));
+                        }
+                        // O segundo callback (erro de leitura) foi removido para evitar spam de alertas
+                    ).catch(err => {
+                        showToast("Erro ao abrir a câmera. Verifique as permissões.", "error");
+                        console.error("QR Scanner Error:", err);
+                    });
                 }
 
                 function stopQrScanner() {
@@ -5012,9 +5119,12 @@
                         (decodedText) => {
                             handleCheckinBarcodeScan(decodedText);
                             stopCheckinQrScanner();
-                        },
-                        (errorMessage) => { showToast(`Erro ao ler QR Code: ${errorMessage}`, 'error'); }
-                     ).catch(err => console.error("QR Scanner Error:", err));
+                        }
+                        // O segundo callback (erro de leitura) foi removido para evitar spam de alertas
+                     ).catch(err => {
+                        showToast("Erro ao abrir a câmera. Verifique as permissões.", "error");
+                        console.error("QR Scanner Error:", err);
+                     });
                 }
 
                 function stopCheckinQrScanner() {
@@ -5585,17 +5695,32 @@
                     const consCard = document.getElementById('shop-cat-card-consumable');
                     const toolText = document.getElementById('shop-cat-text-tool');
                     const consText = document.getElementById('shop-cat-text-consumable');
+                    
+                    const nameInput = document.getElementById('shopNameInput');
+                    const brandInput = document.getElementById('shopBrandInput');
+                    const notesInput = document.getElementById('shopNotesInput');
+                    const nameLabel = nameInput.previousElementSibling;
 
                     if (cat === 'tool') {
-                        toolCard.className = "flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
+                        toolCard.className = "flex-1 cursor-pointer bg-blue-600 border-2 border-blue-600 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 transition-all shadow-md group relative overflow-hidden";
                         toolText.className = "font-black text-white text-[10px] uppercase tracking-widest";
-                        consCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden";
+                        consCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-200 group relative overflow-hidden";
                         consText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
+                        
+                        nameLabel.innerText = "Nome da Ferramenta";
+                        nameInput.placeholder = "EX: FURADEIRA INDUSTRIAL";
+                        brandInput.placeholder = "EX: DEWALT, BOSCH...";
+                        notesInput.placeholder = "EX: BATERIA EXTRA, MALETA DE TRANSPORTE...";
                     } else {
-                        toolCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-blue-200 group relative overflow-hidden";
+                        toolCard.className = "flex-1 cursor-pointer bg-white border-2 border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-200 group relative overflow-hidden";
                         toolText.className = "font-black text-slate-400 text-[10px] uppercase tracking-widest";
-                        consCard.className = "flex-1 cursor-pointer bg-amber-600 border-2 border-amber-600 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-md group relative overflow-hidden";
+                        consCard.className = "flex-1 cursor-pointer bg-amber-600 border-2 border-amber-600 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 transition-all shadow-md group relative overflow-hidden";
                         consText.className = "font-black text-white text-[10px] uppercase tracking-widest";
+
+                        nameLabel.innerText = "Nome do Consumível";
+                        nameInput.placeholder = "EX: LUVAS, DISCOS, GRAXA...";
+                        brandInput.placeholder = "EX: 3M, NORTON, MOBIL...";
+                        notesInput.placeholder = "EX: TAMANHO G, 4 POLEGADAS, ESPECIFICAÇÕES...";
                     }
                     playSound('click');
                 }
@@ -5638,6 +5763,11 @@
                     const grid = document.getElementById('shoppingGrid');
                     if (!grid) return;
 
+                    const totalValue = shoppingList.filter(i => i.status === 'bought').reduce((sum, item) => sum + (item.price || 0), 0);
+                    const totalQty = shoppingList.length;
+                    document.getElementById('shoppingTotalValue').innerText = formatBRL(totalValue);
+                    document.getElementById('shoppingTotalQty').innerText = totalQty;
+
                     const filteredList = shoppingList.filter(item => {
                         if (shoppingFilter === 'all') return true;
                         return item.status === shoppingFilter;
@@ -5649,58 +5779,58 @@
                     }
 
                     grid.innerHTML = filteredList.map(item => `
-                        <div class="bg-white rounded-[2rem] p-6 shadow-lg border ${item.status === 'bought' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100'} flex flex-col group relative transition-all hover:shadow-2xl">
+                        <div class="bg-white rounded-[2rem] p-4 shadow-lg border ${item.status === 'bought' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100'} flex flex-col group relative transition-all hover:shadow-2xl">
                             ${!isReadOnly ? `
-                            <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="editShoppingItem(${item.id})" class="p-2 text-slate-400 hover:text-blue-500 bg-white rounded-lg border shadow-sm"><i data-lucide="pencil" size="14"></i></button>
-                                <button onclick="deleteShoppingItem(${item.id})" class="p-2 text-slate-400 hover:text-rose-500 bg-white rounded-lg border shadow-sm"><i data-lucide="trash-2" size="14"></i></button>
+                            <div class="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="editShoppingItem(${item.id})" class="p-1.5 text-slate-400 hover:text-blue-500 bg-white rounded-lg border shadow-sm"><i data-lucide="pencil" size="12"></i></button>
+                                <button onclick="deleteShoppingItem(${item.id})" class="p-1.5 text-slate-400 hover:text-rose-500 bg-white rounded-lg border shadow-sm"><i data-lucide="trash-2" size="12"></i></button>
                             </div>` : ''}
                             
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-14 h-14 ${item.category === 'consumable' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'} rounded-2xl flex items-center justify-center shadow-inner shrink-0">
-                                    <i data-lucide="${item.category === 'consumable' ? 'box' : 'shopping-bag'}" size="28"></i>
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-12 h-12 ${item.category === 'consumable' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'} rounded-2xl flex items-center justify-center shadow-inner shrink-0">
+                                    <i data-lucide="${item.category === 'consumable' ? 'box' : 'shopping-bag'}" size="24"></i>
                                 </div>
                                 <div class="min-w-0">
                                     <div class="flex items-center gap-2 mb-0.5">
                                         <span class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase tracking-tighter">${item.category === 'consumable' ? 'Consumo' : 'Ferramenta'}</span>
                                         ${item.status === 'bought' ? '<span class="text-[8px] font-black px-1.5 py-0.5 rounded bg-emerald-500 text-white uppercase tracking-tighter">Comprado</span>' : ''}
                                     </div>
-                                    <h3 class="font-black text-slate-800 uppercase text-sm truncate" title="${item.name}">${item.name}</h3>
-                                    <p class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">${item.brand || 'MARCA NÃO DEFINIDA'}</p>
+                                    <h3 class="font-black text-slate-800 uppercase text-xs truncate" title="${item.name}">${item.name}</h3>
+                                    <p class="text-[9px] font-black text-emerald-500 uppercase tracking-widest leading-none">${item.brand || 'MARCA NÃO DEFINIDA'}</p>
                                 </div>
                             </div>
 
-                            <div class="bg-white/50 rounded-2xl p-4 mb-4 flex-1 border border-slate-50 shadow-inner">
-                                <p class="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Itens / Observações</p>
-                                <p class="text-xs text-slate-600 font-medium leading-relaxed whitespace-pre-wrap">${item.notes || 'Nenhuma observação extra.'}</p>
+                            <div class="bg-white/50 rounded-2xl p-3 mb-3 flex-1 border border-slate-50 shadow-inner">
+                                <p class="text-[8px] font-black text-slate-400 uppercase mb-1 tracking-widest">Itens / Observações</p>
+                                <p class="text-[11px] text-slate-600 font-medium leading-tight whitespace-pre-wrap line-clamp-2">${item.notes || 'Nenhuma observação extra.'}</p>
                             </div>
 
                             ${item.status === 'bought' ? `
-                            <div class="grid grid-cols-2 gap-2 mb-4">
-                                <div class="bg-emerald-50/50 p-2 rounded-xl text-center border border-emerald-100/50">
-                                    <p class="text-[8px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Pago</p>
-                                    <p class="text-xs font-black text-emerald-700">${formatBRL(item.price)}</p>
+                            <div class="grid grid-cols-2 gap-2 mb-3">
+                                <div class="bg-emerald-50/50 p-1.5 rounded-xl text-center border border-emerald-100/50">
+                                    <p class="text-[7px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Pago</p>
+                                    <p class="text-[10px] font-black text-emerald-700">${formatBRL(item.price)}</p>
                                 </div>
-                                <div class="bg-emerald-50/50 p-2 rounded-xl text-center border border-emerald-100/50">
-                                    <p class="text-[8px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Data Compra</p>
-                                    <p class="text-xs font-black text-emerald-700">${item.purchaseDate ? new Date(item.purchaseDate).toLocaleDateString('pt-BR') : '-'}</p>
+                                <div class="bg-emerald-50/50 p-1.5 rounded-xl text-center border border-emerald-100/50">
+                                    <p class="text-[7px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Data Compra</p>
+                                    <p class="text-[10px] font-black text-emerald-700">${item.purchaseDate ? new Date(item.purchaseDate).toLocaleDateString('pt-BR') : '-'}</p>
                                 </div>
                             </div>
                             ` : ''}
 
-                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
-                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Adicionado: ${item.date}</span>
-                                <div class="flex gap-2">
+                            <div class="flex items-center justify-between mt-auto pt-3 border-t border-slate-50">
+                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Adicionado: ${item.date}</span>
+                                <div class="flex gap-1.5">
                                     ${!isReadOnly && item.status === 'pending' ? `
-                                        <button onclick="markAsBought(${item.id})" class="bg-emerald-600 text-white px-4 py-2 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-2 hover:bg-emerald-700 transition-all">
-                                            <i data-lucide="check-circle" size="12"></i> Comprado
+                                        <button onclick="markAsBought(${item.id})" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl font-black text-[8px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-1.5 hover:bg-emerald-700 transition-all">
+                                            <i data-lucide="check-circle" size="10"></i> Comprado
                                         </button>
                                     ` : ''}
                                     ${item.link ? `
-                                        <a href="${item.link}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-blue-200 flex items-center gap-2 hover:bg-blue-700 transition-all no-underline">
-                                            <i data-lucide="external-link" size="12"></i> Ver Link
+                                        <a href="${item.link}" target="_blank" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl font-black text-[8px] uppercase tracking-widest shadow-lg shadow-blue-200 flex items-center gap-1.5 hover:bg-blue-700 transition-all no-underline">
+                                            <i data-lucide="external-link" size="10"></i> Ver Link
                                         </a>
-                                    ` : '<span class="text-[9px] font-bold text-slate-300 uppercase italic py-2">Sem link</span>'}
+                                    ` : '<span class="text-[8px] font-bold text-slate-300 uppercase italic py-1.5">Sem link</span>'}
                                 </div>
                             </div>
                         </div>
@@ -5724,20 +5854,48 @@
                 function markAsBought(id) {
                     const item = shoppingList.find(i => i.id === id);
                     if (!item) return;
-                    
-                    selectShopCategory(item.category || 'tool');
-                    document.getElementById('shopNameInput').value = item.name;
-                    document.getElementById('shopBrandInput').value = item.brand;
-                    document.getElementById('shopLinkInput').value = item.link;
-                    document.getElementById('shopNotesInput').value = item.notes;
-                    
-                    document.getElementById('purchaseDetailsFields').classList.remove('hidden');
-                    document.getElementById('shopPricePaidInput').value = '';
-                    document.getElementById('shopPurchaseDateInput').value = new Date().toISOString().split('T')[0];
-                    
-                    document.getElementById('shoppingModalTitle').innerText = "Finalizar Compra";
-                    document.getElementById('btnSaveShopping').onclick = () => updateShoppingItem(id, true);
-                    openModal('shoppingModal');
+
+                    document.getElementById('confirmShopItemInfo').innerHTML = `
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 ${item.category === 'consumable' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'} rounded-2xl flex items-center justify-center shadow-inner mb-2">
+                                <i data-lucide="${item.category === 'consumable' ? 'box' : 'shopping-bag'}" size="24"></i>
+                            </div>
+                            <h4 class="font-black text-slate-800 uppercase text-xs leading-tight">${item.name}</h4>
+                            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${item.brand || 'SEM MARCA'}</p>
+                        </div>
+                    `;
+
+                    document.getElementById('confirmShopPriceInput').value = '';
+                    document.getElementById('confirmShopDateInput').value = new Date().toISOString().split('T')[0];
+
+                    document.getElementById('btnConfirmPurchaseFinal').onclick = () => finalizePurchaseConfirmation(id);
+
+                    openModal('purchaseConfirmModal');
+                    lucide.createIcons();
+                }
+
+                async function finalizePurchaseConfirmation(id) {
+                    const item = shoppingList.find(i => i.id === id);
+                    if (!item) return;
+
+                    const priceInput = document.getElementById('confirmShopPriceInput');
+                    const dateInput = document.getElementById('confirmShopDateInput');
+                    const price = parseFloat(priceInput.value);
+                    const date = dateInput.value;
+
+                    if (isNaN(price) || price <= 0) {
+                        showToast("Insira um valor de compra válido", "error");
+                        return;
+                    }
+
+                    item.status = 'bought';
+                    item.price = price;
+                    item.purchaseDate = date;
+
+                    closeModal('purchaseConfirmModal');
+                    await save();
+                    renderShoppingList();
+                    showToast("Compra confirmada com sucesso!", "success");
                 }
 
                 function editShoppingItem(id) {
