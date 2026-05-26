@@ -2440,10 +2440,10 @@
                         const toolsInPossession = tools.filter(t => t.user === w.name).length;
                         const historyCount = history.filter(h => h.workerName === w.name).length;
                         return `
-                        <div onclick="openWorkerDetails(${w.id})" class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col relative group hover:border-blue-400 transition-all cursor-pointer hover:shadow-lg hover:-translate-y-1">
+                        <div onclick="openWorkerDetails('${w.id}')" class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col relative group hover:border-blue-400 transition-all cursor-pointer hover:shadow-lg hover:-translate-y-1">
                             ${!isReadOnly ? `<div class="absolute top-2 right-2 flex gap-1">
-                                <button onclick="editWorker(${w.id}); event.stopPropagation();" class="p-2 text-slate-400 hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Editar Colaborador"><i data-lucide="pencil" size="16"></i></button>
-                                <button onclick="removeWorker(${w.id}); event.stopPropagation();" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Colaborador"><i data-lucide="trash-2" size="16"></i></button>
+                                <button onclick="editWorker('${w.id}'); event.stopPropagation();" class="p-2 text-slate-400 hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Editar Colaborador"><i data-lucide="pencil" size="16"></i></button>
+                                <button onclick="removeWorker('${w.id}'); event.stopPropagation();" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Colaborador"><i data-lucide="trash-2" size="16"></i></button>
                             </div>` : ''}
                             <div class="flex items-center gap-4 mb-4">
                                 <div class="w-12 h-12 ${workerType === 'TERCEIRO' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'} rounded-full flex items-center justify-center text-lg font-black overflow-hidden border border-slate-100 shadow-sm">
@@ -3371,9 +3371,9 @@
                     return `
                         <div id="tool-card-${t.id}" class="bg-white rounded-[2rem] p-4 shadow-lg border border-slate-100 flex flex-col group relative transition-all hover:shadow-2xl hover:-translate-y-1">
                             ${!isReadOnly ? `<div class="absolute top-6 right-6 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                                ${t.status === 'em uso' ? `<button onclick="requestReturn(${t.id}); event.stopPropagation();" class="bg-orange-500 text-white p-2 rounded-lg shadow-sm border border-orange-500 cursor-pointer hover:bg-orange-600" title="Devolver"><i data-lucide="rotate-ccw" size="14"></i></button>` : ''}
-                                <button onclick="editTool(${t.id}); event.stopPropagation();" class="bg-white/90 dark:bg-slate-800/90 p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 shadow-sm border border-slate-200 dark:border-slate-700 cursor-pointer backdrop-blur" title="Editar"><i data-lucide="pencil" size="14"></i></button>
-                                <button onclick="requestDelete(${t.id}); event.stopPropagation();" class="bg-white/90 dark:bg-slate-800/90 p-2 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 shadow-sm border border-slate-200 dark:border-slate-700 cursor-pointer backdrop-blur" title="Excluir"><i data-lucide="trash-2" size="14"></i></button>
+                                ${t.status === 'em uso' ? `<button onclick="requestReturn('${t.id}'); event.stopPropagation();" class="bg-orange-500 text-white p-2 rounded-lg shadow-sm border border-orange-500 cursor-pointer hover:bg-orange-600" title="Devolver"><i data-lucide="rotate-ccw" size="14"></i></button>` : ''}
+                                <button onclick="editTool('${t.id}'); event.stopPropagation();" class="bg-white/90 dark:bg-slate-800/90 p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 shadow-sm border border-slate-200 dark:border-slate-700 cursor-pointer backdrop-blur" title="Editar"><i data-lucide="pencil" size="14"></i></button>
+                                <button onclick="requestDelete('${t.id}'); event.stopPropagation();" class="bg-white/90 dark:bg-slate-800/90 p-2 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 shadow-sm border border-slate-200 dark:border-slate-700 cursor-pointer backdrop-blur" title="Excluir"><i data-lucide="trash-2" size="14"></i></button>
                             </div>` : ''}
                             <div onclick="openZoom('${t.img || ''}')" class="img-container relative w-full aspect-square bg-slate-50 rounded-2xl mb-4 flex items-center justify-center overflow-hidden border border-slate-50">
                                 ${t.img ? `<img src="${t.img}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">` : `<i data-lucide="wrench" class="text-slate-200" size="40"></i>`}
@@ -3618,11 +3618,11 @@
                             <td class="px-4 md:px-8 py-5 text-right">
                                 <div class="flex justify-end gap-2">
                                     ${t.status === 'em uso' ? 
-                                        `<button onclick="requestReturn(${t.id})" class="p-2 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 rounded-lg transition-colors" title="Devolver"><i data-lucide="rotate-ccw" size="16"></i></button>` :
+                                        `<button onclick="requestReturn('${t.id}')" class="p-2 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 rounded-lg transition-colors" title="Devolver"><i data-lucide="rotate-ccw" size="16"></i></button>` :
                                         '<div class="w-10 p-2"></div>'
                                     }
-                                    <button onclick="editTool(${t.id})" class="p-2 text-slate-400 hover:text-blue-600 bg-transparent border-none cursor-pointer"><i data-lucide="pencil" size="16"></i></button>
-                                    <button onclick="requestDelete(${t.id})" class="p-2 text-slate-400 hover:text-rose-600 bg-transparent border-none cursor-pointer"><i data-lucide="trash-2" size="16"></i></button>
+                                    <button onclick="editTool('${t.id}')" class="p-2 text-slate-400 hover:text-blue-600 bg-transparent border-none cursor-pointer"><i data-lucide="pencil" size="16"></i></button>
+                                    <button onclick="requestDelete('${t.id}')" class="p-2 text-slate-400 hover:text-rose-600 bg-transparent border-none cursor-pointer"><i data-lucide="trash-2" size="16"></i></button>
                                 </div>
                             </td>` : '') + `
                         </tr>
@@ -3725,9 +3725,9 @@
                         const toolImg = h.toolImg || tool.img;
 
                         return `
-                        <div onclick="openHistoryDetailModal(${h.historyId})" class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col gap-4 relative group cursor-pointer hover:border-blue-500 transition-all hover:shadow-lg">
+                        <div onclick="openHistoryDetailModal('${h.historyId}')" class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col gap-4 relative group cursor-pointer hover:border-blue-500 transition-all hover:shadow-lg">
                             ${!isReadOnly ? `<div class="absolute top-4 right-4">
-                                <button onclick="requestDeleteHistory(${h.historyId}); event.stopPropagation();" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Registro"><i data-lucide="trash-2" size="16"></i></button>
+                                <button onclick="requestDeleteHistory('${h.historyId}'); event.stopPropagation();" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Registro"><i data-lucide="trash-2" size="16"></i></button>
                             </div>` : ''}
                             <div class="flex items-start gap-4">
                                 <div class="w-16 h-16 bg-slate-50 rounded-xl flex items-center justify-center overflow-hidden border border-slate-100">
@@ -4584,7 +4584,7 @@
                         `;
 
                         return `
-                        <div onclick="selectToolForMaterial(${t.id})"
+                        <div onclick="selectToolForMaterial('${t.id}')"
                             class="bg-white rounded-2xl p-3 shadow-lg border border-slate-100 cursor-pointer hover:border-blue-500 hover:shadow-xl transition-all flex flex-col text-center group">
                             <div class="relative w-full aspect-square bg-white rounded-xl mb-3 flex items-center justify-center overflow-hidden border border-slate-100">
                                 ${t.img ? `<img src="${t.img}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">` : `<i data-lucide="wrench" class="text-slate-200" size="40"></i>`}
@@ -4780,7 +4780,7 @@
                         const textColor = workerType === 'TERCEIRO' ? 'text-orange-600' : 'text-blue-600';
                         const infoDisplay = w.info || w.company || 'N/A';
                         return `
-                        <div onclick="selectWorkerForMaterial(${w.id})" class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all flex flex-col items-center gap-2 text-center">
+                        <div onclick="selectWorkerForMaterial('${w.id}')" class="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all flex flex-col items-center gap-2 text-center">
                             <div class="w-10 h-10 bg-white dark:bg-slate-900 ${textColor} rounded-full flex items-center justify-center font-black shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700">
                                 ${w.img ? `<img src="${w.img}" class="w-full h-full object-cover">` : w.name.charAt(0)}
                             </div>
@@ -4862,7 +4862,7 @@
                     );
 
                     list.innerHTML = borrowedItems.map(t => `
-                        <div onclick="requestReturn(${t.id}); closeModal('checkinModal');"
+                        <div onclick="requestReturn('${t.id}'); closeModal('checkinModal');"
                             class="bg-white rounded-2xl p-3 shadow-lg border border-slate-100 cursor-pointer hover:border-blue-500 hover:shadow-xl transition-all flex flex-col text-center group">
                             <div class="relative w-full aspect-square bg-white rounded-xl mb-3 flex items-center justify-center overflow-hidden border border-slate-100">
                                 ${t.img ? `<img src="${t.img}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">` : `<i data-lucide="wrench" class="text-slate-200" size="40"></i>`}
@@ -5785,8 +5785,8 @@
                         <div class="bg-white rounded-[2rem] p-4 shadow-lg border ${item.status === 'bought' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100'} flex flex-col group relative transition-all hover:shadow-2xl">
                             ${!isReadOnly ? `
                             <div class="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="editShoppingItem(${item.id})" class="p-1.5 text-slate-400 hover:text-blue-500 bg-white rounded-lg border shadow-sm"><i data-lucide="pencil" size="12"></i></button>
-                                <button onclick="deleteShoppingItem(${item.id})" class="p-1.5 text-slate-400 hover:text-rose-500 bg-white rounded-lg border shadow-sm"><i data-lucide="trash-2" size="12"></i></button>
+                                <button onclick="editShoppingItem('${item.id}')" class="p-1.5 text-slate-400 hover:text-blue-500 bg-white rounded-lg border shadow-sm"><i data-lucide="pencil" size="12"></i></button>
+                                <button onclick="deleteShoppingItem('${item.id}')" class="p-1.5 text-slate-400 hover:text-rose-500 bg-white rounded-lg border shadow-sm"><i data-lucide="trash-2" size="12"></i></button>
                             </div>` : ''}
                             
                             <div class="flex items-center gap-3 mb-3">
@@ -5825,7 +5825,7 @@
                                 <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Adicionado: ${item.date}</span>
                                 <div class="flex gap-1.5">
                                     ${!isReadOnly && item.status === 'pending' ? `
-                                        <button onclick="markAsBought(${item.id})" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl font-black text-[8px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-1.5 hover:bg-emerald-700 transition-all">
+                                        <button onclick="markAsBought('${item.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl font-black text-[8px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-1.5 hover:bg-emerald-700 transition-all">
                                             <i data-lucide="check-circle" size="10"></i> Comprado
                                         </button>
                                     ` : ''}
@@ -5978,9 +5978,9 @@
                     grid.innerHTML = maintenanceTools.map(t => {
                         const info = t.maintenanceInfo || {};
                         return `
-                        <div class="bg-white rounded-2xl p-5 shadow-lg border border-slate-100 flex flex-col gap-4 group cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all relative" onclick="openManageMaintenanceModal(${t.id})">
+                        <div class="bg-white rounded-2xl p-5 shadow-lg border border-slate-100 flex flex-col gap-4 group cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all relative" onclick="openManageMaintenanceModal('${t.id}')">
                             ${!isReadOnly ? `<div class="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="requestDeleteMaintenance(${t.id}, event)" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Manutenção"><i data-lucide="trash-2" size="16"></i></button>
+                                <button onclick="requestDeleteMaintenance('${t.id}', event)" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Manutenção"><i data-lucide="trash-2" size="16"></i></button>
                             </div>` : ''}
                             <div class="flex items-start gap-4">
                                 <div class="w-16 h-16 bg-slate-50 rounded-xl flex items-center justify-center overflow-hidden border border-slate-100 shadow-sm">
@@ -6149,7 +6149,7 @@
                                             <p class="text-[10px] text-slate-400 uppercase">Clique para visualizar</p>
                                         </div>
                                         <button onclick="openZoom('${info.invoiceFile}')" class="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="Visualizar"><i data-lucide="eye" size="18"></i></button>
-                                        <button onclick="deleteInvoice(${id})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg transition-colors" title="Excluir Nota"><i data-lucide="trash-2" size="18"></i></button>
+                                        <button onclick="deleteInvoice('${id}')" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg transition-colors" title="Excluir Nota"><i data-lucide="trash-2" size="18"></i></button>
                                     </div>
                                 `;
                             } else {
