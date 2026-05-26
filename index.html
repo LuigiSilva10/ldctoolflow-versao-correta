@@ -1627,7 +1627,11 @@
                                     type: 'execute',
                                     stmt: { 
                                         sql: st.sql, 
-                                        args: (st.args || []).map(arg => ({ type: typeof arg === 'number' ? 'integer' : 'text', value: String(arg) }))
+                                        args: (st.args || []).map(arg => {
+                                            if (arg === null || arg === undefined) return { type: 'null' };
+                                            if (typeof arg === 'number') return { type: 'integer', value: arg };
+                                            return { type: 'text', value: String(arg) };
+                                        })
                                     }
                                 })).concat({ type: 'close' })
                             })
@@ -2114,7 +2118,8 @@
                         localStorage.setItem('ldc_history_db', JSON.stringify(history));
                         localStorage.setItem('ldc_settings_db', JSON.stringify(appSettings));
                     } catch (e) {
-                        // Tratamento de erro de storage omitido por brevidade
+                        console.warn("LocalStorage cheio! Os dados estão sendo mantidos apenas em memória e na nuvem.", e);
+                        if (syncToCloud === false) showToast("Erro: Espaço local cheio. Sincronize com a nuvem.", "error");
                     }
                     
                     // Salvar no Turso
@@ -3154,10 +3159,8 @@
 
                     const qtyInput = document.getElementById('toolQtyInput');
 
-                    let newId = Date.now();
-                    while(tools.some(t => t.id === newId)) {
-                        newId++;
-                    }
+                    // Uso de UUID para evitar colisões em ambiente multiusuário
+                    const newId = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Date.now() + Math.random();
 
                     const tool = {
                         id: newId,
