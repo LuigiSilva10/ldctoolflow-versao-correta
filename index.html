@@ -53,7 +53,13 @@
                 :root {
                     --brand-primary: #0F172A;
                     --brand-action: #2563EB;
-                    --bg-main: #0B1120; /* Azul Marinho Profundo Original */
+                    --bg-main: #F8FAFC;
+                    --text-main: #1E293B;
+                }
+
+                .dark {
+                    --bg-main: #0B1120;
+                    --text-main: #F8FAFC;
                 }
 
                 body { 
@@ -62,7 +68,7 @@
                     display: flex;
                     height: 100vh;
                     overflow-y: hidden;
-                color: #F8FAFC; /* Branco do Texto */
+                    color: var(--text-main);
                     /* Suporte para Safe Areas em dispositivos mobile */
                     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
                 }
@@ -71,15 +77,35 @@
                 .sidebar {
                     width: 280px; /* Largura sempre expandida */
                     transition: all 0.3s ease;
-                    background-color: #0B1120;
-                    border-right: 1px solid #1E293B;
+                    background-color: white;
+                    border-right: 1px solid #E2E8F0;
                     position: sticky;
                     top: 0;
-                    height: 100vh;
+                    height: 100dvh;
                     z-index: 50;
                     flex-shrink: 0;
+                    overflow-x: hidden;
                 }
-                .sidebar .sidebar-text { display: inline; } /* Texto sempre visível */
+
+                .sidebar.collapsed {
+                    width: 88px;
+                }
+
+                .sidebar.collapsed .sidebar-text, 
+                .sidebar.collapsed h1 { 
+                    display: none; 
+                }
+
+                .sidebar.collapsed .nav-btn {
+                    justify-content: center;
+                    padding: 0.75rem;
+                }
+
+                .sidebar.collapsed .p-6 {
+                    padding: 1.5rem 0.5rem;
+                    justify-content: center;
+                }
+
                 .sidebar .nav-btn { justify-content: flex-start; } /* Botões sempre alinhados à esquerda */
                 
                 .main-content { flex: 1; display: none; opacity: 0; transform: translateY(10px); transition: all 0.4s ease; overflow-y: auto; }
@@ -102,7 +128,7 @@
 
                 .dashboard-filter-btn {
                     background-color: #e2e8f0;
-                    color: #475569;
+                    color: #000000;
                     padding: 0.25rem 0.75rem;
                     border-radius: 0.5rem;
                     font-size: 0.75rem;
@@ -116,11 +142,11 @@
                 .dashboard-filter-btn.active { background-color: var(--brand-action); color: white; }
 
                 .soft-ui-panel {
-                background: #111827;
+                    background: white;
                     border-radius: 1.5rem;
                     padding: 1.5rem;
-                border: 1px solid #1F2937;
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+                    border: 1px solid #E2E8F0;
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
                 }
 
                 /* Flatpickr Customization for Gray/Silver Theme */
@@ -151,34 +177,56 @@
                 }
 
                 /* Tema Escuro Global Refinado */
-                .bg-white { background-color: #111827 !important; border-color: #1F2937 !important; }
-                .bg-slate-50 { background-color: #0B1120 !important; }
-                .bg-slate-100 { background-color: #1F2937 !important; border-color: #374151 !important; }
-                .text-slate-900, .text-slate-800, .text-slate-700 { color: #F8FAFC !important; }
-                .text-slate-600, .text-slate-500, .text-slate-400 { color: #94A3B8 !important; }
-                .border-slate-100, .border-slate-200 { border-color: #1F2937 !important; }
+                .dark .bg-white { background-color: #111827 !important; border-color: #1F2937 !important; }
+                .dark .bg-slate-50 { background-color: #0B1120 !important; }
+                .dark .bg-slate-100 { background-color: #1F2937 !important; border-color: #374151 !important; }
+                .dark .text-slate-900, .dark .text-slate-800, .dark .text-slate-700 { color: #F8FAFC !important; }
+                .dark .text-slate-600, .dark .text-slate-500, .dark .text-slate-400 { color: #94A3B8 !important; }
+                .dark .border-slate-100, .dark .border-slate-200 { border-color: #1F2937 !important; }
                 
                 /* Contraste do Valor (Verde Pop) e Dimmer de Fundos Leves */
                 .text-emerald-600, .text-emerald-500 { color: #10B981 !important; }
                 
                 /* Transparência para classes de fundo '50' e '100' para não estourarem no Dark Mode */
-                .bg-blue-50, .bg-emerald-50, .bg-orange-50, .bg-red-50, .bg-purple-50, .bg-cyan-50, .bg-indigo-50, .bg-amber-50, .bg-rose-50, .bg-sky-100 { 
+                .dark .bg-blue-50, .dark .bg-emerald-50, .dark .bg-orange-50, .dark .bg-red-50, .dark .bg-purple-50, .dark .bg-cyan-50, .dark .bg-indigo-50, .dark .bg-amber-50, .dark .bg-rose-50, .dark .bg-sky-100 { 
                     background-color: rgba(255, 255, 255, 0.05) !important; 
                 }
 
                 /* Ajuste de Inputs para o Fundo Escuro */
-                input, select, textarea { 
+                .dark input, .dark select, .dark textarea { 
                     background-color: #111827 !important; 
                     border-color: #1F2937 !important; 
                     color: #F8FAFC !important; 
                 }
-                input::placeholder { color: #4B5563 !important; }
+                .dark input::placeholder { color: #4B5563 !important; }
 
                 /* Redução de brilho excessivo nos cards e efeitos de fundo */
-                .shadow-xl, .shadow-2xl, .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important; }
-                .blur-\[100px\], .blur-\[80px\] { opacity: 0.1 !important; }
+                .dark .shadow-xl, .dark .shadow-2xl, .dark .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important; }
+                .dark .blur-\[100px\], .dark .blur-\[80px\] { opacity: 0.1 !important; }
 
-                .sidebar { background-color: #020617; border-color: #0F172A; }
+                .dark .sidebar { background-color: #020617; border-color: #0F172A; }
+                .dark .soft-ui-panel { background: #111827; border: 1px solid #1F2937; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); }
+
+                /* Mobile Responsiveness & Sidebar Drawer */
+                @media (max-width: 1024px) {
+                    .sidebar {
+                        position: fixed;
+                        left: -280px;
+                        box-shadow: 20px 0 25px -5px rgba(0, 0, 0, 0.1);
+                    }
+                    .sidebar.mobile-active {
+                        left: 0;
+                    }
+                    .sidebar.collapsed {
+                        width: 280px; /* No mobile, não colapsamos, apenas fechamos */
+                    }
+                    .sidebar.collapsed .sidebar-text, .sidebar.collapsed h1 {
+                        display: inline;
+                    }
+                    .sidebar.collapsed .nav-btn {
+                        justify-content: flex-start;
+                    }
+                }
 
                 /* Toast Animations */
                 @keyframes slideDown {
@@ -188,29 +236,32 @@
                 .toast-enter { animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
             </style>
         </head>
-        <body class="bg-[#0B1120]">
+        <body>
+
+            <!-- Overlay para Mobile -->
+            <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-[45] hidden backdrop-blur-sm transition-opacity"></div>
 
             <aside id="sidebar" class="sidebar text-slate-400 flex flex-col">
                 <div class="p-6 flex items-center justify-between">
-                    <h1 class="text-white font-black text-xl sidebar-text uppercase tracking-tighter">LDC ToolFlow</h1>
-                    <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white bg-transparent border-none cursor-pointer"><i data-lucide="menu"></i></button>
+                    <h1 class="text-slate-900 dark:text-white font-black text-xl sidebar-text uppercase tracking-tighter">LDC ToolFlow</h1>
+                    <button onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-900 dark:hover:text-white bg-transparent border-none cursor-pointer"><i data-lucide="menu"></i></button>
                 </div>
                 <nav class="flex-1 px-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar pb-6">
-                    <button id="btn-main" onclick="showSection('main')" class="nav-btn active"><i data-lucide="layout-dashboard"></i> <span class="sidebar-text">Painel Principal</span></button>
-                    <button id="btn-actions" onclick="showSection('actions')" class="nav-btn relative">
+                    <button id="btn-main" onclick="handleNavClick('main')" class="nav-btn active"><i data-lucide="layout-dashboard"></i> <span class="sidebar-text">Painel Principal</span></button>
+                    <button id="btn-actions" onclick="handleNavClick('actions')" class="nav-btn relative">
                         <i data-lucide="zap"></i> 
                         <span class="sidebar-text">Operações</span>
                         <span id="actionsOverdueBadge" class="hidden absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full"></span>
                     </button>
-                    <button id="btn-dashboard" onclick="showSection('dashboard')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Dashboard</span></button>
-                    <button id="btn-catalog" onclick="showSection('catalog')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">Ferramentas</span></button>
-                    <button id="btn-materials" onclick="showSection('materials')" class="nav-btn"><i data-lucide="box"></i> <span class="sidebar-text">Materiais</span></button>
-                    <button id="btn-team" onclick="showSection('team')" class="nav-btn"><i data-lucide="users"></i> <span class="sidebar-text">Equipe</span></button>
-                    <button id="btn-maintenance" onclick="showSection('maintenance')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">FollowUp</span></button>
-                    <button id="btn-shopping" onclick="showSection('shopping')" class="nav-btn"><i data-lucide="shopping-cart"></i> <span class="sidebar-text">Lista de Compras</span></button>
-                    <button id="btn-logs" onclick="showSection('logs')" class="nav-btn"><i data-lucide="history"></i> <span class="sidebar-text">Histórico</span></button>
-                    <button id="btn-database" onclick="showSection('database')" class="nav-btn"><i data-lucide="database"></i> <span class="sidebar-text">Backup</span></button>
-                    <button id="btn-settings" onclick="showSection('settings')" class="nav-btn"><i data-lucide="settings"></i> <span class="sidebar-text">Configurações</span></button>
+                    <button id="btn-dashboard" onclick="handleNavClick('dashboard')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Dashboard</span></button>
+                    <button id="btn-catalog" onclick="handleNavClick('catalog')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">Ferramentas</span></button>
+                    <button id="btn-materials" onclick="handleNavClick('materials')" class="nav-btn"><i data-lucide="box"></i> <span class="sidebar-text">Materiais</span></button>
+                    <button id="btn-team" onclick="handleNavClick('team')" class="nav-btn"><i data-lucide="users"></i> <span class="sidebar-text">Equipe</span></button>
+                    <button id="btn-maintenance" onclick="handleNavClick('maintenance')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">FollowUp</span></button>
+                    <button id="btn-shopping" onclick="handleNavClick('shopping')" class="nav-btn"><i data-lucide="shopping-cart"></i> <span class="sidebar-text">Lista de Compras</span></button>
+                    <button id="btn-logs" onclick="handleNavClick('logs')" class="nav-btn"><i data-lucide="history"></i> <span class="sidebar-text">Histórico</span></button>
+                    <button id="btn-database" onclick="handleNavClick('database')" class="nav-btn"><i data-lucide="database"></i> <span class="sidebar-text">Backup</span></button>
+                    <button id="btn-settings" onclick="handleNavClick('settings')" class="nav-btn"><i data-lucide="settings"></i> <span class="sidebar-text">Configurações</span></button>
                 </nav>
             </aside>
 
@@ -228,6 +279,7 @@
                         <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
                                         <i data-lucide="layout-dashboard" size="28"></i>
                                     </div>
@@ -264,13 +316,15 @@
                                 <div id="card-value-use" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm"><p class="text-indigo-500 text-[10px] font-bold uppercase mb-1">Valor em Uso</p><h2 id="mainValueInUse" class="text-xl font-black text-slate-700">R$ 0,00</h2></div>
                             </div>
 
-                            <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden border border-slate-100">
-                                <table class="w-full text-left text-sm">
-                                    <thead class="bg-black/20 text-slate-500 text-[10px] font-bold uppercase tracking-wider">
-                                        <tr><th class="px-4 md:px-8 py-4">Equipamento</th><th class="px-4 md:px-8 py-4">Status / Responsável</th><th id="mainTableActionsHeader" class="px-4 md:px-8 py-4 text-right">Ações</th></tr>
-                                    </thead>
-                                    <tbody id="toolList" class="divide-y divide-slate-50"></tbody>
-                                </table>
+                            <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden border border-slate-100 overflow-x-auto custom-scrollbar">
+                                <div class="min-w-[600px]">
+                                    <table class="w-full text-left text-sm">
+                                        <thead class="bg-black/20 text-slate-500 text-[10px] font-bold uppercase tracking-wider">
+                                            <tr><th class="px-4 md:px-8 py-4">Equipamento</th><th class="px-4 md:px-8 py-4">Status / Responsável</th><th id="mainTableActionsHeader" class="px-4 md:px-8 py-4 text-right">Ações</th></tr>
+                                        </thead>
+                                        <tbody id="toolList" class="divide-y divide-slate-50"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -282,6 +336,7 @@
                     <div class="bg-[#0B1120] rounded-[2.5rem] p-6 md:p-8 mb-10 shadow-2xl relative overflow-hidden border border-slate-800">
                         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
                         <div class="relative z-10 flex items-center gap-4">
+                            <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl"><i data-lucide="menu"></i></button>
                             <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
                                 <i data-lucide="trending-up" size="28"></i>
                             </div>
@@ -318,6 +373,7 @@
                         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
                         <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none"></div>
                         <div class="relative z-10 flex items-center gap-4">
+                            <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl"><i data-lucide="menu"></i></button>
                             <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
                                 <i data-lucide="zap" size="28"></i>
                             </div>
@@ -398,6 +454,7 @@
                         <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400"><i data-lucide="archive" size="28"></i></div>
                                     <div>
                                         <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Ferramentas</h2>
@@ -420,7 +477,7 @@
 
                     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
                         <div class="flex gap-2 flex-wrap">
-                            <button onclick="setCatalogFilter('all')" id="filter-all" class="filter-pill active bg-slate-200 text-slate-700">Todos</button>
+                            <button onclick="setCatalogFilter('all')" id="filter-all" class="filter-pill active bg-slate-200 text-black">Todos</button>
                             <button onclick="setCatalogFilter('disponivel')" id="filter-disponivel" class="filter-pill bg-emerald-100 text-emerald-600">Disponíveis</button>
                             <button onclick="setCatalogFilter('em uso')" id="filter-uso" class="filter-pill bg-orange-100 text-orange-600">Em Uso</button>
                             <button onclick="setCatalogFilter('quebrado')" id="filter-quebrado" class="filter-pill bg-red-100 text-red-600">Manutenção</button>
@@ -446,6 +503,7 @@
                         <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400"><i data-lucide="box" size="28"></i></div>
                                     <div>
                                         <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Materiais</h2>
@@ -476,6 +534,7 @@
                         <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400"><i data-lucide="history" size="28"></i></div>
                                     <div>
                                         <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Histórico</h2>
@@ -510,6 +569,7 @@
                         <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400"><i data-lucide="users" size="28"></i></div>
                                     <div>
                                         <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Gestão de Equipe</h2>
@@ -526,7 +586,7 @@
                     </div>
 
                     <div class="flex flex-col md:flex-row justify-end mb-8 gap-3">
-                        <button onclick="printAllWorkerCards()" class="bg-slate-800 text-white px-6 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg text-xs uppercase tracking-widest hover:bg-slate-700 transition-all border-none cursor-pointer w-full md:w-auto justify-center">
+                        <button onclick="printAllWorkerCards()" class="bg-slate-200 text-black px-6 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg text-xs uppercase tracking-widest hover:bg-slate-300 transition-all border-none cursor-pointer w-full md:w-auto justify-center">
                             <i data-lucide="printer" size="18"></i> Imprimir Todos
                         </button>
                         <button onclick="openAddWorkerModal()" class="bg-blue-600 text-white px-6 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg text-xs uppercase tracking-widest hover:bg-blue-700 transition-all border-none cursor-pointer w-full md:w-auto justify-center">
@@ -547,6 +607,7 @@
                         <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400"><i data-lucide="wrench" size="28"></i></div>
                                     <div>
                                         <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Follow-Up</h2>
@@ -571,7 +632,7 @@
                     </div>
                     
                     <div class="flex gap-2 mb-8 flex-wrap">
-                        <button onclick="setMaintenanceFilter('all')" id="maint-filter-all" class="filter-pill active bg-slate-200 text-slate-700">Todos</button>
+                        <button onclick="setMaintenanceFilter('all')" id="maint-filter-all" class="filter-pill active bg-slate-200 text-black">Todos</button>
                         <button onclick="setMaintenanceFilter('Aguardando Orçamento')" id="maint-filter-aguardando-orçamento" class="filter-pill bg-amber-100 text-amber-600">Aguardando Orçamento</button>
                         <button onclick="setMaintenanceFilter('Aguardando Aprovação')" id="maint-filter-aguardando-aprovação" class="filter-pill bg-sky-100 text-sky-600">Aguardando Aprovação</button>
                         <button onclick="setMaintenanceFilter('Em Conserto')" id="maint-filter-em-conserto" class="filter-pill bg-indigo-100 text-indigo-600">Em Conserto</button>
@@ -588,6 +649,7 @@
                         <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
                                     <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
                                         <i data-lucide="shopping-cart" size="28"></i>
                                     </div>
@@ -603,8 +665,8 @@
                     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
                         <div class="flex gap-2 flex-wrap mb-4 lg:mb-0">
                             <button onclick="setShoppingFilter('pending')" id="shop-filter-pending" class="filter-pill active bg-amber-100 text-amber-600">Pendentes</button>
-                            <button onclick="setShoppingFilter('bought')" id="shop-filter-bought" class="filter-pill bg-slate-100 text-slate-500">Já Comprados</button>
-                            <button onclick="setShoppingFilter('all')" id="shop-filter-all" class="filter-pill bg-slate-100 text-slate-500">Ver Todos</button>
+                            <button onclick="setShoppingFilter('bought')" id="shop-filter-bought" class="filter-pill bg-slate-100 text-black">Já Comprados</button>
+                            <button onclick="setShoppingFilter('all')" id="shop-filter-all" class="filter-pill bg-slate-100 text-black">Ver Todos</button>
                         </div>
                         <div class="flex flex-col md:flex-row gap-4 w-full lg:w-auto items-end md:items-center">
                             <div class="flex gap-4">
@@ -642,7 +704,7 @@
                     <h3 class="text-lg font-black text-slate-900 uppercase mb-2">Excluir Item?</h3>
                     <p class="text-slate-500 text-sm mb-6">Você tem certeza que deseja remover este item? Esta ação não pode ser desfeita.</p>
                     <div class="flex gap-3">
-                        <button onclick="closeModal('deleteModal')" class="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold uppercase text-xs cursor-pointer border-none">Cancelar</button>
+                        <button onclick="closeModal('deleteModal')" class="flex-1 py-3 bg-slate-100 text-black rounded-xl font-bold uppercase text-xs cursor-pointer border-none">Cancelar</button>
                         <button id="confirmDeleteBtn" class="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold uppercase text-xs cursor-pointer border-none shadow-lg hover:bg-rose-700 transition-all">Confirmar</button>
                     </div>
                 </div>
@@ -653,7 +715,7 @@
                     <div class="w-16 h-16 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="alert-triangle" size="32"></i></div>
                     <h3 id="alertModalTitle" class="text-lg font-black text-slate-900 uppercase mb-2">Atenção</h3>
                     <p id="alertModalText" class="text-slate-500 text-sm mb-6">Mensagem de alerta.</p>
-                    <button onclick="closeModal('alertModal')" class="w-full py-3 bg-slate-100 text-slate-600 rounded-xl font-bold uppercase text-xs cursor-pointer border-none hover:bg-slate-200 transition-all">Entendido</button>
+                    <button onclick="closeModal('alertModal')" class="w-full py-3 bg-slate-100 text-black rounded-xl font-bold uppercase text-xs cursor-pointer border-none hover:bg-slate-200 transition-all">Entendido</button>
                 </div>
             </div>
 
@@ -666,7 +728,7 @@
                         <button id="btnReturnBroken" class="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold uppercase text-xs cursor-pointer border-none shadow-lg hover:bg-rose-700">Quebrado</button>
                         <button id="btnReturnWorking" class="flex-1 py-3 bg-emerald-500 text-white rounded-xl font-bold uppercase text-xs cursor-pointer border-none shadow-lg hover:bg-emerald-600">Funcionando</button>
                     </div>
-                    <button onclick="closeModal('returnModal')" class="w-full mt-6 py-4 bg-slate-100 text-slate-600 rounded-2xl font-black uppercase text-xs border-none cursor-pointer hover:bg-slate-200">Cancelar</button>
+                    <button onclick="closeModal('returnModal')" class="w-full mt-6 py-4 bg-slate-100 text-black rounded-2xl font-black uppercase text-xs border-none cursor-pointer hover:bg-slate-200">Cancelar</button>
                 </div>
             </div>
 
@@ -784,6 +846,7 @@
                         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
                         <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none"></div>
                         <div class="relative z-10 flex items-center gap-4">
+                            <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl"><i data-lucide="menu"></i></button>
                             <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
                                 <i data-lucide="database" size="28"></i>
                             </div>
@@ -830,6 +893,7 @@
                         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
                         <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none"></div>
                         <div class="relative z-10 flex items-center gap-4">
+                            <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl"><i data-lucide="menu"></i></button>
                             <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
                                 <i data-lucide="settings" size="28"></i>
                             </div>
@@ -957,7 +1021,7 @@
                                         <label class="text-xs font-bold text-slate-400 uppercase ml-2 tracking-wider">PIN de Administrador</label>
                                         <div class="flex gap-2 mt-1">
                                             <input type="password" id="settingAdminPin" placeholder="****" class="flex-1 border-2 border-slate-100 rounded-xl px-4 py-3 font-bold text-slate-700 outline-none focus:border-red-500 transition-all">
-                                            <button id="btnSavePin" onclick="setAdminPin()" class="bg-slate-800 text-white px-4 rounded-xl font-bold uppercase text-xs hover:bg-slate-700 transition-all">Definir</button>
+                                            <button id="btnSavePin" onclick="setAdminPin()" class="bg-slate-200 text-black px-4 rounded-xl font-bold uppercase text-xs hover:bg-slate-300 transition-all">Definir</button>
                                             <button id="btnDeletePin" onclick="deleteAdminPin()" class="hidden bg-red-100 text-red-600 px-4 rounded-xl font-bold uppercase text-xs hover:bg-red-200 transition-all border border-red-200">Excluir</button>
                                         </div>
                                         <p class="text-xs text-slate-400 mt-2 font-medium">
@@ -1099,7 +1163,7 @@
                     <p class="text-slate-500 text-sm mb-6">Esta ação requer autorização. Digite o PIN de administrador para continuar.</p>
                     <input type="password" id="pinInputModal" placeholder="****" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold text-center text-lg outline-none focus:border-blue-500 transition-all mb-6">
                     <div class="flex gap-3">
-                        <button onclick="closeModal('pinModal')" class="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold uppercase text-[10px] cursor-pointer border-none">Cancelar</button>
+                        <button onclick="closeModal('pinModal')" class="flex-1 py-3 bg-slate-100 text-black rounded-xl font-bold uppercase text-[10px] cursor-pointer border-none">Cancelar</button>
                         <button onclick="validatePin()" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold uppercase text-[10px] cursor-pointer border-none shadow-lg hover:bg-blue-700 transition-all">Confirmar</button>
                     </div>
                 </div>
@@ -1168,7 +1232,7 @@
                             </div>
                             <textarea id="maintenanceNoteInput" placeholder="Descreva o problema ou o motivo da manutenção..." class="w-full h-24 border-2 border-slate-100 rounded-xl p-3 font-medium text-sm outline-none focus:border-red-500 transition-all"></textarea>
                             <div class="flex gap-3 mt-4">
-                                <button onclick="resetMaintenance()" class="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                                <button onclick="resetMaintenance()" class="flex-1 py-4 bg-slate-100 text-black rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
                                 <button id="btnFinalizeMaintenance" class="flex-1 py-4 bg-red-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-red-700">Confirmar Manutenção</button>
                             </div>
                         </div>
@@ -1352,7 +1416,7 @@
                             <div id="selectedToolMaterial" class="mb-6"></div>
                             <input type="number" inputmode="numeric" id="materialQtyInput" placeholder="QTD" class="w-32 text-center border-2 border-slate-200 rounded-xl px-4 py-3 font-black text-lg outline-none focus:border-blue-500 transition-all">
                             <div class="flex gap-3 mt-6">
-                                <button onclick="resetMaterial(0)" class="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                                <button onclick="resetMaterial(0)" class="flex-1 py-4 bg-slate-100 text-black rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
                                 <button id="btnNextMaterialQty" onclick="processQtyStep()" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700">Avançar</button>
                             </div>
                         </div>
@@ -1380,7 +1444,7 @@
                                 </div>
                             </div>
                             <div class="flex gap-3 mt-8">
-                                <button onclick="resetMaterial(1)" class="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                                <button onclick="resetMaterial(1)" class="flex-1 py-4 bg-slate-100 text-black rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
                                 <button onclick="processDetailsStep()" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700">Avançar</button>
                             </div>
                         </div>
@@ -1392,13 +1456,13 @@
                                 <button onclick="clearSearch('workerSearchInputMaterial', renderWorkerListMaterial)" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 hidden z-10"><i data-lucide="x-circle" size="16"></i></button>
                             </div>
                             <div id="teamGridMaterial" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar"></div>
-                                <button onclick="resetMaterial(2)" class="w-full mt-4 py-3 bg-slate-100 text-slate-500 rounded-xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                                <button onclick="resetMaterial(2)" class="w-full mt-4 py-3 bg-slate-100 text-black rounded-xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
                         </div>
                         <div id="step-material-confirm" class="hidden text-center py-2">
                             <div id="confirmationDetails" class="mb-2"></div>
                             <h4 class="text-md font-black text-slate-900 uppercase mb-2">Confirmar Retirada?</h4>
                             <div class="flex gap-3">
-                                    <button onclick="resetMaterial(3)" class="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
+                                    <button onclick="resetMaterial(3)" class="flex-1 py-4 bg-slate-100 text-black rounded-2xl font-black uppercase text-xs cursor-pointer border-none">Voltar</button>
                                     <button id="btnFinalizeMaterial" class="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-indigo-700">Confirmar Saída</button>
                             </div>
                         </div>
@@ -1678,13 +1742,17 @@
                 team = team.filter(w => w.id !== 1 && w.name !== 'ALMOXARIFADO');
 
                 let history = JSON.parse(localStorage.getItem('ldc_history_db')) || [];
-                let appSettings = JSON.parse(localStorage.getItem('ldc_settings_db')) || { 
-                    overdueHours: 24, 
+                // Preferências Locais (Individuais por navegador)
+                let appSettings = JSON.parse(localStorage.getItem('ldc_settings_db')) || {
                     systemSounds: true, 
                     darkMode: false, 
-                    alertOverdue: true, 
-                    adminPin: null,
                     showToasts: true
+                };
+                // Configurações do Sistema (Compartilhadas via Nuvem)
+                let systemConfigs = JSON.parse(localStorage.getItem('ldc_system_configs')) || {
+                    overdueHours: 24,
+                    alertOverdue: true,
+                    adminPin: null
                 };
                 let auditSession = { missing: [], found: [] };
 
@@ -1752,6 +1820,7 @@
                             if (cloudData.team) team = Array.isArray(cloudData.team) ? cloudData.team : (Array.isArray(team) ? team : []);
                             if (cloudData.history) history = Array.isArray(cloudData.history) ? cloudData.history : (Array.isArray(history) ? history : []);
                             if (cloudData.shoppingList) shoppingList = Array.isArray(cloudData.shoppingList) ? cloudData.shoppingList : (Array.isArray(shoppingList) ? shoppingList : []);
+                            if (cloudData.systemConfigs) systemConfigs = cloudData.systemConfigs;
                             
                             save(false); // Salva localmente e atualiza a tela (false para não reenviar pra nuvem)
                         }
@@ -2123,11 +2192,12 @@
                     if (syncToCloud) hasUnsavedChanges = true; // Marca como não salvo até confirmar o sucesso
 
                     try {
-                        localStorage.setItem('ldc_pro_db', JSON.stringify(tools)); 
+                        localStorage.setItem('ldc_pro_db', JSON.stringify(tools));
                         localStorage.setItem('ldc_team_db', JSON.stringify(team));
                         localStorage.setItem('ldc_shopping_db', JSON.stringify(shoppingList));
                         localStorage.setItem('ldc_history_db', JSON.stringify(history));
                         localStorage.setItem('ldc_settings_db', JSON.stringify(appSettings));
+                        localStorage.setItem('ldc_system_configs', JSON.stringify(systemConfigs));
                     } catch (e) {
                         console.warn("LocalStorage cheio! Os dados estão sendo mantidos apenas em memória e na nuvem.", e);
                         if (syncToCloud === false) showToast("Erro: Espaço local cheio. Sincronize com a nuvem.", "error");
@@ -2141,7 +2211,8 @@
                                 { sql: sqlUpsert, args: ['tools', JSON.stringify(tools)] },
                                 { sql: sqlUpsert, args: ['team', JSON.stringify(team)] },
                                 { sql: sqlUpsert, args: ['history', JSON.stringify(history)] },
-                                { sql: sqlUpsert, args: ['shoppingList', JSON.stringify(shoppingList)] }
+                                { sql: sqlUpsert, args: ['shoppingList', JSON.stringify(shoppingList)] },
+                                { sql: sqlUpsert, args: ['systemConfigs', JSON.stringify(systemConfigs)] }
                             ]);
 
                             lastCloudSaveTime = Date.now();
@@ -2194,11 +2265,22 @@
                     render();
                     playSound('click');
                 }
-
-                function toggleSidebar() { 
-                    document.getElementById('sidebar').classList.toggle('collapsed'); 
+                
+                function handleNavClick(section) {
+                    showSection(section);
+                    if (window.innerWidth <= 1024) toggleSidebar();
                 }
 
+                function toggleSidebar() { 
+                    const sidebar = document.getElementById('sidebar');
+                    const overlay = document.getElementById('sidebar-overlay');
+                    if (window.innerWidth <= 1024) {
+                        sidebar.classList.toggle('mobile-active');
+                        overlay.classList.toggle('hidden');
+                    } else {
+                        sidebar.classList.toggle('collapsed'); 
+                    }
+                }
                 function openModal(id) { 
                     document.getElementById(id).classList.remove('hidden');
                     playSound('open');
@@ -2495,7 +2577,7 @@
                     const historyCount = history.filter(h => h.workerName === w.name).length;
 
                     // Cálculos de Performance
-                    const overdueHoursLimit = appSettings.overdueHours || 24;
+                    const overdueHoursLimit = systemConfigs.overdueHours || 24;
                     const userHistory = history.filter(h => h.workerName === w.name);
                     
                     const countAtrasos = userHistory.filter(h => {
@@ -3827,7 +3909,7 @@
 
                 function validatePin() {
                     const input = document.getElementById('pinInputModal');
-                    if (input.value === appSettings.adminPin) {
+                    if (input.value === systemConfigs.adminPin) {
                         closeModal('pinModal');
                         if (pendingPinAction) pendingPinAction();
                         pendingPinAction = null;
@@ -3965,7 +4047,7 @@
                 // --- FUNÇÕES DE CONFIGURAÇÃO ---
                 function loadSettingsUI() {
                     // Carrega valores nos inputs
-                    const hours = appSettings.overdueHours || 24;
+                    const hours = systemConfigs.overdueHours || 24;
                     const slider = document.getElementById('settingOverdueHours');
                     if (slider) {
                         slider.value = hours;
@@ -3977,7 +4059,7 @@
                     const btnSave = document.getElementById('btnSavePin');
                     const btnDelete = document.getElementById('btnDeletePin');
                     
-                    if (appSettings.adminPin) {
+                    if (systemConfigs.adminPin) {
                         pinInput.value = '';
                         pinInput.placeholder = "PIN Ativo (Protegido)";
                         pinInput.disabled = true;
@@ -3995,7 +4077,7 @@
 
                     // Checkboxes
                     document.getElementById('settingDarkMode').checked = appSettings.darkMode || false;
-                    document.getElementById('settingAlertOverdue').checked = appSettings.alertOverdue !== false;
+                    document.getElementById('settingAlertOverdue').checked = systemConfigs.alertOverdue !== false;
                     document.getElementById('settingSystemSounds').checked = appSettings.systemSounds !== false;
                     document.getElementById('settingShowToasts').checked = appSettings.showToasts !== false;
 
@@ -4040,9 +4122,11 @@
                 }
 
                 async function saveSettings() {
-                    appSettings.overdueHours = parseInt(document.getElementById('settingOverdueHours').value) || 24;
+                    // Separação correta: Global vs Local
+                    systemConfigs.overdueHours = parseInt(document.getElementById('settingOverdueHours').value) || 24;
+                    systemConfigs.alertOverdue = document.getElementById('settingAlertOverdue').checked;
+                    
                     appSettings.darkMode = document.getElementById('settingDarkMode').checked;
-                    appSettings.alertOverdue = document.getElementById('settingAlertOverdue').checked;
                     appSettings.systemSounds = document.getElementById('settingSystemSounds').checked;
                     appSettings.showToasts = document.getElementById('settingShowToasts').checked;
                     await save();
@@ -4052,7 +4136,7 @@
                     const pinInput = document.getElementById('settingAdminPin');
                     const val = pinInput.value.trim();
                     if (!val) return;
-                    appSettings.adminPin = val;
+                    systemConfigs.adminPin = val;
                     save(false); // Salva localmente primeiro
                     loadSettingsUI();
                     document.getElementById('alertModalTitle').innerText = "Sucesso";
@@ -4079,7 +4163,7 @@
                     modal.querySelector('p').innerText = 'Tem certeza que deseja remover a proteção por PIN?';
                     
                     document.getElementById('confirmDeleteBtn').onclick = async () => {
-                        appSettings.adminPin = null;
+                        systemConfigs.adminPin = null;
                         await save();
                         loadSettingsUI();
                         closeModal('deleteModal');
@@ -4124,7 +4208,7 @@
                         openModal('deleteModal');
                     };
 
-                    if (appSettings.adminPin) {
+                    if (systemConfigs.adminPin) {
                         requestPin(executeReset);
                     } else {
                         executeReset();
@@ -5160,7 +5244,7 @@
                         }
                         const checkoutDate = new Date(h.checkoutDate);
                         const diffHours = (now - checkoutDate) / (1000 * 60 * 60);
-                        return diffHours > (appSettings.overdueHours || 24);
+                        return diffHours > (systemConfigs.overdueHours || 24);
                     });
                     return overdueTools;
                 }
@@ -5781,7 +5865,7 @@
                     shoppingFilter = f;
                     document.querySelectorAll('#section-shopping .filter-pill').forEach(b => {
                         b.classList.remove('active', 'bg-blue-100', 'text-blue-600', 'bg-amber-100', 'text-amber-600', 'bg-emerald-100', 'text-emerald-600');
-                        b.classList.add('bg-slate-100', 'text-slate-500');
+                        b.classList.add('bg-slate-100', 'text-black');
                     });
                     const activeBtn = document.getElementById(`shop-filter-${f}`);
                     activeBtn.classList.add('active');
