@@ -43,10 +43,19 @@ self.addEventListener('activate', (event) => {
       return Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)));
     })
   );
+  self.clients.claim();
 });
 
 // Estratégia: Tenta Rede, se falhar, vai no Cache (Network First)
 self.addEventListener('fetch', (event) => {
+  // Ignora requisições do Live Server, WebSockets e ambiente local de desenvolvimento
+  const isLocal = event.request.url.includes('127.0.0.1') || event.request.url.includes('localhost');
+  const isWebSocket = event.request.url.includes('/ws') || event.request.headers.get('Upgrade') === 'websocket';
+
+  if (isLocal || isWebSocket) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );

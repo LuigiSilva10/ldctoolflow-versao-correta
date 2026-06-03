@@ -101,20 +101,61 @@
                     padding: 0.75rem;
                 }
 
+                .sidebar.collapsed .sidebar-label {
+                    display: none;
+                }
+
                 .sidebar.collapsed .p-6 {
                     padding: 1.5rem 0.5rem;
                     justify-content: center;
                 }
 
-                .sidebar .nav-btn { justify-content: flex-start; } /* Botões sempre alinhados à esquerda */
+                .sidebar .nav-btn { 
+                    justify-content: flex-start; 
+                    position: relative;
+                    overflow: hidden;
+                } 
                 
                 .main-content { flex: 1; display: none; opacity: 0; transform: translateY(10px); transition: all 0.4s ease; overflow-y: auto; }
                 .main-content.active-section { display: block; opacity: 1; transform: translateY(0); }
                 
-                .nav-btn { width: 100%; display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.75rem; font-weight: 700; color: #64748B; transition: all 0.2s; border: none; cursor: pointer; background: transparent; }
-                .nav-btn:hover { color: #F1F5F9; background-color: #1E293B; }
-                .nav-btn.active { background-color: var(--brand-action); color: white; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3); }
+                /* Refinamento dos Botões de Navegação */
+                .nav-btn { 
+                    width: 100%; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 0.85rem; 
+                    padding: 0.65rem 0.85rem; 
+                    border-radius: 0.6rem; 
+                    font-size: 0.85rem;
+                    font-weight: 600; 
+                    color: #475569; 
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+                    border: 1px solid transparent; 
+                    cursor: pointer; 
+                    background: transparent; 
+                }
+                .nav-btn:hover { 
+                    color: #0F172A; 
+                    background-color: #F8FAFC; 
+                }
+                .nav-btn.active { 
+                    background-color: #EFF6FF; 
+                    color: #2563EB; 
+                    border-color: #DBEAFE;
+                }
                 
+                .nav-btn.active::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 20%;
+                    bottom: 20%;
+                    width: 4px;
+                    background-color: #2563EB;
+                    border-radius: 0 4px 4px 0;
+                }
+
                 .custom-scrollbar::-webkit-scrollbar { width: 8px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 10px; }
                 
@@ -179,8 +220,8 @@
                 /* Tema Escuro Global Refinado */
                 .dark .bg-white { background-color: #111827 !important; border-color: #1F2937 !important; }
                 .dark .bg-slate-50 { background-color: #0B1120 !important; }
-                .dark .bg-slate-100 { background-color: #1F2937 !important; border-color: #374151 !important; }
-                .dark .text-slate-900, .dark .text-slate-800, .dark .text-slate-700 { color: #F8FAFC !important; }
+                .dark .bg-slate-100, .dark .bg-slate-200 { background-color: #1F2937 !important; border-color: #374151 !important; }
+                .dark .text-slate-900, .dark .text-slate-800, .dark .text-slate-700, .dark .text-black { color: #F8FAFC !important; }
                 .dark .text-slate-600, .dark .text-slate-500, .dark .text-slate-400 { color: #94A3B8 !important; }
                 .dark .border-slate-100, .dark .border-slate-200 { border-color: #1F2937 !important; }
                 
@@ -206,7 +247,15 @@
 
                 .dark .sidebar { background-color: #020617; border-color: #0F172A; }
                 .dark .soft-ui-panel { background: #111827; border: 1px solid #1F2937; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); }
-
+                .dark .sidebar-label::after { background: #1E2937; }
+                .dark .nav-btn { color: #94A3B8; }
+                .dark .nav-btn:hover { background-color: #1E2937; color: #F8FAFC; }
+                .dark .nav-btn.active { 
+                    background-color: rgba(37, 99, 235, 0.1); 
+                    color: #60A5FA; 
+                    border-color: rgba(37, 99, 235, 0.2);
+                }
+                
                 /* Mobile Responsiveness & Sidebar Drawer */
                 @media (max-width: 1024px) {
                     .sidebar {
@@ -247,18 +296,25 @@
                     <button onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-900 dark:hover:text-white bg-transparent border-none cursor-pointer"><i data-lucide="menu"></i></button>
                 </div>
                 <nav class="flex-1 px-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar pb-6">
+                    <div class="sidebar-label">Operacional</div>
                     <button id="btn-main" onclick="handleNavClick('main')" class="nav-btn active"><i data-lucide="layout-dashboard"></i> <span class="sidebar-text">Painel Principal</span></button>
                     <button id="btn-actions" onclick="handleNavClick('actions')" class="nav-btn relative">
                         <i data-lucide="zap"></i> 
                         <span class="sidebar-text">Operações</span>
                         <span id="actionsOverdueBadge" class="hidden absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full"></span>
                     </button>
-                    <button id="btn-dashboard" onclick="handleNavClick('dashboard')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Dashboard</span></button>
+                    <button id="btn-maintenance" onclick="handleNavClick('maintenance')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">FollowUp</span></button>
+
+                    <div class="sidebar-label">Inventário</div>
                     <button id="btn-catalog" onclick="handleNavClick('catalog')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">Ferramentas</span></button>
                     <button id="btn-materials" onclick="handleNavClick('materials')" class="nav-btn"><i data-lucide="box"></i> <span class="sidebar-text">Materiais</span></button>
                     <button id="btn-team" onclick="handleNavClick('team')" class="nav-btn"><i data-lucide="users"></i> <span class="sidebar-text">Equipe</span></button>
-                    <button id="btn-maintenance" onclick="handleNavClick('maintenance')" class="nav-btn"><i data-lucide="wrench"></i> <span class="sidebar-text">FollowUp</span></button>
+
+                    <div class="sidebar-label">Análise e Compras</div>
+                    <button id="btn-dashboard" onclick="handleNavClick('dashboard')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Dashboard</span></button>
                     <button id="btn-shopping" onclick="handleNavClick('shopping')" class="nav-btn"><i data-lucide="shopping-cart"></i> <span class="sidebar-text">Lista de Compras</span></button>
+
+                    <div class="sidebar-label">Sistema</div>
                     <button id="btn-logs" onclick="handleNavClick('logs')" class="nav-btn"><i data-lucide="history"></i> <span class="sidebar-text">Histórico</span></button>
                     <button id="btn-database" onclick="handleNavClick('database')" class="nav-btn"><i data-lucide="database"></i> <span class="sidebar-text">Backup</span></button>
                     <button id="btn-settings" onclick="handleNavClick('settings')" class="nav-btn"><i data-lucide="settings"></i> <span class="sidebar-text">Configurações</span></button>
@@ -2203,6 +2259,9 @@
                         if (syncToCloud === false) showToast("Erro: Espaço local cheio. Sincronize com a nuvem.", "error");
                     }
                     
+                    // Atualiza a interface imediatamente (Optimistic UI) para que o usuário veja a mudança na hora
+                    renderAll();
+                    
                     // Salvar no Turso
                     if (syncToCloud && TURSO_URL && TURSO_TOKEN) {
                         try {
@@ -2219,8 +2278,6 @@
                             hasUnsavedChanges = false;
                         } catch (e) { console.error("Erro de rede ao salvar no Turso", e); }
                     }
-
-                    renderAll();
                     isSaving = false;
                 }
 
@@ -2421,12 +2478,12 @@
                     updateWorkerQrPreview();
                     closeModal('addWorkerModal');
 
-                    await save();
+                    save();
                     playSound('success', 'Colaborador adicionado com sucesso!');
                 }
 
                 function editWorker(id) {
-                    const w = team.find(x => x.id === id);
+                    const w = team.find(x => x.id == id);
                     if (!w) return;
 
                     selectWorkerType(w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO'));
@@ -2457,7 +2514,7 @@
                 }
 
                 async function updateWorker(id) {
-                    const w = team.find(x => x.id === id);
+                    const w = team.find(x => x.id == id);
                     if (!w) return;
 
                     const name = document.getElementById('workerNameInput').value.trim().toUpperCase();
@@ -2473,13 +2530,13 @@
                     w.qrcode = name;
 
                     closeModal('addWorkerModal');
-                    await save();
+                    save();
                     playSound('success', 'Colaborador atualizado com sucesso!');
                     renderTeam();
                 }
 
                 function removeWorker(id) {
-                    const worker = team.find(w => w.id === id);
+                    const worker = team.find(w => w.id == id);
                     if (worker) {
                         const toolsInPossession = tools.filter(t => t.user === worker.name).length;
                         if (toolsInPossession > 0) {
@@ -2493,9 +2550,9 @@
                         modal.querySelector('h3').innerText = `Remover ${worker.name}?`;
                         modal.querySelector('p').innerText = 'Você tem certeza que deseja remover este colaborador da equipe?';
                         document.getElementById('confirmDeleteBtn').onclick = async () => {
-                            team = team.filter(w => w.id !== id);
+                            team = team.filter(w => w.id != id);
                             closeModal('deleteModal');
-                            await save();
+                            save();
                             playSound('success', 'Colaborador removido com sucesso.');
                         };
                         openModal('deleteModal');
@@ -2559,7 +2616,7 @@
                 }
 
                 function openWorkerDetails(id) {
-                    const w = team.find(x => x.id === id);
+                    const w = team.find(x => x.id == id);
                     if (!w) return;
 
                     const workerType = w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO');
@@ -2695,15 +2752,22 @@
 
                     document.getElementById('workerDetailsContent').innerHTML = content;
                     
+                    openModal('workerDetailsModal'); // Open modal first
+
                     if (w.qrcode || w.name) {
                         new QRious({
                             element: document.getElementById('detailQrCanvas'),
                             value: (w.qrcode || w.name).toUpperCase(),
                             size: 150
                         });
+                    } else {
+                        // Clear canvas if no QR code content
+                        const canvas = document.getElementById('detailQrCanvas');
+                        if (canvas) {
+                            const ctx = canvas.getContext('2d');
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        }
                     }
-
-                    openModal('workerDetailsModal');
                     lucide.createIcons();
                 }
 
@@ -3277,12 +3341,12 @@
                     }
                     tools.unshift(tool);
                     closeModal('addModal');
-                    await save();
+                    save();
                     playSound('success', 'Novo item cadastrado com sucesso!');
                 }
 
                 async function editTool(id) {
-                    const t = tools.find(x => x.id === id);
+                    const t = tools.find(x => x.id == id);
                     if(!t) return;
                     document.getElementById('fileInput').value = null;
                     document.getElementById('addModalTitle').innerText = "Editar Equipamento";
@@ -3322,7 +3386,8 @@
                         t.img = currentImageBase64;
                         t.category = pendingCategory;
                         // A nota de manutenção só é alterada na tela de manutenção
-                        await save(); closeModal('addModal');
+                        save(); 
+                        closeModal('addModal');
                         playSound('success', 'Item atualizado com sucesso!');
                     };
                     openModal('addModal');
@@ -3330,7 +3395,7 @@
                 }
 
                 function requestDelete(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (tool && tool.status === 'em uso') {
                         document.getElementById('alertModalTitle').innerText = "Ação Bloqueada";
                         document.getElementById('alertModalText').innerText = "Não é possível excluir um item que está 'Em Uso'. Realize a devolução primeiro.";
@@ -3343,9 +3408,9 @@
                     modal.querySelector('h3').innerText = 'Excluir Item?';
                     modal.querySelector('p').innerText = 'Você tem certeza que deseja remover este item? Esta ação não pode ser desfeita.';
                     document.getElementById('confirmDeleteBtn').onclick = async () => {
-                        tools = tools.filter(t => t.id !== itemToDeleteId);
+                        tools = tools.filter(t => t.id != itemToDeleteId);
                         closeModal('deleteModal');
-                        await save();
+                        save();
                         playSound('success', 'Item excluído com sucesso.');
                     }; 
                     openModal('deleteModal');
@@ -3511,6 +3576,10 @@
                     const searchTerm = document.getElementById('catalogSearchInput').value.toLowerCase();
 
                     let filteredTools = tools.filter(t => {
+                // Garante que apenas ferramentas apareçam nesta seção
+                const isTool = t.category === 'tool' || !t.category;
+                if (!isTool) return false;
+
                         // Hide items with qty 0 (stock placeholders) completely from catalog
                         if (t.hasOwnProperty('qty') && t.qty === 0) {
                             return false;
@@ -3540,10 +3609,10 @@
                 }
 
                 function openHistoryDetailModal(historyId) {
-                    const h = history.find(entry => entry.historyId === historyId);
+                    const h = history.find(entry => entry.historyId == historyId);
                     if (!h) return;
 
-                    const tool = tools.find(t => t.id === h.toolId) || {};
+                    const tool = tools.find(t => t.id == h.toolId) || {};
                     const content = document.getElementById('historyDetailContent');
                     
                     let typeLabel, typeColor;
@@ -3757,9 +3826,9 @@
                 }
 
                 async function deleteHistoryEntry() {
-                    history = history.filter(h => h.historyId !== historyItemToDeleteId);
-                    await save();
+                    history = history.filter(h => h.historyId != historyItemToDeleteId);
                     closeModal('deleteModal');
+                    save();
                     playSound('success', 'Registro de histórico removido.');
                 }
 
@@ -3814,7 +3883,7 @@
                             typeLabel = h.type === 'manutencao' ? 'Em Manutenção' : 'Em Uso';
                             typeColor = h.type === 'manutencao' ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700';
                         }
-                        const tool = tools.find(t => t.id === h.toolId) || {};
+                            const tool = tools.find(t => t.id == h.toolId) || {};
                         const toolImg = h.toolImg || tool.img;
 
                         return `
@@ -3875,10 +3944,10 @@
                 }
 
                 function openItemHistory(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool) return;
 
-                    const itemHistory = history.filter(h => h.toolId === id).sort((a,b) => new Date(b.checkoutDate) - new Date(a.checkoutDate));
+                    const itemHistory = history.filter(h => h.toolId == id).sort((a,b) => new Date(b.checkoutDate) - new Date(a.checkoutDate));
                     const container = document.getElementById('itemHistoryContent');
                     
                     let html = `<div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100"><div class="w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden border border-slate-200">${tool.img ? `<img src="${tool.img}" class="w-full h-full object-cover">` : `<i data-lucide="wrench" class="text-slate-300" size="24"></i>`}</div><div><h3 class="font-black text-slate-900 uppercase text-lg">${tool.name}</h3><p class="text-sm font-bold text-slate-400 uppercase">${tool.code || 'S/C'}</p></div></div><div class="space-y-3">`;
@@ -4129,7 +4198,7 @@
                     appSettings.darkMode = document.getElementById('settingDarkMode').checked;
                     appSettings.systemSounds = document.getElementById('settingSystemSounds').checked;
                     appSettings.showToasts = document.getElementById('settingShowToasts').checked;
-                    await save();
+                    save();
                 }
 
                 function setAdminPin() {
@@ -4202,7 +4271,7 @@
                             team = [];
                             history = [];
                             // Salva estado vazio
-                            await save(true);
+                            save(true);
                             location.reload();
                         };
                         openModal('deleteModal');
@@ -4259,7 +4328,7 @@
                 // --- FUNÇÕES DE CHECKOUT / DEVOLUÇÃO ---
                 function requestReturn(id) {
                     itemToReturnId = id; // This is used by handleReturnCondition
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool) return;
                     
                     document.getElementById('returnModalTitle').innerText = `Devolver: ${tool.name}`;
@@ -4269,10 +4338,10 @@
                     openModal('returnModal');
                 }
                 async function handleReturnCondition(id, condition) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool) return;
 
-                    const historyEntry = history.find(h => h.toolId === tool.id && h.returnDate === null && h.type === 'emprestimo');
+                    const historyEntry = history.find(h => h.toolId == tool.id && h.returnDate === null && h.type === 'emprestimo');
 
                     if (condition === 'funcionando') {
                         if (historyEntry) {
@@ -4281,7 +4350,7 @@
                         }
 
                         if (tool.original_id) { // It's a consumable part
-                            const originalTool = tools.find(ot => ot.id === tool.original_id);
+                            const originalTool = tools.find(ot => ot.id == tool.original_id);
                             if (originalTool) {
                                 originalTool.qty = (originalTool.qty || 0) + (tool.qty || 1);
                             }
@@ -4328,7 +4397,7 @@
                     }
                 }
                 async function finishRepair(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool || !tool.maintenanceInfo) return;
 
                     // Bloqueia atualização da nuvem imediatamente para evitar conflito durante leitura do arquivo
@@ -4339,11 +4408,11 @@
 
                     const processAndSave = async (invoiceData) => {
                         // Re-busca a ferramenta para garantir que estamos alterando a instância correta
-                        const currentTool = tools.find(t => t.id === id) || tool;
+                        const currentTool = tools.find(t => t.id == id) || tool;
                         currentTool.maintenanceInfo.invoiceFile = invoiceData;
                         currentTool.maintenanceInfo.status = 'Finalizado';
-                        closeModal('manageMaintenanceModal');
-                        await save();
+                        save(); // Salva em segundo plano
+                        openManageMaintenanceModal(id); // Atualiza a tela NA HORA
                         playSound('success', 'Manutenção finalizada!');
                     };
 
@@ -4353,6 +4422,7 @@
                             const reader = new FileReader();
                             reader.onload = (e) => {
                                 const img = new Image();
+                                img.onerror = () => { isSaving = false; showToast("Erro ao carregar imagem", "error"); };
                                 img.onload = () => {
                                     const canvas = document.createElement('canvas');
                                     const ctx = canvas.getContext('2d');
@@ -4372,6 +4442,7 @@
                                             height = maxHeight;
                                         }
                                     }
+                                try {
                                     canvas.width = width;
                                     canvas.height = height;
                                     ctx.fillStyle = "#FFFFFF";
@@ -4379,6 +4450,11 @@
                                     ctx.drawImage(img, 0, 0, width, height);
                                     const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
                                     processAndSave(compressedBase64);
+                                } catch (err) {
+                                    console.error(err);
+                                    isSaving = false;
+                                    showToast("Erro ao processar imagem", "error");
+                                }
                                 };
                                 img.src = e.target.result;
                             };
@@ -4408,7 +4484,7 @@
 
                 async function concludeAndMoveToStock(id) {
                     closeModal('manageMaintenanceModal');
-                    const t = tools.find(x => x.id === id);
+                    const t = tools.find(x => x.id == id);
                     if (t) {
                         // Atualiza histórico de manutenção se existir
                         const historyEntry = history.find(h => h.toolId === t.id && h.returnDate === null && h.type === 'manutencao');
@@ -4420,7 +4496,7 @@
                         t.maintenanceNote = "";
                         t.maintenanceInfo = null;
                         document.getElementById(`tool-card-${id}`)?.remove();
-                        await save();
+                        save(); // Resposta instantânea ao fechar o modal
                         playSound('success', 'Manutenção concluída e item retornado ao estoque.');
                     }
                 }
@@ -4464,7 +4540,7 @@
                             stockInfo = `<span class="text-[10px] font-black uppercase text-slate-400 uppercase">Em Uso Por</span><p class="text-orange-600 font-black text-lg">${t.user}</p>`;
                         }
                         return `
-                        <div onclick="selectToolForMaintenance(${t.id})" class="bg-white rounded-2xl p-3 shadow-lg border border-slate-100 cursor-pointer hover:border-red-500 hover:shadow-xl transition-all flex flex-col text-center group">
+                        <div onclick="selectToolForMaintenance('${t.id}')" class="bg-white rounded-2xl p-3 shadow-lg border border-slate-100 cursor-pointer hover:border-red-500 hover:shadow-xl transition-all flex flex-col text-center group">
                             <div class="relative w-full aspect-square bg-white rounded-xl mb-3 flex items-center justify-center overflow-hidden border border-slate-100">
                                 ${t.img ? `<img src="${t.img}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">` : `<i data-lucide="wrench" class="text-slate-200" size="40"></i>`}
                             </div>
@@ -4479,7 +4555,7 @@
 
                 function selectToolForMaintenance(id) {
                     maintenanceData.toolId = id;
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     document.getElementById('step-selecionar-ferramenta').classList.add('hidden');
                     document.getElementById('step-detalhes-manutencao').classList.remove('hidden');
                     document.getElementById('selectedToolMaintenance').innerHTML = `<div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl mb-3 border border-slate-100">
@@ -4522,7 +4598,7 @@
                 }
 
                 async function finalizeMaintenanceReport() {
-                    const t = tools.find(x => x.id === maintenanceData.toolId);
+                    const t = tools.find(x => x.id == maintenanceData.toolId);
                     const note = document.getElementById('maintenanceNoteInput').value.trim();
                     const qtyInput = document.getElementById('maintenanceQtyInput');
                     let qtyToMaintenance = parseInt(qtyInput.value);
@@ -4554,7 +4630,7 @@
                         
                         // Se for um item em uso (clone) e a quantidade zerar, remove da lista e fecha histórico
                         if (t.status === 'em uso') {
-                            const activeLoan = history.find(h => h.toolId === t.id && h.returnDate === null && h.type === 'emprestimo');
+                            const activeLoan = history.find(h => h.toolId == t.id && h.returnDate === null && h.type === 'emprestimo');
                             if (t.qty === 0) {
                                 if (activeLoan) {
                                     activeLoan.returnDate = new Date().toISOString();
@@ -4608,7 +4684,7 @@
                         // Quantidade total ou item único (comportamento padrão)
                         
                         // Se a ferramenta já estava em uso, primeiro finaliza o histórico de empréstimo
-                        const activeLoan = history.find(h => h.toolId === t.id && h.returnDate === null && h.type === 'emprestimo');
+                        const activeLoan = history.find(h => h.toolId == t.id && h.returnDate === null && h.type === 'emprestimo');
                         if (activeLoan) {
                             activeLoan.returnDate = new Date().toISOString();
                             activeLoan.condition = 'quebrado';
@@ -4644,7 +4720,7 @@
                     }
 
                     closeModal('maintenanceModal');
-                    await save();
+                    save(); // Salva em segundo plano para resposta imediata
                     playSound('success', 'Manutenção reportada com sucesso!');
                 }
 
@@ -4707,7 +4783,7 @@
                 }
 
                 async function processQtyStep() {
-                    const tool = tools.find(t => t.id === materialData.toolId);
+                    const tool = tools.find(t => t.id == materialData.toolId);
                     const qtyInput = document.getElementById('materialQtyInput');
                     const qty = parseInt(qtyInput.value);
 
@@ -4737,7 +4813,7 @@
                 }
 
                 function selectWorkerForMaterial(workerId) {
-                    const worker = team.find(w => w.id === workerId);
+                    const worker = team.find(w => w.id == workerId);
                     if (!worker) return;
 
                     // Verifica se o colaborador já possui algum item em uso
@@ -4789,7 +4865,7 @@
                     document.getElementById('step-material-confirm').classList.toggle('hidden', step !== 4);
 
                     if (step === 1) { // Etapa de Quantidade
-                        const tool = tools.find(t => t.id === materialData.toolId);
+                        const tool = tools.find(t => t.id == materialData.toolId);
                         const isConsumable = tool.hasOwnProperty('qty');
                         const stockInfo = isConsumable ? `EM ESTOQUE: ${tool.qty}` : 'FERRAMENTA';
                         document.getElementById('selectedToolMaterial').innerHTML = `<div class="w-24 h-24 bg-slate-100 rounded-2xl mx-auto mb-4 overflow-hidden border border-slate-200">${tool.img ? `<img src="${tool.img}" class="w-full h-full object-cover">` : `<div class="flex items-center justify-center h-full text-slate-300"><i data-lucide="wrench"></i></div>`}</div><h3 class="font-black text-slate-900 uppercase text-sm">${tool.name}</h3><p class="text-slate-400 text-[10px] font-bold uppercase">${stockInfo}</p>`;
@@ -4806,8 +4882,8 @@
                         }
                         renderWorkerListMaterial();
                     } else if (step === 4) { // Etapa de Confirmação
-                        const tool = tools.find(t => t.id === materialData.toolId);
-                        const worker = team.find(w => w.id === materialData.workerId);
+                        const tool = tools.find(t => t.id == materialData.toolId);
+                        const worker = team.find(w => w.id == materialData.workerId);
                         const isTool = !tool.hasOwnProperty('qty');
                         const operationType = isTool ? 'Retirada' : 'Consumo';
 
@@ -4897,46 +4973,37 @@
                 }
 
                 async function finalizeMaterialCheckout() {
-                    const t = tools.find(x => x.id === materialData.toolId);
-                    const w = team.find(x => x.id === materialData.workerId);
+                    const t = tools.find(x => x.id == materialData.toolId);
+                    const w = team.find(x => x.id == materialData.workerId);
                     const qty = materialData.qty;
                     
                     if (!t || !w || !qty) return;
 
-                    const isTool = (t.category === 'tool' || !t.category);
-
-                    if (isTool) {
-                        if (!t.hasOwnProperty('qty')) {
-                            t.status = 'em uso';
-                            t.user = w.name;
-                            history.unshift({ 
-                                historyId: Date.now(), toolId: t.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
-                                qty: 1, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo', service: materialData.service, area: materialData.area
-                            });
-                        } else {
-                            if (t.qty < qty) return;
-                            t.qty -= qty;
-                            const newTool = { ...t, status: 'em uso', user: w.name, id: Date.now(), original_id: t.id, qty: qty, category: 'tool' };
-                            tools.unshift(newTool);
-                            history.unshift({
-                                historyId: Date.now() + 1, toolId: newTool.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
-                                qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo', service: materialData.service, area: materialData.area
-                            });
-                        };
-                    } else {
-                        // Lógica para Materiais (Consumíveis)
+                    // Unificamos a lógica: se o item possui quantidade (lote), criamos um clone para controle de posse
+                    if (t.hasOwnProperty('qty')) {
                         if (t.qty < qty) return;
-                        t.qty -= qty;
+                        t.qty -= qty; // Deduz do estoque principal
+                        
+                        const newId = Date.now();
+                        // Mantemos a categoria original (material ou tool) no clone
+                        const newTool = { ...t, id: newId, status: 'em uso', user: w.name, original_id: t.id, qty: qty };
+                        tools.unshift(newTool);
+                        
                         history.unshift({
+                            historyId: Date.now() + 1, toolId: newId, toolName: t.name, toolImg: t.img, workerName: w.name, 
+                            qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo', service: materialData.service, area: materialData.area
+                        });
+                    } else {
+                        // Ferramenta Única (comportamento padrão)
+                        t.status = 'em uso';
+                        t.user = w.name;
+                        history.unshift({ 
                             historyId: Date.now(), toolId: t.id, toolName: t.name, toolImg: t.img, workerName: w.name, 
-                            qty: qty, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), 
-                            returnDate: new Date().toISOString(), // Devolução imediata pois é consumo
-                            type: 'emprestimo', condition: 'boa',
-                            service: materialData.service, area: materialData.area
+                            qty: 1, toolValue: t.value || 0, checkoutDate: new Date().toISOString(), returnDate: null, type: 'emprestimo', service: materialData.service, area: materialData.area
                         });
                     }
                     closeModal('materialModal');
-                    await save();
+                    save();
                     playSound('success', 'Saída registrada com sucesso!');
                 }
 
@@ -4952,7 +5019,7 @@
                     const searchTerm = searchInput.value.toLowerCase();
 
                     const borrowedItems = tools.filter(t => 
-                        t.status === 'em uso' && (t.category === 'tool' || !t.category) &&
+                        t.status === 'em uso' &&
                         (!searchTerm || t.name.toLowerCase().includes(searchTerm) || (t.code && t.code.toLowerCase().includes(searchTerm)) || (t.user && t.user.toLowerCase().includes(searchTerm)))
                     );
 
@@ -5310,7 +5377,7 @@
                             const remainingHours = diffHours % 24;
                             let timeString = `${diffDays}d ${remainingHours}h`;
                             
-                            const tool = tools.find(t => t.id === h.toolId) || {};
+                            const tool = tools.find(t => t.id == h.toolId) || {};
                             const toolImg = h.toolImg || tool.img;
 
                             return `<div class="flex items-center gap-4 p-4 mb-3 bg-slate-50 rounded-xl border border-slate-100"><div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center overflow-hidden border">${toolImg ? `<img src="${toolImg}" class="w-full h-full object-cover">` : `<i data-lucide="wrench" class="text-slate-300"></i>`}</div><div class="flex-1"><p class="font-bold text-xs uppercase text-slate-800">${h.toolName}</p><p class="text-[10px] font-bold text-slate-400">COM: <span class="text-orange-600">${h.workerName}</span></p></div><div class="text-right"><p class="text-xs font-bold text-rose-600">Atrasado há</p><p class="text-lg font-black text-rose-600">${timeString.trim()}</p></div></div>`;
@@ -5893,7 +5960,7 @@
 
                     shoppingList.unshift(newItem);
                     closeModal('shoppingModal');
-                    await save();
+                    save();
                     renderShoppingList();
                     showToast("Pedido de compra adicionado!", "success");
                 }
@@ -5980,7 +6047,7 @@
                     document.getElementById('confirmDeleteBtn').onclick = async () => {
                         shoppingList = shoppingList.filter(i => String(i.id) !== String(id));
                         closeModal('deleteModal');
-                        await save();
+                        save();
                         renderShoppingList();
                     };
                     openModal('deleteModal');
@@ -6028,7 +6095,7 @@
                     item.purchaseDate = date;
 
                     closeModal('purchaseConfirmModal');
-                    await save();
+                    save();
                     renderShoppingList();
                     showToast("Compra confirmada com sucesso!", "success");
                 }
@@ -6063,7 +6130,7 @@
                     }
 
                     closeModal('shoppingModal');
-                    await save();
+                    save();
                     renderShoppingList();
                     showToast("Pedido de compra atualizado!", "success");
                 }
@@ -6197,7 +6264,7 @@
 
                 function openManageMaintenanceModal(id) {
                     itemToManageMaintenanceId = id;
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool || !tool.maintenanceInfo) return;
 
                     const info = tool.maintenanceInfo;
@@ -6296,7 +6363,7 @@
                 }
 
                 async function saveQuote(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool || !tool.maintenanceInfo) return;
 
                     tool.maintenanceInfo.provider = document.getElementById('quoteProviderInput').value.toUpperCase();
@@ -6305,23 +6372,23 @@
                     tool.maintenanceInfo.status = 'Aguardando Aprovação';
 
                     closeModal('manageMaintenanceModal');
-                    await save();
+                    save();
                     playSound('success', 'Orçamento salvo com sucesso!');
                 }
 
                 async function approveRepair(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool || !tool.maintenanceInfo) return;
 
                     tool.maintenanceInfo.status = 'Em Conserto';
                     tool.maintenanceInfo.approvalDate = new Date().toISOString();
                     closeModal('manageMaintenanceModal');
-                    await save();
+                    save();
                     playSound('success', 'Conserto aprovado!');
                 }
 
                 async function sendBackToQuote(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool || !tool.maintenanceInfo) return;
                     tool.maintenanceInfo.status = 'Aguardando Orçamento';
                     tool.maintenanceInfo.provider = '';
@@ -6330,12 +6397,12 @@
                     tool.maintenanceInfo.approvalDate = null;
                     tool.maintenanceInfo.invoiceFile = null;
                     closeModal('manageMaintenanceModal');
-                    await save();
+                    save();
                     playSound('success', 'Retornado para orçamento.');
                 }
 
                 async function rejectRepair(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool || !tool.maintenanceInfo) return;
                     tool.maintenanceInfo.status = 'Aguardando Orçamento';
                     tool.maintenanceInfo.provider = '';
@@ -6344,13 +6411,13 @@
                     tool.maintenanceInfo.approvalDate = null;
                     tool.maintenanceInfo.invoiceFile = null;
                     closeModal('manageMaintenanceModal');
-                    await save();
+                    save();
                     playSound('success', 'Conserto recusado.');
                 }
 
                 async function requestDeleteMaintenance(id, event) {
                     event.stopPropagation();
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool) return;
 
                     const modal = document.getElementById('deleteModal');
@@ -6363,7 +6430,7 @@
                 }
 
                 async function deleteInvoice(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (!tool || !tool.maintenanceInfo) return;
 
                     const modal = document.getElementById('deleteModal');
@@ -6373,7 +6440,7 @@
                         tool.maintenanceInfo.invoiceFile = null;
                         tool.maintenanceInfo.status = 'Em Conserto';
                         closeModal('deleteModal');
-                        await save();
+                        save();
                         openManageMaintenanceModal(id);
                         playSound('success', 'Nota fiscal excluída.');
                     };
@@ -6381,15 +6448,15 @@
                 }
 
                 async function deleteMaintenance(id) {
-                    const tool = tools.find(t => t.id === id);
+                    const tool = tools.find(t => t.id == id);
                     if (tool && tool.status === 'quebrado') {
                         tool.status = 'disponivel';
                         tool.user = '-';
                         tool.maintenanceNote = '';
                         tool.maintenanceInfo = null;
-                        history = history.filter(h => !(h.toolId === id && h.type === 'manutencao' && h.returnDate === null));
+                        history = history.filter(h => !(h.toolId == id && h.type === 'manutencao' && h.returnDate === null));
                         closeModal('deleteModal');
-                        await save();
+                        save();
                         playSound('success', 'Manutenção cancelada.');
                     }
                 }
