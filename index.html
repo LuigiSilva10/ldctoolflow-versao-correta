@@ -1432,11 +1432,10 @@
                                     <label class="text-xs font-black uppercase text-slate-400 ml-4">Setor</label>
                                     <input type="text" id="workerSectorInput" placeholder="SETOR" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
                                 </div>
-                            </div>
-
-                            <div>
-                                <label class="text-xs font-black uppercase text-slate-400 ml-4">Gestor Direto</label>
-                                <input type="text" id="workerManagerInput" placeholder="NOME DO GESTOR" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                                <div>
+                                    <label class="text-xs font-black uppercase text-slate-400 ml-4">Gestor Direto</label>
+                                    <input type="text" id="workerManagerInput" placeholder="NOME DO GESTOR" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                                </div>
                             </div>
 
                         </div>
@@ -1496,6 +1495,7 @@
                                         <button onclick="selectAreaForMaterial('2')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">2</button>
                                         <button onclick="selectAreaForMaterial('3')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">3</button>
                                         <button onclick="selectAreaForMaterial('4')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">4</button>
+                                        <button onclick="selectAreaForMaterial('Externo')" class="area-pill px-4 py-2 border-2 border-slate-100 rounded-xl font-black text-xs uppercase text-slate-400 hover:border-blue-500 transition-all">Externo</button>
                                     </div>
                                 </div>
                             </div>
@@ -1705,6 +1705,10 @@
                             <div onclick="selectAreaInfo('4')" class="area-info-card flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all shadow-sm group">
                                 <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-md group-hover:scale-110 transition-transform">4</div>
                                 <div class="min-w-0"><p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Supervisor</p><p class="text-xs font-black text-slate-800 uppercase truncate">Marcelo Guerra</p></div>
+                            </div>
+                            <div onclick="selectAreaInfo('Externo')" class="area-info-card flex items-center gap-4 p-4 bg-white rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all shadow-sm group">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-md group-hover:scale-110 transition-transform">EXT</div>
+                                <div class="min-w-0"><p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Tipo</p><p class="text-xs font-black text-slate-800 uppercase truncate">Uso Externo</p></div>
                             </div>
                         </div>
 
@@ -4834,7 +4838,7 @@
                 function selectAreaForMaterial(area) {
                     materialData.area = area;
                     document.querySelectorAll('.area-pill').forEach(btn => {
-                        btn.classList.toggle('active', btn.innerText === area);
+                        btn.classList.toggle('active', btn.innerText.trim().toUpperCase() === area.toUpperCase());
                     });
                     playSound('click');
                 }
@@ -5774,7 +5778,9 @@
                     
                     // Toggle active visual style on cards
                     cards.forEach(card => {
-                        const isTarget = card.querySelector('div').innerText === areaCode;
+                        const pillText = card.querySelector('div').innerText.trim().toUpperCase();
+                        // Compara se o texto do círculo é igual ao código ou se é o caso especial 'Externo'/'EXT'
+                        const isTarget = (areaCode.toUpperCase() === 'EXTERNO' && pillText === 'EXT') || (pillText === areaCode.toUpperCase());
                         card.classList.toggle('border-blue-500', isTarget);
                         card.classList.toggle('shadow-md', isTarget);
                         card.classList.toggle('scale-[1.02]', isTarget);
@@ -5805,6 +5811,11 @@
                             sup: 'Marcelo Guerra', 
                             locations: ['Elétrica em geral', 'Painéis de comando', 'Subestações'],
                             icon: 'zap'
+                        },
+                        'Externo': { 
+                            sup: 'Uso fora da planta', 
+                            locations: ['Serviços em Campo', 'Viagens Técnicas', 'Outras Unidades', 'Uso em Trânsito'],
+                            icon: 'truck'
                         }
                     };
 
@@ -6024,12 +6035,12 @@
                                 <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Adicionado: ${item.date}</span>
                                 <div class="flex gap-1.5">
                                     ${!isReadOnly && item.status === 'pending' ? `
-                                        <button onclick="markAsBought('${item.id}')" class="bg-emerald-600 text-white px-4 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-1.5 hover:bg-emerald-700 transition-all">
+                                        <button onclick="markAsBought('${item.id}')" class="bg-emerald-600 text-white px-2.5 py-1.5 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-1.5 hover:bg-emerald-700 transition-all">
                                             <i data-lucide="check-circle" size="10"></i> Comprado
                                         </button>
                                     ` : ''}
                                     ${item.link ? `
-                                        <a href="${item.link}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-200 flex items-center gap-1.5 hover:bg-blue-700 transition-all no-underline">
+                                        <a href="${item.link}" target="_blank" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-blue-200 flex items-center gap-1.5 hover:bg-blue-700 transition-all no-underline">
                                             <i data-lucide="external-link" size="10"></i> Ver Link
                                         </a>
                                     ` : '<span class="text-[8px] font-bold text-slate-300 uppercase italic py-1.5">Sem link</span>'}
