@@ -807,7 +807,7 @@
                                     <span id="cat-text-material" class="font-black text-slate-400 text-[10px] uppercase tracking-widest">Material</span>
                                 </div>
                             </div>
-                            <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group" onclick="document.getElementById('fileInput').click()">
+                            <div id="itemDropZone" class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group" onclick="document.getElementById('fileInput').click()">
                                 <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage(this)">
                                 <div id="uploadPlaceholder" class="text-slate-400">
                                     <i data-lucide="camera" class="mx-auto" size="24"></i>
@@ -1271,7 +1271,7 @@
                         <div id="step-detalhes-manutencao" class="hidden">
                             <p class="text-xs font-black uppercase text-slate-400 mb-4 tracking-widest">2. Detalhes do problema</p>
                             <div id="selectedToolMaintenance" class="mb-4"></div>
-                            <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group mb-4" onclick="document.getElementById('maintenanceFileInput').click()">
+                            <div id="maintenanceDropZone" class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group mb-4" onclick="document.getElementById('maintenanceFileInput').click()">
                                 <input type="file" id="maintenanceFileInput" class="hidden" accept="image/*" onchange="previewMaintenanceImage(this)">
                                 <div id="maintenanceUploadPlaceholder" class="text-slate-400">
                                     <i data-lucide="camera" class="mx-auto" size="24"></i>
@@ -1378,7 +1378,7 @@
                         <div class="space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- Photo Upload -->
-                                <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group" onclick="document.getElementById('workerFileInputModal').click()">
+                                <div id="workerDropZone" class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-center h-40 flex items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group" onclick="document.getElementById('workerFileInputModal').click()">
                                     <input type="file" id="workerFileInputModal" class="hidden" accept="image/*" onchange="previewWorkerImage(this)">
                                     <div id="workerUploadPlaceholderModal" class="text-slate-400">
                                         <i data-lucide="camera" class="mx-auto" size="24"></i>
@@ -1751,7 +1751,8 @@
                             return [];
                         }
 
-                        const response = await fetch(`${TURSO_URL}/v2/pipeline`, {
+                        try {
+                            const response = await fetch(`${TURSO_URL}/v2/pipeline`, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `Bearer ${TURSO_TOKEN}`,
@@ -1786,7 +1787,10 @@
                         if (!data || !Array.isArray(data.results)) {
                             return [];
                         }
-                        return data.results.map(r => r?.response?.result).filter(Boolean);
+                            return data.results.map(r => r?.response?.result).filter(Boolean);
+                        } catch (e) {
+                            return []; // Retorna vazio em caso de falha de fetch (TypeError)
+                        }
                     }
                 };
                 // -------------------------------------
@@ -1884,7 +1888,10 @@
                             
                             save(false); // Salva localmente e atualiza a tela (false para não reenviar pra nuvem)
                         }
-                    } catch (e) { console.error("Erro ao carregar da nuvem", e); }
+                    } catch (e) { 
+                        // Loga apenas erros que não sejam de conexão/fetch
+                        if (e.name !== 'TypeError') console.error("Erro ao carregar da nuvem", e); 
+                    }
                 }
                 
                 let currentWorkerImageBase64 = "";
@@ -6472,6 +6479,47 @@
                     }
                 }
 
+                // --- Configuração de Drag and Drop Global ---
+                function setupModalDragAndDrop(zoneId, inputId, previewFn) {
+                    const zone = document.getElementById(zoneId);
+                    const input = document.getElementById(inputId);
+                    if (!zone || !input) return;
+
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                        zone.addEventListener(eventName, e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }, false);
+                    });
+
+                    ['dragenter', 'dragover'].forEach(eventName => {
+                        zone.addEventListener(eventName, () => {
+                            zone.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+                        }, false);
+                    });
+
+                    ['dragleave', 'drop'].forEach(eventName => {
+                        zone.addEventListener(eventName, () => {
+                            zone.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+                        }, false);
+                    });
+
+                    zone.addEventListener('drop', (e) => {
+                        if (e.dataTransfer && e.dataTransfer.files.length) {
+                            input.files = e.dataTransfer.files;
+                            previewFn(input);
+                        }
+                    }, false);
+                }
+
+                function handleFiles(files) {
+                    const dropAreaText = document.getElementById('drop-area-text');
+                    const fileNameDisplay = document.getElementById('file-name-display');
+                    if (fileNameDisplay) fileNameDisplay.textContent = files.length > 0 ? files[0].name : '';
+                    if (dropAreaText) dropAreaText.classList.toggle('hidden', files.length > 0);
+                    if (fileNameDisplay) fileNameDisplay.classList.toggle('hidden', files.length === 0);
+                }
+
                 const dropArea = document.getElementById('drop-area');
                 if (dropArea) {
                     const fileInput = document.getElementById('invoiceFileInput');
@@ -6499,13 +6547,12 @@
                         fileInput.files = e.dataTransfer.files;
                         handleFiles(fileInput.files);
                     }
-
-                    function handleFiles(files) {
-                        fileNameDisplay.textContent = files.length > 0 ? files[0].name : '';
-                        dropAreaText.classList.toggle('hidden', files.length > 0);
-                        fileNameDisplay.classList.toggle('hidden', files.length === 0);
-                    }
                 }
+
+                // Inicializa Drag and Drop para Item, Colaborador e Manutenção
+                setupModalDragAndDrop('itemDropZone', 'fileInput', previewImage);
+                setupModalDragAndDrop('workerDropZone', 'workerFileInputModal', previewWorkerImage);
+                setupModalDragAndDrop('maintenanceDropZone', 'maintenanceFileInput', previewMaintenanceImage);
             </script>
         </body>
         </html>
