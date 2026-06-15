@@ -650,7 +650,23 @@
                         </button>
                     </div>
                     
-                    <div id="teamGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    <!-- Seção LDC -->
+                    <div class="mb-12">
+                        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 dark:border-slate-800 pb-4">
+                            <div class="w-2 h-8 bg-blue-600 rounded-full"></div>
+                            <h3 class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Colaboradores LDC</h3>
+                        </div>
+                        <div id="teamGridLDC" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    </div>
+
+                    <!-- Seção Terceiros -->
+                    <div>
+                        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 dark:border-slate-800 pb-4">
+                            <div class="w-2 h-8 bg-orange-500 rounded-full"></div>
+                            <h3 class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Prestadores Terceiros</h3>
+                        </div>
+                        <div id="teamGridTerceiro" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    </div>
                 </div>
             </main>
 
@@ -2571,58 +2587,81 @@
                 }
 
                 function renderTeam() {
-                    const grid = document.getElementById('teamGrid');
-                    if (!grid) return;
+                    const gridLDC = document.getElementById('teamGridLDC');
+                    const gridTerceiro = document.getElementById('teamGridTerceiro');
+                    if (!gridLDC || !gridTerceiro) return;
+
                     const search = document.getElementById('teamSearchInput').value.toLowerCase();
 
                     const filteredTeam = team.filter(w => w.name.toLowerCase().includes(search) || 
                                                         (w.info && w.info.toLowerCase().includes(search)) || 
                                                         (w.company && w.company.toLowerCase().includes(search)) || // Compatibilidade com dados antigos
                                                         (w.costCenter && w.costCenter.toLowerCase().includes(search)));
-                    
-                    if (filteredTeam.length === 0) {
-                        grid.innerHTML = `<p class="text-center text-sm text-slate-400 col-span-full py-20">Nenhum colaborador encontrado.</p>`;
-                        return;
-                    }
 
-                    grid.innerHTML = filteredTeam.map(w => {
-                        // Lógica para compatibilidade com dados antigos que usavam 'company'
+                    const ldcTeam = filteredTeam.filter(w => (w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO')) === 'LDC');
+                    const terceiroTeam = filteredTeam.filter(w => (w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO')) === 'TERCEIRO');
+
+                    const getCardHtml = (w) => {
                         const workerType = w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO');
-                        let displayInfo = w.info;
-                        if (!displayInfo) {
-                             // Fallback para dados antigos
-                             displayInfo = w.company || 'N/A';
-                        }
+                        let displayInfo = w.info || w.company || 'N/A';
                         
                         const typeLabel = workerType === 'LDC' ? 'LDC' : 'Terceiro';
+                        const headerColor = workerType === 'LDC' ? 'bg-blue-600' : 'bg-orange-500';
                         const typeColor = workerType === 'LDC' ? 'text-blue-500' : 'text-orange-500';
                         const infoLabel = workerType === 'LDC' ? 'Matrícula' : 'Empresa';
-
                         const toolsInPossession = tools.filter(t => t.user === w.name).length;
                         const historyCount = history.filter(h => h.workerName === w.name).length;
+
                         return `
-                        <div onclick="openWorkerDetails('${w.id}')" class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col relative group hover:border-blue-400 transition-all cursor-pointer hover:shadow-lg hover:-translate-y-1">
-                            ${!isReadOnly ? `<div class="absolute top-2 right-2 flex gap-1">
-                                <button onclick="editWorker('${w.id}'); event.stopPropagation();" class="p-2 text-slate-400 hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Editar Colaborador"><i data-lucide="pencil" size="16"></i></button>
-                                <button onclick="removeWorker('${w.id}'); event.stopPropagation();" class="p-2 text-slate-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" title="Excluir Colaborador"><i data-lucide="trash-2" size="16"></i></button>
-                            </div>` : ''}
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 ${workerType === 'TERCEIRO' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'} rounded-full flex items-center justify-center text-lg font-black overflow-hidden border border-slate-100 shadow-sm">
-                                    ${w.img ? `<img src="${w.img}" class="w-full h-full object-cover">` : w.name.charAt(0)}
+                            <div onclick="openWorkerDetails('${w.id}')" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col relative group hover:border-blue-400 transition-all cursor-pointer hover:shadow-lg hover:-translate-y-1 overflow-hidden min-h-[235px]">
+                                <!-- Header do Card -->
+                                <div class="${headerColor} h-10 flex items-center justify-between px-4 shrink-0">
+                                    <span class="text-[10px] font-black text-white uppercase tracking-widest">${typeLabel}</span>
+                                    ${!isReadOnly ? `
+                                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button onclick="editWorker('${w.id}'); event.stopPropagation();" class="p-1.5 text-white/80 hover:text-white transition-colors" title="Editar"><i data-lucide="pencil" size="14"></i></button>
+                                        <button onclick="removeWorker('${w.id}'); event.stopPropagation();" class="p-1.5 text-white/80 hover:text-rose-200 transition-colors" title="Excluir"><i data-lucide="trash-2" size="14"></i></button>
+                                    </div>
+                                    ` : ''}
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="font-black text-slate-800 uppercase truncate text-sm" title="${w.name}">${w.name}</h3>
-                                    <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase flex-wrap">
-                                        <span class="${typeColor}">${typeLabel}</span>
-                                        <span class="truncate" title="${infoLabel}: ${displayInfo}">• ${displayInfo}</span>
-                                        ${w.sector ? `<span class="truncate" title="Setor: ${w.sector}">• ${w.sector}</span>` : ''}
-                                        ${w.costCenter ? `<span class="truncate" title="Centro de Custo: ${w.costCenter}">• ${w.costCenter}</span>` : ''}
+
+                                <div class="p-5 flex flex-col flex-1">
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <div class="w-14 h-14 ${workerType === 'TERCEIRO' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'} rounded-full flex items-center justify-center text-xl font-black overflow-hidden border-2 border-white dark:border-slate-800 shadow-md shrink-0">
+                                            ${w.img ? `<img src="${w.img}" class="w-full h-full object-cover">` : w.name.charAt(0)}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="font-black text-slate-800 dark:text-white uppercase truncate text-sm mb-1" title="${w.name}">${w.name}</h3>
+                                            <div class="flex flex-col gap-0.5 text-[10px] font-bold text-slate-400 uppercase">
+                                                <span class="truncate" title="${infoLabel}: ${displayInfo}">
+                                                    <i data-lucide="hash" size="10" class="inline mr-1"></i> ${displayInfo}
+                                                </span>
+                                                ${w.sector ? `
+                                                <span class="truncate" title="Setor: ${w.sector}">
+                                                    <i data-lucide="map-pin" size="10" class="inline mr-1"></i> ${w.sector}
+                                                </span>` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4 text-center">
+                                        <div>
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Em Posse</p>
+                                            <p class="text-2xl font-black ${toolsInPossession > 0 ? 'text-orange-500' : 'text-slate-600 dark:text-slate-400'}">${toolsInPossession}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Movimentações</p>
+                                            <p class="text-2xl font-black text-slate-600 dark:text-slate-400">${historyCount}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-auto pt-4 border-t border-slate-100 grid grid-cols-2 gap-4 text-center"><div><p class="text-[9px] font-black text-slate-400 uppercase">Em Posse</p><p class="text-2xl font-black ${toolsInPossession > 0 ? 'text-orange-500' : 'text-slate-600'}">${toolsInPossession}</p></div><div><p class="text-[9px] font-black text-slate-400 uppercase">Movimentações</p><p class="text-2xl font-black text-slate-600">${historyCount}</p></div></div>
-                        </div>
-                    `}).join('');
+                        `;
+                    };
+
+                    gridLDC.innerHTML = ldcTeam.length > 0 ? ldcTeam.map(getCardHtml).join('') : `<p class="text-center text-sm text-slate-400 col-span-full py-10 italic">Nenhum colaborador LDC encontrado.</p>`;
+                    gridTerceiro.innerHTML = terceiroTeam.length > 0 ? terceiroTeam.map(getCardHtml).join('') : `<p class="text-center text-sm text-slate-400 col-span-full py-10 italic">Nenhum prestador terceiro encontrado.</p>`;
+                    
                     lucide.createIcons();
                 }
 
