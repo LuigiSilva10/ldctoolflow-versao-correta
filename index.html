@@ -654,7 +654,7 @@
                     <div class="mb-12">
                         <div class="flex items-center gap-3 mb-6 border-b border-slate-100 dark:border-slate-800 pb-4">
                             <div class="w-2 h-8 bg-blue-600 rounded-full"></div>
-                            <h3 class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Colaboradores LDC</h3>
+                            <h3 class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Colaboradores LDC <span id="teamCountLDC" class="ml-2 text-sm font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-full">0</span></h3>
                         </div>
                         <div id="teamGridLDC" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                     </div>
@@ -663,7 +663,7 @@
                     <div>
                         <div class="flex items-center gap-3 mb-6 border-b border-slate-100 dark:border-slate-800 pb-4">
                             <div class="w-2 h-8 bg-orange-500 rounded-full"></div>
-                            <h3 class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Prestadores Terceiros</h3>
+                            <h3 class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Prestadores Terceiros <span id="teamCountTerceiro" class="ml-2 text-sm font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-full">0</span></h3>
                         </div>
                         <div id="teamGridTerceiro" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                     </div>
@@ -2600,6 +2600,11 @@
 
                     const ldcTeam = filteredTeam.filter(w => (w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO')) === 'LDC');
                     const terceiroTeam = filteredTeam.filter(w => (w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO')) === 'TERCEIRO');
+
+                    const countLdcEl = document.getElementById('teamCountLDC');
+                    const countTerceiroEl = document.getElementById('teamCountTerceiro');
+                    if (countLdcEl) countLdcEl.innerText = ldcTeam.length;
+                    if (countTerceiroEl) countTerceiroEl.innerText = terceiroTeam.length;
 
                     const getCardHtml = (w) => {
                         const workerType = w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO');
