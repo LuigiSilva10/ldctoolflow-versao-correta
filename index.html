@@ -1754,6 +1754,19 @@
                 </div>
             </div>
 
+            <div id="loanConfirmationModal" class="fixed inset-0 bg-slate-900/80 hidden z-[900] flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal('loanConfirmationModal')">
+                <div class="bg-white rounded-[2rem] p-8 w-full max-w-md text-center shadow-2xl" onclick="event.stopPropagation()">
+                    <div class="w-16 h-16 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="alert-triangle" size="32"></i></div>
+                    <h3 class="text-lg font-black text-slate-900 uppercase mb-2">Múltiplas Ferramentas</h3>
+                    <p id="loanConfirmationText" class="text-slate-500 text-sm mb-4"></p>
+                    <div id="loanConfirmationItems" class="space-y-2 mb-6 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                    <div class="flex gap-3">
+                        <button onclick="closeModal('loanConfirmationModal')" class="flex-1 py-3 bg-slate-100 text-black rounded-xl font-bold uppercase text-xs cursor-pointer border-none">Cancelar</button>
+                        <button id="confirmLoanBtn" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold uppercase text-xs cursor-pointer border-none shadow-lg hover:bg-blue-700 transition-all">Autorizar</button>
+                    </div>
+                </div>
+            </div>
+
             <script>
                 // --- CONFIGURAÇÃO DE NUVEM (TURSO) ---
                 const TURSO_URL = TURSO_CONFIG ? TURSO_CONFIG.URL.replace(/\/$/, "").replace(/^libsql:\/\//, "https://") : ""; 
@@ -4871,15 +4884,37 @@
                     const worker = team.find(w => w.id == workerId);
                     if (!worker) return;
 
-                    // Verifica se o colaborador já possui algum item em uso
-                    const hasTool = tools.some(t => t.status === 'em uso' && t.user === worker.name);
+                    // Busca ferramentas que o colaborador já possui
+                    const toolsInPossession = tools.filter(t => t.status === 'em uso' && t.user === worker.name);
 
-                    if (hasTool) {
-                        document.getElementById('alertModalTitle').innerText = "Bloqueio de Retirada";
-                        document.getElementById('alertModalText').innerText = `O colaborador ${worker.name} já possui uma ferramenta em uso. Por política de segurança, é necessário devolver o item pendente antes de retirar um novo.`;
-                        openModal('alertModal');
-                        playSound('error');
-                        return; // Interrompe o fluxo de saída
+                    if (toolsInPossession.length > 0) {
+                        const modal = document.getElementById('loanConfirmationModal');
+                        const text = document.getElementById('loanConfirmationText');
+                        const itemsList = document.getElementById('loanConfirmationItems');
+                        
+                        text.innerText = `${worker.name} já possui os seguintes itens em uso. Deseja autorizar a retirada de mais um item?`;
+                        
+                        itemsList.innerHTML = toolsInPossession.map(t => `
+                            <div class="flex items-center gap-3 p-2 bg-slate-50 rounded-xl border border-slate-100 text-left">
+                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center overflow-hidden border">
+                                    ${t.img ? `<img src="${t.img}" class="w-full h-full object-cover">` : `<i data-lucide="wrench" class="text-slate-300" size="14"></i>`}
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-[10px] font-black text-slate-800 uppercase truncate">${t.name}</p>
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase">${t.code || 'S/C'}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                        
+                        document.getElementById('confirmLoanBtn').onclick = () => {
+                            materialData.workerId = workerId;
+                            closeModal('loanConfirmationModal');
+                            resetMaterial(4);
+                        };
+                        
+                        openModal('loanConfirmationModal');
+                        lucide.createIcons();
+                        return;
                     }
 
                     materialData.workerId = workerId;
