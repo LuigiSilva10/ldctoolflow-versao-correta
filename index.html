@@ -310,9 +310,11 @@
                     <button id="btn-materials" onclick="handleNavClick('materials')" class="nav-btn"><i data-lucide="box"></i> <span class="sidebar-text">Materiais</span></button>
                     <button id="btn-team" onclick="handleNavClick('team')" class="nav-btn"><i data-lucide="users"></i> <span class="sidebar-text">Equipe</span></button>
 
-                    <div class="sidebar-label">Análise e Compras</div>
+                                        <div class="sidebar-label">Análise e Compras</div>
                     <button id="btn-dashboard" onclick="handleNavClick('dashboard')" class="nav-btn"><i data-lucide="trending-up"></i> <span class="sidebar-text">Dashboard</span></button>
                     <button id="btn-shopping" onclick="handleNavClick('shopping')" class="nav-btn"><i data-lucide="shopping-cart"></i> <span class="sidebar-text">Lista de Compras</span></button>
+                    <button id="btn-suggestions" onclick="handleNavClick('suggestions')" class="nav-btn"><i data-lucide="lightbulb"></i> <span class="sidebar-text">Sugestões</span></button>
+
 
                     <div class="sidebar-label">Sistema</div>
                     <button id="btn-logs" onclick="handleNavClick('logs')" class="nav-btn"><i data-lucide="history"></i> <span class="sidebar-text">Histórico</span></button>
@@ -714,7 +716,7 @@
                 </div>
             </main>
 
-            <main id="section-shopping" class="main-content p-4 md:p-8">
+                        <main id="section-shopping" class="main-content p-4 md:p-8">
                 <div class="max-w-[1400px] mx-auto">
                     <div class="bg-[#0B1120] rounded-[2.5rem] p-6 md:p-8 mb-10 shadow-2xl relative overflow-hidden border border-slate-800">
                         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
@@ -760,6 +762,43 @@
                     <div id="shoppingGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
             </main>
+
+            <main id="section-suggestions" class="main-content p-4 md:p-8">
+                <div class="max-w-[1400px] mx-auto">
+                    <div class="bg-[#0B1120] rounded-[2.5rem] p-6 md:p-8 mb-10 shadow-2xl relative overflow-hidden border border-slate-800">
+                        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
+                        <div class="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
+                            <div>
+                                <div class="flex items-center gap-4 mb-2">
+                                    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-slate-200 text-black rounded-xl mb-1"><i data-lucide="menu"></i></button>
+                                    <div class="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30 text-blue-400">
+                                        <i data-lucide="lightbulb" size="28"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none">Caixa de Sugestões</h2>
+                                        <p class="text-slate-400 text-sm font-medium mt-1">Ideias para melhoria do inventário e ferramentas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                        <div class="flex gap-2 flex-wrap">
+                             <button onclick="setSuggestionFilter('all')" id="sug-filter-all" class="filter-pill active bg-slate-200 text-black">Todas</button>
+                            <button onclick="setSuggestionFilter('pending')" id="sug-filter-pending" class="filter-pill bg-amber-100 text-amber-600">Pendentes</button>
+                            <button onclick="setSuggestionFilter('approved')" id="sug-filter-approved" class="filter-pill bg-emerald-100 text-emerald-600">Aprovadas</button>
+                            <button onclick="setSuggestionFilter('bought')" id="sug-filter-bought" class="filter-pill bg-blue-100 text-blue-600">Compradas</button>
+                        </div>
+                        <button onclick="openSuggestionModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-black flex items-center gap-2 shadow-md text-xs uppercase tracking-widest hover:bg-blue-700 transition-all border-none cursor-pointer w-full md:w-auto justify-center">
+                            <i data-lucide="plus" size="16"></i> Nova Sugestão
+                        </button>
+                    </div>
+
+                    <div id="suggestionsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </main>
+
 
             <div id="zoomModal" class="fixed inset-0 bg-black/90 hidden z-[950] flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal('zoomModal')">
 
@@ -1384,7 +1423,37 @@
                 </div>
             </div>
 
+                        <div id="suggestionModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('suggestionModal')">
+                <div class="bg-white rounded-[2.5rem] w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+                    <div class="bg-slate-50 p-5 border-b border-slate-100 flex justify-between items-center shrink-0">
+                        <h3 id="suggestionModalTitle" class="font-black uppercase tracking-tighter text-slate-900">Nova Sugestão</h3>
+                        <button onclick="closeModal('suggestionModal');" class="text-slate-400 hover:text-rose-500 bg-transparent border-none cursor-pointer"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="p-5 space-y-3 overflow-y-auto custom-scrollbar">
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2 mb-2 block">Quem está sugerindo?</label>
+                            <div class="relative mb-3">
+                                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size="16"></i>
+                                <input type="text" id="sugWorkerSearchInput" onkeyup="renderWorkerListSuggestion()" placeholder="BUSCAR COLABORADOR..." class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl pl-12 pr-10 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                                <button onclick="clearSearch('sugWorkerSearchInput', renderWorkerListSuggestion)" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 hidden z-10"><i data-lucide="x-circle" size="16"></i></button>
+                            </div>
+                            <div id="teamGridSuggestion" class="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar"></div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2">Título / Ferramenta</label>
+                            <input type="text" id="sugTitleInput" placeholder="EX: CHAVE DE IMPACTO 1/2" class="w-full border-2 border-slate-100 rounded-xl px-4 py-3 font-bold uppercase text-xs outline-none focus:border-blue-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2">Descrição / Por que é necessária?</label>
+                            <textarea id="sugDescriptionInput" placeholder="" class="w-full h-32 border-2 border-slate-100 rounded-xl p-3 font-medium text-sm outline-none focus:border-blue-500 transition-all"></textarea>
+                        </div>
+                        <button id="btnSubmitSuggestion" onclick="submitSuggestion()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg border-none cursor-pointer hover:bg-blue-700 transition-all">Enviar Sugestão</button>
+                    </div>
+                </div>
+            </div>
+
             <div id="addWorkerModal" class="fixed inset-0 bg-slate-900/90 hidden z-[800] flex items-center justify-center p-4 backdrop-blur-md" onclick="closeModal('addWorkerModal')">
+
                 <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
                     <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center">
                         <h3 class="font-black uppercase tracking-tighter text-slate-900">Novo Colaborador</h3>
@@ -1829,8 +1898,12 @@
                 let tools = JSON.parse(localStorage.getItem('ldc_pro_db')) || [];
                 let team = JSON.parse(localStorage.getItem('ldc_team_db')) || [];
                 // Remove Almoxarifado legado se existir e garante que IDs da shoppingList são strings
-                let shoppingList = (JSON.parse(localStorage.getItem('ldc_shopping_db')) || []).map(item => ({...item, id: String(item.id), status: item.status || 'pending'}));
+                                let shoppingList = (JSON.parse(localStorage.getItem('ldc_shopping_db')) || []).map(item => ({...item, id: String(item.id), status: item.status || 'pending'}));
+                let suggestions = JSON.parse(localStorage.getItem('ldc_suggestions_db')) || [];
                 let shoppingFilter = 'pending';
+                let suggestionFilter = 'all';
+                let editingSuggestionId = null;
+
                 let pendingShopCategory = 'tool';
                 team = team.filter(w => w.id !== 1 && w.name !== 'ALMOXARIFADO');
 
@@ -1912,8 +1985,10 @@
                             if (cloudData.tools) tools = Array.isArray(cloudData.tools) ? cloudData.tools : (Array.isArray(tools) ? tools : []);
                             if (cloudData.team) team = Array.isArray(cloudData.team) ? cloudData.team : (Array.isArray(team) ? team : []);
                             if (cloudData.history) history = Array.isArray(cloudData.history) ? cloudData.history : (Array.isArray(history) ? history : []);
-                            if (cloudData.shoppingList) shoppingList = Array.isArray(cloudData.shoppingList) ? cloudData.shoppingList : (Array.isArray(shoppingList) ? shoppingList : []);
+                                                        if (cloudData.shoppingList) shoppingList = Array.isArray(cloudData.shoppingList) ? cloudData.shoppingList : (Array.isArray(shoppingList) ? shoppingList : []);
+                            if (cloudData.suggestions) suggestions = Array.isArray(cloudData.suggestions) ? cloudData.suggestions : (Array.isArray(suggestions) ? suggestions : []);
                             if (cloudData.systemConfigs) systemConfigs = cloudData.systemConfigs;
+
                             
                             save(false); // Salva localmente e atualiza a tela (false para não reenviar pra nuvem)
                         }
@@ -2024,7 +2099,7 @@
                     }
                 }
 
-                function renderAll() {
+                                function renderAll() {
                     render(); 
                     renderCatalog(); 
                     renderHistory(); 
@@ -2032,7 +2107,9 @@
                     renderOverdueAlert();
                     renderMaterials();
                     renderTeam(); 
+                    renderSuggestions();
                 }
+
 
                 function updateDashboard() {
                     const chartDom = document.getElementById('flowChart');
@@ -2287,14 +2364,16 @@
                     lastLocalUpdate = Date.now(); // Atualiza timestamp da modificação local
                     if (syncToCloud) hasUnsavedChanges = true; // Marca como não salvo até confirmar o sucesso
 
-                    try {
+                                        try {
                         localStorage.setItem('ldc_pro_db', JSON.stringify(tools));
                         localStorage.setItem('ldc_team_db', JSON.stringify(team));
                         localStorage.setItem('ldc_shopping_db', JSON.stringify(shoppingList));
+                        localStorage.setItem('ldc_suggestions_db', JSON.stringify(suggestions));
                         localStorage.setItem('ldc_history_db', JSON.stringify(history));
                         localStorage.setItem('ldc_settings_db', JSON.stringify(appSettings));
                         localStorage.setItem('ldc_system_configs', JSON.stringify(systemConfigs));
                     } catch (e) {
+
                         console.warn("LocalStorage cheio! Os dados estão sendo mantidos apenas em memória e na nuvem.", e);
                         if (syncToCloud === false) showToast("Erro: Espaço local cheio. Sincronize com a nuvem.", "error");
                     }
@@ -2306,13 +2385,15 @@
                     if (syncToCloud && TURSO_URL && TURSO_TOKEN) {
                         try {
                             const sqlUpsert = "INSERT INTO app_storage (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value";
-                            await tursoClient.execute([
+                                                        await tursoClient.execute([
                                 { sql: sqlUpsert, args: ['tools', JSON.stringify(tools)] },
                                 { sql: sqlUpsert, args: ['team', JSON.stringify(team)] },
                                 { sql: sqlUpsert, args: ['history', JSON.stringify(history)] },
                                 { sql: sqlUpsert, args: ['shoppingList', JSON.stringify(shoppingList)] },
+                                { sql: sqlUpsert, args: ['suggestions', JSON.stringify(suggestions)] },
                                 { sql: sqlUpsert, args: ['systemConfigs', JSON.stringify(systemConfigs)] }
                             ]);
+
 
                             lastCloudSaveTime = Date.now();
                             hasUnsavedChanges = false;
@@ -2355,9 +2436,11 @@
                     if (s === 'materials') renderMaterials();
                     if (s === 'logs') renderHistory();
                     if (s === 'maintenance') renderMaintenance();
-                    if (s === 'team') renderTeam();
+                                        if (s === 'team') renderTeam();
                     if (s === 'shopping') renderShoppingList();
+                    if (s === 'suggestions') renderSuggestions();
                     if (s === 'settings') loadSettingsUI();
+
                     if (s === 'dashboard') updateDashboard();
                     render();
                     playSound('click');
@@ -5479,7 +5562,236 @@
                 }
 
                 // --- FUNÇÕES DE RELATÓRIO ---
+                                // --- FUNÇÕES DE SUGESTÕES ---
+
+                let selectedSuggestionWorkerName = "";
+
+                function openSuggestionModal() {
+                    editingSuggestionId = null;
+                    document.getElementById('suggestionModalTitle').innerText = 'Nova Sugestão';
+                    document.getElementById('btnSubmitSuggestion').innerText = 'Enviar Sugestão';
+                    selectedSuggestionWorkerName = "";
+                    const searchInput = document.getElementById('sugWorkerSearchInput');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.nextElementSibling.classList.add('hidden');
+                    }
+                    renderWorkerListSuggestion();
+                    
+                    document.getElementById('sugTitleInput').value = '';
+                    document.getElementById('sugDescriptionInput').value = '';
+                    openModal('suggestionModal');
+                }
+
+                function renderWorkerListSuggestion() {
+                    const list = document.getElementById('teamGridSuggestion');
+                    if (!list) return;
+                    const input = document.getElementById('sugWorkerSearchInput');
+                    const searchTerm = (input ? input.value : "").toLowerCase();
+                    
+                    const filteredTeam = (Array.isArray(team) ? team : []).filter(w => 
+                        w.name.toLowerCase().includes(searchTerm) || 
+                        (w.info && w.info.toLowerCase().includes(searchTerm)) || 
+                        (w.company && w.company.toLowerCase().includes(searchTerm))
+                    );
+
+                    list.innerHTML = filteredTeam.map(w => {
+                        const workerType = w.type || (w.company === 'LDC' ? 'LDC' : 'TERCEIRO');
+                        const isSelected = selectedSuggestionWorkerName === w.name;
+                        const borderClass = isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30' : 'border-slate-100 dark:border-slate-700/50';
+                        const textColor = workerType === 'TERCEIRO' ? 'text-orange-600' : 'text-blue-600';
+                        const infoDisplay = w.info || w.company || 'N/A';
+                        return `
+                        <div onclick="selectWorkerForSuggestion('${w.name}')" class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border ${borderClass} cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all flex flex-col items-center gap-2 text-center">
+                            <div class="w-10 h-10 bg-white dark:bg-slate-900 ${textColor} rounded-full flex items-center justify-center font-black shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700">
+                                ${w.img ? `<img src="${w.img}" class="w-full h-full object-cover">` : w.name.charAt(0)}
+                            </div>
+                            <div class="w-full">
+                                <p class="font-bold text-[10px] uppercase text-slate-700 truncate px-1" title="${w.name}">${w.name}</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase truncate px-1" title="${infoDisplay}">${infoDisplay}</p>
+                            </div>
+                        </div>
+                    `; }).join('');
+                    
+                    if (filteredTeam.length === 0) {
+                        list.innerHTML = `<p class="text-center text-[10px] text-slate-400 col-span-full py-10">Nenhum colaborador encontrado.</p>`;
+                    }
+                    
+                    const clearBtn = input ? input.nextElementSibling : null;
+                    if (clearBtn) clearBtn.classList.toggle('hidden', !searchTerm);
+                    
+                    lucide.createIcons();
+                }
+
+                function selectWorkerForSuggestion(workerName) {
+                    selectedSuggestionWorkerName = workerName;
+                    renderWorkerListSuggestion();
+                    playSound('click');
+                }
+
+                function editSuggestion(id) {
+                    const sug = suggestions.find(s => String(s.id) === String(id));
+                    if (!sug) return;
+
+                    editingSuggestionId = sug.id;
+                    document.getElementById('suggestionModalTitle').innerText = 'Editar Sugestão';
+                    document.getElementById('btnSubmitSuggestion').innerText = 'Salvar Alterações';
+                    
+                    selectedSuggestionWorkerName = sug.worker;
+                    document.getElementById('sugTitleInput').value = sug.title;
+                    document.getElementById('sugDescriptionInput').value = sug.description;
+                    
+                    renderWorkerListSuggestion();
+                    searchInput = document.getElementById('sugWorkerSearchInput');
+                    if (searchInput) {
+                        searchInput.value = sug.worker;
+                        searchInput.nextElementSibling.classList.remove('hidden');
+                    }
+                    
+                    openModal('suggestionModal');
+                }
+
+                function submitSuggestion() {
+                    const worker = selectedSuggestionWorkerName;
+                    const title = document.getElementById('sugTitleInput').value.trim();
+                    const desc = document.getElementById('sugDescriptionInput').value.trim();
+
+                    if (!worker || !title || !desc) {
+                        showToast("Por favor, preencha todos os campos, incluindo a seleção de colaborador.", "error");
+                        return;
+                    }
+
+                    if (editingSuggestionId) {
+                        const sug = suggestions.find(s => String(s.id) === String(editingSuggestionId));
+                        if (sug) {
+                            sug.worker = worker;
+                            sug.title = title.toUpperCase();
+                            sug.description = desc;
+                            showToast("Sugestão atualizada!", "success");
+                        }
+                    } else {
+                        const newSug = {
+                            id: Date.now(),
+                            worker: worker,
+                            title: title.toUpperCase(),
+                            description: desc,
+                            date: new Date().toLocaleDateString('pt-BR'),
+                            status: 'pending'
+                        };
+                        suggestions.unshift(newSug);
+                        showToast("Sugestão enviada com sucesso!", "success");
+                    }
+
+                    editingSuggestionId = null;
+                    closeModal('suggestionModal');
+                    save();
+                    renderSuggestions();
+                }
+
+                function setSuggestionFilter(f) {
+                    suggestionFilter = f;
+                    document.querySelectorAll('#section-suggestions .filter-pill').forEach(b => b.classList.remove('active', 'bg-slate-200', 'text-black'));
+                    document.getElementById(`sug-filter-${f}`).classList.add('active', 'bg-slate-200', 'text-black');
+                    renderSuggestions();
+                }
+
+                function renderSuggestions() {
+                    const grid = document.getElementById('suggestionsGrid');
+                    if (!grid) return;
+
+                    const filtered = suggestions.filter(s => suggestionFilter === 'all' || s.status === suggestionFilter);
+
+                    if (filtered.length === 0) {
+                        grid.innerHTML = `<p class="text-center text-sm text-slate-400 col-span-full py-20 font-black uppercase tracking-widest opacity-50">Nenhuma sugestão encontrada.</p>`;
+                        return;
+                    }
+
+                    grid.innerHTML = filtered.map(s => `
+                        <div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 flex flex-col group relative transition-all hover:shadow-2xl hover:border-blue-200 overflow-hidden">
+                            <div class="bg-gradient-to-br from-slate-50 to-slate-100 p-5 border-b border-slate-100 flex justify-between items-start shrink-0">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 ${s.status === 'bought' ? 'bg-blue-100 text-blue-600' : s.status === 'approved' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'} rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                                        <i data-lucide="${s.status === 'bought' ? 'shopping-bag' : s.status === 'approved' ? 'check-circle' : 'lightbulb'}" size="18"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h3 class="font-black text-slate-800 uppercase text-xs truncate leading-tight" title="${s.title}">${s.title}</h3>
+                                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">${s.worker}</p>
+                                    </div>
+                                </div>
+                                ${!isReadOnly ? `
+                                <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    ${s.status === 'pending' ? `
+                                    <button onclick="approveSuggestion(${s.id})" class="p-1.5 text-emerald-600 hover:bg-emerald-50 bg-white rounded-lg border border-slate-200 shadow-sm transition-all" title="Aprovar"><i data-lucide="check" size="12"></i></button>
+                                    ` : ''}
+                                    ${s.status === 'approved' ? `
+                                    <button onclick="markSuggestionAsBought(${s.id})" class="p-1.5 text-blue-600 hover:bg-blue-50 bg-white rounded-lg border border-slate-200 shadow-sm transition-all" title="Marcar como Comprada"><i data-lucide="shopping-bag" size="12"></i></button>
+                                    ` : ''}
+                                    ${s.status !== 'bought' ? `
+                                    <button onclick="editSuggestion(${s.id})" class="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 bg-white rounded-lg border border-slate-200 shadow-sm transition-all" title="Editar"><i data-lucide="pencil" size="12"></i></button>
+                                    ` : ''}
+                                    <button onclick="deleteSuggestion(${s.id})" class="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 bg-white rounded-lg border border-slate-200 shadow-sm transition-all" title="Excluir"><i data-lucide="trash-2" size="12"></i></button>
+                                </div>
+                                ` : ''}
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col">
+                                <p class="text-xs text-slate-600 font-medium leading-relaxed mb-3 flex-1">${s.description}</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                                    <span class="text-[8px] font-bold text-slate-400 uppercase">Enviado em: ${s.date}</span>
+                                    <span class="px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest ${s.status === 'bought' ? 'bg-blue-50 text-blue-600 border border-blue-100' : s.status === 'approved' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}">
+                                        ${s.status === 'bought' ? 'Comprada' : s.status === 'approved' ? 'Aprovada' : 'Pendente'}
+                                    </span>
+                                </div>
+                                ${s.status === 'bought' && s.boughtDate ? `
+                                <div class="mt-2 text-right">
+                                    <span class="text-[8px] font-black text-blue-500 uppercase tracking-wider">Comprada em: ${s.boughtDate}</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                    lucide.createIcons();
+                }
+
+                function approveSuggestion(id) {
+                    const sug = suggestions.find(s => String(s.id) === String(id));
+                    if (!sug) return;
+
+                    sug.status = 'approved';
+                    save();
+                    renderSuggestions();
+                    showToast("Sugestão aprovada!", "success");
+                }
+
+                function markSuggestionAsBought(id) {
+                    const sug = suggestions.find(s => String(s.id) === String(id));
+                    if (!sug) {
+                        console.error('Sugestão não encontrada para id:', id);
+                        return;
+                    }
+                    console.log('Marcando como comprada:', sug.title, 'ID:', sug.id);
+                    sug.status = 'bought';
+                    sug.boughtDate = new Date().toLocaleDateString('pt-BR');
+                    save();
+                    setSuggestionFilter('bought');
+                    showToast("Sugestão marcada como comprada!", "success");
+                }
+
+                function deleteSuggestion(id) {
+                    const modal = document.getElementById('deleteModal');
+                    modal.querySelector('h3').innerText = 'Excluir Sugestão?';
+                    modal.querySelector('p').innerText = 'Deseja remover esta sugestão permanentemente?';
+                    document.getElementById('confirmDeleteBtn').onclick = () => {
+                        suggestions = suggestions.filter(s => String(s.id) !== String(id));
+                        closeModal('deleteModal');
+                        save();
+                        renderSuggestions();
+                        showToast("Sugestão removida.");
+                    };
+                    openModal('deleteModal');
+                }
+
                 function exportToolsToExcel() {
+
                     const wb = XLSX.utils.book_new();
                     const now = new Date();
                     const dateStr = now.toLocaleDateString('pt-BR');
@@ -6081,59 +6393,61 @@
                         return;
                     }
 
-                    grid.innerHTML = filteredList.map(item => `
-                        <div class="bg-white rounded-[2rem] p-4 shadow-lg border ${item.status === 'bought' ? 'border-emerald-100 bg-emerald-50/10' : 'border-slate-100'} flex flex-col group relative transition-all hover:shadow-2xl">
-                            ${!isReadOnly ? `
-                            <div class="absolute top-4 right-4 flex gap-2">
-                                <button onclick="editShoppingItem('${item.id}')" class="p-2 text-slate-500 hover:text-blue-600 bg-white rounded-xl border shadow-sm transition-colors"><i data-lucide="pencil" size="14"></i></button>
-                                <button onclick="deleteShoppingItem('${item.id}')" class="p-2 text-slate-500 hover:text-rose-600 bg-white rounded-xl border shadow-sm transition-colors"><i data-lucide="trash-2" size="14"></i></button>
-                            </div>` : ''}
-                            
-                            <div class="flex items-center gap-3 mb-3">
-                                <div class="w-12 h-12 ${item.category === 'consumable' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'} rounded-2xl flex items-center justify-center shadow-inner shrink-0">
-                                    <i data-lucide="${item.category === 'consumable' ? 'box' : 'shopping-bag'}" size="24"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <h3 class="font-black text-slate-800 uppercase text-xs truncate" title="${item.name}">${item.name}</h3>
-                                    <p class="text-[9px] font-black text-emerald-500 uppercase tracking-widest leading-none">${item.brand || 'MARCA NÃO DEFINIDA'}</p>
-                                </div>
-                            </div>
+                     grid.innerHTML = filteredList.map(item => `
+                         <div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 flex flex-col group relative transition-all hover:shadow-2xl hover:border-blue-200 overflow-hidden">
+                             ${!isReadOnly ? `
+                             <div class="absolute top-4 right-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                 <button onclick="editShoppingItem('${item.id}')" class="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 bg-white rounded-lg border border-slate-200 shadow-sm transition-all" title="Editar"><i data-lucide="pencil" size="12"></i></button>
+                                 <button onclick="deleteShoppingItem('${item.id}')" class="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 bg-white rounded-lg border border-slate-200 shadow-sm transition-all" title="Excluir"><i data-lucide="trash-2" size="12"></i></button>
+                             </div>` : ''}
+                             
+                             <div class="bg-gradient-to-br from-slate-50 to-slate-100 p-5 border-b border-slate-100 flex items-center gap-3 shrink-0">
+                                 <div class="w-12 h-12 ${item.category === 'consumable' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'} rounded-xl flex items-center justify-center shadow-sm shrink-0">
+                                     <i data-lucide="${item.category === 'consumable' ? 'box' : 'shopping-bag'}" size="22"></i>
+                                 </div>
+                                 <div class="min-w-0">
+                                     <h3 class="font-black text-slate-800 uppercase text-xs truncate leading-tight" title="${item.name}">${item.name}</h3>
+                                     <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-tight">${item.brand || 'MARCA NÃO DEFINIDA'}</p>
+                                 </div>
+                             </div>
 
-                            <div class="bg-slate-50 rounded-2xl p-3 mb-3 flex-1 border border-slate-100 shadow-inner">
-                                <p class="text-[8px] font-black text-slate-400 uppercase mb-1 tracking-widest">Itens / Observações</p>
-                                <p class="text-[11px] text-slate-600 font-medium leading-tight whitespace-pre-wrap line-clamp-2">${item.notes || 'Nenhuma observação extra.'}</p>
-                            </div>
+                             <div class="p-4 flex-1 flex flex-col">
+                                 <div class="bg-slate-50 rounded-2xl p-3 mb-3 flex-1 border border-slate-100 shadow-inner">
+                                     <p class="text-[8px] font-black text-slate-400 uppercase mb-1 tracking-widest">Itens / Observações</p>
+                                     <p class="text-[11px] text-slate-600 font-medium leading-tight whitespace-pre-wrap line-clamp-2">${item.notes || 'Nenhuma observação extra.'}</p>
+                                 </div>
 
-                            ${item.status === 'bought' ? `
-                            <div class="grid grid-cols-2 gap-2 mb-3">
-                                <div class="bg-slate-50 p-1.5 rounded-xl text-center border border-slate-100 shadow-inner">
-                                    <p class="text-[7px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Pago</p>
-                                    <p class="text-[10px] font-black text-emerald-700">${formatBRL(item.price)}</p>
-                                </div>
-                                <div class="bg-slate-50 p-1.5 rounded-xl text-center border border-slate-100 shadow-inner">
-                                    <p class="text-[7px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Data Compra</p>
-                                    <p class="text-[10px] font-black text-emerald-700">${item.purchaseDate || '-'}</p>
-                                </div>
-                            </div>
-                            ` : ''}
+                                 ${item.status === 'bought' ? `
+                                 <div class="grid grid-cols-2 gap-2 mb-3">
+                                     <div class="bg-slate-50 p-2 rounded-xl text-center border border-slate-100 shadow-inner">
+                                         <p class="text-[7px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Valor Pago</p>
+                                         <p class="text-[10px] font-black text-emerald-700">${formatBRL(item.price)}</p>
+                                     </div>
+                                     <div class="bg-slate-50 p-2 rounded-xl text-center border border-slate-100 shadow-inner">
+                                         <p class="text-[7px] font-black text-emerald-600 uppercase mb-0.5 tracking-tighter">Data Compra</p>
+                                         <p class="text-[10px] font-black text-emerald-700">${item.purchaseDate || '-'}</p>
+                                     </div>
+                                 </div>
+                                 ` : ''}
 
-                            <div class="flex items-center justify-between mt-auto pt-3 border-t border-slate-50">
-                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Adicionado: ${item.date}</span>
-                                <div class="flex gap-1.5">
-                                    ${!isReadOnly && item.status === 'pending' ? `
-                                        <button onclick="markAsBought('${item.id}')" class="bg-emerald-600 text-white px-2.5 py-1.5 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-1.5 hover:bg-emerald-700 transition-all">
-                                            <i data-lucide="check-circle" size="10"></i> Comprado
-                                        </button>
-                                    ` : ''}
-                                    ${item.link ? `
-                                        <a href="${item.link}" target="_blank" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-blue-200 flex items-center gap-1.5 hover:bg-blue-700 transition-all no-underline">
-                                            <i data-lucide="external-link" size="10"></i> Ver Link
-                                        </a>
-                                    ` : '<span class="text-[8px] font-bold text-slate-300 uppercase italic py-1.5">Sem link</span>'}
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
+                                 <div class="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
+                                     <span class="text-[8px] font-bold text-slate-400 uppercase">Adicionado: ${item.date}</span>
+                                     <div class="flex gap-1.5">
+                                         ${!isReadOnly && item.status === 'pending' ? `
+                                             <button onclick="markAsBought('${item.id}')" class="bg-emerald-600 text-white px-2.5 py-1.5 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-emerald-200 flex items-center gap-1.5 hover:bg-emerald-700 transition-all">
+                                                 <i data-lucide="check-circle" size="10"></i> Comprado
+                                             </button>
+                                         ` : ''}
+                                         ${item.link ? `
+                                             <a href="${item.link}" target="_blank" class="bg-blue-600 text-white px-2.5 py-1.5 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg shadow-blue-200 flex items-center gap-1.5 hover:bg-blue-700 transition-all no-underline">
+                                                 <i data-lucide="external-link" size="10"></i> Link
+                                             </a>
+                                         ` : ''}
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     `).join('');
                     lucide.createIcons();
                 }
 
